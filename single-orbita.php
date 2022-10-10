@@ -16,12 +16,15 @@ get_header();
             $votes_text = $count > 1 ? 'votos' : 'voto';
 
         ?>
-        
+
         <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-            
+
             <header class="entry-header">
-                <?php 
-                
+                <?php
+
+                date_default_timezone_set('America/Sao_Paulo');
+                $date = get_the_date('d/m/Y H:i');
+
                 if($external_url) :
                     the_title( '<h1 class="entry-title">🔗 <a href="' . esc_url( $external_url ) . '" rel="ugc">', '</a></h1>' );
                 else:
@@ -29,14 +32,14 @@ get_header();
                 endif;
                 ?>
                 <div class="entry-meta">
-                    <?php echo do_shortcode('[orbita-vote]'); ?><span data-votes-post-id="<?php the_ID(); ?>"><?php echo $count; ?></span> <?php echo $votes_text; ?> | <?php mdu2020_posted_by(); ?> em <?php mdu2020_posted_on(); ?>
+                    <?php echo do_shortcode('[orbita-vote]'); ?><span data-votes-post-id="<?php the_ID(); ?>"><?php echo $count; ?></span> <?php echo $votes_text; ?> | <?php echo get_the_author_meta('display_name', $post->post_author); ?> em <?php echo $date; ?>
                 </div>
             </header>
 
             <div class="entry-content">
                 <?php the_content(); ?>
             </div>
-            
+
             <footer class="entry-footer">
                 <span style="float: right">
                     <a href="mailto:?subject=<?php the_title(); ?>&amp;body=Veja este post: <?php echo get_permalink(); ?>" title="Compartilhe por e-mail" rel="noopener">
@@ -59,7 +62,7 @@ get_header();
 
                 <p>🪐 <a href="/orbita">Órbita</a></p>
             </footer>
-        <?php 
+        <?php
             // If comments are open or we have at least one comment, load up the comment template.
             if ( comments_open() || get_comments_number() ) :
                 comments_template();
