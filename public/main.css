@@ -36,7 +36,7 @@
   padding-bottom: 1rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
-@media only screen and (min-width: 700px) {
+@media only screen and (min-width : 700px) {
   .orbita-post {
     padding-bottom: 0;
     border-bottom: 0;
@@ -100,7 +100,7 @@
 .orbita-header a:visited, .orbita-header a:hover, .orbita-header a:active {
   color: var(--orbita-secondary-color);
 }
-@media only screen and (min-width: 700px) {
+@media only screen and (min-width : 700px) {
   .orbita-header {
     background-color: var(--orbita-background-seconday-color);
     padding: 0.5rem 1rem;
@@ -117,7 +117,7 @@
   border-bottom: 0;
   line-height: 2;
 }
-@media only screen and (min-width: 700px) {
+@media only screen and (min-width : 700px) {
   .orbita-header .orbita-post-button {
     margin-right: auto;
   }
@@ -178,13 +178,13 @@
   display: block;
   cursor: pointer;
 }
-.orbita-form-control input[type="text"],
-.orbita-form-control input[type="url"] {
+.orbita-form-control input[type=text],
+.orbita-form-control input[type=url] {
   width: 100%;
 }
-@media only screen and (min-width: 700px) {
-  .orbita-form-control input[type="text"],
-  .orbita-form-control input[type="url"] {
+@media only screen and (min-width : 700px) {
+  .orbita-form-control input[type=text],
+.orbita-form-control input[type=url] {
     width: 50%;
   }
 }
@@ -200,7 +200,7 @@
   display: none;
   background-color: var(--orbita-background-color);
 }
-@media only screen and (min-width: 700px) {
+@media only screen and (min-width : 700px) {
   .orbita-bookmarklet {
     display: block;
   }
