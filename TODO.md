@@ -3,7 +3,7 @@
 ## Front-end (WIP)
 - [x] corrigir package.json
 - [x] readme
-- [ ] typo orbita -> Órbita
+- [x] typo orbita -> Órbita
 - [ ] criar script para gerar .zip com grunt-contrib-compress/ atualizar step no readme
 - [ ] `mdu2020_posted_by()` error
 - [ ] alinhar link "reportar" (vertical-align: baseline)
