@@ -325,7 +325,7 @@ function orbita_form_shortcode() {
     $html .= '          <label for="orbita_post_title">Título</label>';
     $html .= '          <input required type="text" id="orbita_post_title" name="orbita_post_title" value="'. $_GET['t'] .'" placeholder="Prefira títulos em português">';
     $html .= '      </div>';
-    $html .= '      <div class="orbita-form-control"><br>';
+    $html .= '      <div class="orbita-form-control">';
     $html .= '          <p>Deixe o link vazio para iniciar uma discussão (que pode ser uma dúvida, por exemplo). Se você enviar um comentário ele irá aparecer no topo.</p>';
     $html .= '      </div>';
     $html .= '      <div class="orbita-form-control">';

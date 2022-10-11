@@ -198,6 +198,11 @@
     width: 50%;
   }
 }
+.orbita-form-control input[type=url] {
+  background-color: var(--light-bg);
+  color: var(--txt-color);
+  border: 1px solid var(--border-color);
+}
 .orbita-form-control .orbita-help-block {
   font-family: monospace;
   display: block;
@@ -208,7 +213,6 @@
   padding: 24px;
   margin-top: 32px;
   display: none;
-  background-color: var(--orbita-background-color);
 }
 @media only screen and (min-width : 700px) {
   .orbita-bookmarklet {
@@ -222,9 +226,13 @@
   margin-top: 8px;
   background-color: var(--orbita-tertiary-color);
   color: var(--orbita-primary-color);
+  cursor: grab;
 }
 .orbita-bookmarklet a:hover {
   color: var(--orbita-primary-color);
+}
+.orbita-bookmarklet a:active {
+  cursor: grabbing;
 }
 
 .orbita-report-link {
