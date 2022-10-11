@@ -46,6 +46,10 @@ $desktop: "only screen and (min-width : 700px)";
     border-bottom: 0;
   }
 
+  &-title a {
+    text-decoration: none !important;
+  }
+
   &-info {
     display: inline-flex;
     align-items: center;
@@ -65,17 +69,19 @@ $desktop: "only screen and (min-width : 700px)";
   }
 
   &-date {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     font-family: monospace;
 
     a {
+      text-decoration: underline !important;
+
       &:hover {
-        text-decoration: underline;
+        text-decoration: none !important;
       }
     }
 
     .orbita-report-link {
-      font-size: 0.85rem;
+      font-size: 0.75rem;
       float: none;
       text-transform: lowercase;
     }
@@ -107,14 +113,18 @@ $desktop: "only screen and (min-width : 700px)";
     margin-left: 1rem;
     color: var(--orbita-secondary-color);
     border-bottom: 0.5px solid var(--orbita-secondary-color);
-    text-decoration: none;
+    text-decoration: none !important;
     display: inline;
     line-height: 1;
 
     &:visited,
-    &:hover,
     &:active {
       color: var(--orbita-secondary-color);
+    }
+
+    &:hover {
+      color: var(--orbita-tertiary-color);
+      border-bottom-color: var(--orbita-tertiary-color);
     }
   }
 
@@ -147,14 +157,14 @@ $desktop: "only screen and (min-width : 700px)";
 
 .orbita-vote {
   border: 0;
+  padding-right: 5px;
   width: 16px;
   height: 32px;
   position: relative;
   cursor: default;
   text-indent: -9999px;
   overflow: hidden;
-  margin-right: 0.5rem;
-  background: transparent;
+  background: transparent !important;
 
   &:after {
     bottom: 8px;
@@ -185,7 +195,7 @@ $desktop: "only screen and (min-width : 700px)";
   }
 
   &-already-voted {
-    cursor: default;
+    cursor: default !important;
     opacity: 0.5;
 
     &:after {
@@ -250,18 +260,16 @@ $desktop: "only screen and (min-width : 700px)";
   color: var(--orbita-link-color);
   text-decoration: underline;
   padding: 0;
+  vertical-align: baseline;
 
   &:hover {
-    color: var(--orbita-link-hover-color);
+    text-decoration: none;
+    background-color: transparent;
   }
 
   &-already-reported {
     text-decoration: none;
     color: var(--orbita-primary-color);
-    cursor: default;
-
-    &:hover {
-      color: var(--orbita-primary-color);
-    }
+    cursor: default !important;
   }
 }

@@ -42,6 +42,9 @@
     border-bottom: 0;
   }
 }
+.orbita-post-title a {
+  text-decoration: none !important;
+}
 .orbita-post-info {
   display: inline-flex;
   align-items: center;
@@ -58,14 +61,17 @@
   color: var(--orbita-tertiary-color);
 }
 .orbita-post-date {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   font-family: monospace;
 }
+.orbita-post-date a {
+  text-decoration: underline !important;
+}
 .orbita-post-date a:hover {
-  text-decoration: underline;
+  text-decoration: none !important;
 }
 .orbita-post-date .orbita-report-link {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   float: none;
   text-transform: lowercase;
 }
@@ -93,12 +99,16 @@
   margin-left: 1rem;
   color: var(--orbita-secondary-color);
   border-bottom: 0.5px solid var(--orbita-secondary-color);
-  text-decoration: none;
+  text-decoration: none !important;
   display: inline;
   line-height: 1;
 }
-.orbita-header a:visited, .orbita-header a:hover, .orbita-header a:active {
+.orbita-header a:visited, .orbita-header a:active {
   color: var(--orbita-secondary-color);
+}
+.orbita-header a:hover {
+  color: var(--orbita-tertiary-color);
+  border-bottom-color: var(--orbita-tertiary-color);
 }
 @media only screen and (min-width : 700px) {
   .orbita-header {
@@ -129,14 +139,14 @@
 
 .orbita-vote {
   border: 0;
+  padding-right: 5px;
   width: 16px;
   height: 32px;
   position: relative;
   cursor: default;
   text-indent: -9999px;
   overflow: hidden;
-  margin-right: 0.5rem;
-  background: transparent;
+  background: transparent !important;
 }
 .orbita-vote:after {
   bottom: 8px;
@@ -163,7 +173,7 @@
   transition: 0.2s all ease-in-out;
 }
 .orbita-vote-already-voted {
-  cursor: default;
+  cursor: default !important;
   opacity: 0.5;
 }
 .orbita-vote-already-voted:after {
@@ -224,17 +234,16 @@
   color: var(--orbita-link-color);
   text-decoration: underline;
   padding: 0;
+  vertical-align: baseline;
 }
 .orbita-report-link:hover {
-  color: var(--orbita-link-hover-color);
+  text-decoration: none;
+  background-color: transparent;
 }
 .orbita-report-link-already-reported {
   text-decoration: none;
   color: var(--orbita-primary-color);
-  cursor: default;
-}
-.orbita-report-link-already-reported:hover {
-  color: var(--orbita-primary-color);
+  cursor: default !important;
 }
 
 /*# sourceMappingURL=main.css.map */

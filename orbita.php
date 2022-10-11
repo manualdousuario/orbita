@@ -86,7 +86,6 @@ function orbita_get_vote_html($post_id) {
     if($already_voted) $additional_class = 'orbita-vote-already-voted';
 
     $html = '<button title="Votar" class="orbita-vote ' . $additional_class . '" data-url="' . admin_url('admin-ajax.php') . '" data-post-id="' . $post_id . '">';
-    $html .= '  Votar';
     $html .= '</button>';
 
     return $html;
@@ -110,7 +109,8 @@ function orbita_get_post_html($post_id) {
 
     $external_url = get_post_meta($post_id, 'external_url', true);
     if (!$external_url) $external_url = get_permalink();
-    $only_domain = parse_url($external_url, PHP_URL_HOST);
+    $regex = "/manualdousuario.net\/orbita/i";
+    $only_domain = preg_match($regex, $external_url) ? 'debate' : parse_url($external_url, PHP_URL_HOST);
     $count_key = 'post_like_count';
     $count = get_post_meta($post_id, $count_key, true);
 
