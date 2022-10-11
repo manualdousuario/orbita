@@ -161,7 +161,7 @@ function orbita_ranking_calculator($args, $comment_points, $vote_points) {
         $points_comments = get_comments_number();
         $points_votes = get_post_meta(get_the_id(), 'post_like_count', true);
         $invisible_votes = get_post_meta(get_the_id(), 'invisible_votes', true);
-        $total_points = ($points_comments * $comment_points) + ($points_votes * $vote_points) + ($invisible_votes * $vote_points);
+        $total_points = ((int)$points_comments * (int)$comment_points) + ((int)$points_votes * (int)$vote_points) + ((int)$invisible_votes * (int)$vote_points);
 
         if ($total_points > 0)  {
             $total_points = $total_points - ($time_elapsed / 10);
