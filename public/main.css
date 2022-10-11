@@ -44,6 +44,12 @@
 }
 .orbita-post-title a {
   text-decoration: none !important;
+  line-height: 30pt;
+}
+@media only screen and (min-width : 700px) {
+  .orbita-post-title a {
+    line-height: 28pt;
+  }
 }
 .orbita-post-info {
   display: inline-flex;
@@ -79,6 +85,11 @@
 .orbita-ranking {
   counter-increment: css-counter 0;
 }
+@media only screen and (min-width : 700px) {
+  .orbita-ranking {
+    line-height: 1.7;
+  }
+}
 .orbita-ranking .orbita-post {
   counter-increment: css-counter 1;
 }
@@ -86,6 +97,7 @@
   content: counter(css-counter) ". ";
   font-size: 1.2rem;
   margin-right: 0.5rem;
+  line-height: 1.3;
 }
 
 .orbita-header {
