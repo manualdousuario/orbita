@@ -28,6 +28,12 @@ Caso queira alterar o arquivo de estilo `main.scss`
 grunt watch
 ```
 
+Gerar arquivo `orbita.zip`
+
+```bash
+grunt compress
+```
+
 ## Instalar o plugin
 
 1. Faça login no seu admin do WordPress

@@ -1,16 +1,16 @@
 # TODO
 
-## Front-end (WIP)
+## Front-end
 - [x] corrigir package.json
 - [x] readme
 - [x] typo orbita -> Órbita
-- [ ] criar script para gerar .zip com grunt-contrib-compress/ atualizar step no readme
+- [x] criar script para gerar .zip com grunt-contrib-compress/ atualizar step no readme
 - [x] `mdu2020_posted_by()` error
 - [x] alinhar link "reportar" (vertical-align: baseline)
 - [x] input link
 - [x] underline em links (child theme já aplica)
 - [x] box amarelo "postar no orbita" (seguir modelo de theme mdu2020)
-- [ ] criar licença
+- [x] criar licença
 - [x] post-date com fonte menor
 - [x] vote button sem texto
 - [x] não mostrar link quando é uma discussão/ adicionar texto "debate"

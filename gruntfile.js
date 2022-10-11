@@ -43,6 +43,18 @@ module.exports = function (grunt) {
       files: ["src/scss/*.scss"],
       tasks: ["newer:sass"],
     },
+
+    compress: {
+      main: {
+          options: {
+              archive: "orbita.zip",
+              mode: "zip"
+          },
+          files: [
+              { src: ["public/*", "orbita.php", "single-orbita.php"]}
+          ]
+      }
+    },
   });
 
   grunt.loadNpmTasks("grunt-newer");
@@ -50,5 +62,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks("grunt-contrib-uglify");
   grunt.loadNpmTasks("grunt-contrib-sass");
   grunt.loadNpmTasks("grunt-contrib-watch");
+  grunt.loadNpmTasks('grunt-contrib-compress');
   grunt.registerTask("default", ["concat", "uglify", "sass"]);
 };
