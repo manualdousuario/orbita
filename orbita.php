@@ -94,9 +94,11 @@ function orbita_get_vote_html($post_id) {
 function orbita_get_header_html() {
     $html = '<div class="orbita-header">';
     $html .= '  <a href="/orbita/postar/" class="orbita-post-button">Postar</a>';
-    $html .= '  <a href="/orbita">Capa</a>';
-    $html .= '  <a href="/orbita/guia-de-uso">Guia de uso</a>';
-    $html .= '  <a href="/orbita/arquivo">Arquivo</a>';
+    $html .= '  <div>';
+    $html .= '      <a href="/orbita">Capa</a>';
+    $html .= '      <a href="/orbita/guia-de-uso">Guia de uso</a>';
+    $html .= '      <a href="/orbita/arquivo">Arquivo</a>';
+    $html .= '  </div>';
     $html .= '</div>';
 
     return $html;

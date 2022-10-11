@@ -14,7 +14,7 @@
 - [x] post-date com fonte menor
 - [x] vote button sem texto
 - [x] não mostrar link quando é uma discussão/ adicionar texto "debate"
-- [ ] limitar tamanho de string no titulo (evitar quebra de layout)
+- [x] mobile: header
 
 ## Segurança
 - [ ] coding standard WP

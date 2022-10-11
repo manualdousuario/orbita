@@ -105,6 +105,7 @@ $desktop: "only screen and (min-width : 700px)";
 .orbita-header {
   margin-bottom: 2rem;
   display: flex;
+  flex-direction: column;
   align-items: center;
   font-family: -apple-system, sans-serif;
   font-size: 0.9rem;
@@ -132,6 +133,7 @@ $desktop: "only screen and (min-width : 700px)";
     background-color: var(--orbita-background-seconday-color);
     padding: 0.5rem 1rem;
     font-size: 1rem;
+    flex-direction: row;
   }
 
   .orbita-post-button {
@@ -143,9 +145,11 @@ $desktop: "only screen and (min-width : 700px)";
     margin-left: 0;
     border-bottom: 0;
     line-height: 2;
+    margin-bottom: 15px;
 
     @media #{$desktop} {
       margin-right: auto;
+      margin-bottom: 0;
     }
 
     &:hover {
