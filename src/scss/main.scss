@@ -134,6 +134,7 @@ $desktop: "only screen and (min-width : 700px)";
     padding: 0.5rem 1rem;
     font-size: 1rem;
     flex-direction: row;
+    max-width: 60ch;
   }
 
   .orbita-post-button {
@@ -230,6 +231,10 @@ $desktop: "only screen and (min-width : 700px)";
     background-color: var(--light-bg);
     color: var(--txt-color);
     border: 1px solid var(--border-color);
+  }
+
+  textarea {
+    max-width: 60ch;
   }
 
   .orbita-help-block {

@@ -117,6 +117,7 @@
     padding: 0.5rem 1rem;
     font-size: 1rem;
     flex-direction: row;
+    max-width: 60ch;
   }
 }
 .orbita-header .orbita-post-button {
@@ -206,6 +207,9 @@
   background-color: var(--light-bg);
   color: var(--txt-color);
   border: 1px solid var(--border-color);
+}
+.orbita-form-control textarea {
+  max-width: 60ch;
 }
 .orbita-form-control .orbita-help-block {
   font-family: monospace;
