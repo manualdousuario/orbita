@@ -39,7 +39,7 @@ function orbita_setup_post_type() {
         'rewrite' => array('slug' => 'orbita-post'),
         )
     );
-    
+
     register_taxonomy(
 		'orbita_category',
 		array('orbita_post'),
@@ -52,7 +52,7 @@ function orbita_setup_post_type() {
 			'hierarchical' => true
 		)
 	);
-} 
+}
 add_action( 'init', 'orbita_setup_post_type' );
 
 /****************** Templates **********************/
@@ -86,7 +86,6 @@ function orbita_get_vote_html($post_id) {
     if($already_voted) $additional_class = 'orbita-vote-already-voted';
 
     $html = '<button title="Votar" class="orbita-vote ' . $additional_class . '" data-url="' . admin_url('admin-ajax.php') . '" data-post-id="' . $post_id . '">';
-    $html .= '  Votar';
     $html .= '</button>';
 
     return $html;
@@ -95,22 +94,25 @@ function orbita_get_vote_html($post_id) {
 function orbita_get_header_html() {
     $html = '<div class="orbita-header">';
     $html .= '  <a href="/orbita/postar/" class="orbita-post-button">Postar</a>';
-    $html .= '  <a href="/orbita">Capa</a>';
-    $html .= '  <a href="/orbita/guia-de-uso">Guia de uso</a>';
-    $html .= '  <a href="/orbita/arquivo">Arquivo</a>';
+    $html .= '  <div>';
+    $html .= '      <a href="/orbita">Capa</a>';
+    $html .= '      <a href="/orbita/guia-de-uso">Guia de uso</a>';
+    $html .= '      <a href="/orbita/arquivo">Arquivo</a>';
+    $html .= '  </div>';
     $html .= '</div>';
 
     return $html;
 }
 
 function orbita_get_post_html($post_id) {
-    global $post; 
+    global $post;
     $post = get_post( $post_id, OBJECT );
     setup_postdata( $post );
 
     $external_url = get_post_meta($post_id, 'external_url', true);
     if (!$external_url) $external_url = get_permalink();
-    $only_domain = parse_url($external_url, PHP_URL_HOST);
+    $regex = "/manualdousuario.net\/orbita/i";
+    $only_domain = preg_match($regex, $external_url) ? 'debate' : parse_url($external_url, PHP_URL_HOST);
     $count_key = 'post_like_count';
     $count = get_post_meta($post_id, $count_key, true);
 
@@ -159,7 +161,7 @@ function orbita_ranking_calculator($args, $comment_points, $vote_points) {
         $points_comments = get_comments_number();
         $points_votes = get_post_meta(get_the_id(), 'post_like_count', true);
         $invisible_votes = get_post_meta(get_the_id(), 'invisible_votes', true);
-        $total_points = ($points_comments * $comment_points) + ($points_votes * $vote_points) + ($invisible_votes * $vote_points);
+        $total_points = ((int)$points_comments * (int)$comment_points) + ((int)$points_votes * (int)$vote_points) + ((int)$invisible_votes * (int)$vote_points);
 
         if ($total_points > 0)  {
             $total_points = $total_points - ($time_elapsed / 10);
@@ -170,7 +172,7 @@ function orbita_ranking_calculator($args, $comment_points, $vote_points) {
             'points' => $total_points
         );
 
-    endwhile; 
+    endwhile;
 
     return $posts_array;
 }
@@ -209,7 +211,7 @@ function orbita_ranking_shortcode($atts = [], $content = null, $tag = '') {
     $blog_posts_array = orbita_ranking_calculator($args_blog, $orbita_rank_atts['comment-points'], $orbita_rank_atts['vote-points']);
 
     $posts_array = array_merge($orbita_posts_array, $blog_posts_array);
- 
+
     usort($posts_array, 'orbita_sort_by_points');
     $posts_array = array_slice($posts_array, 0, 30);
 
@@ -222,7 +224,7 @@ function orbita_ranking_shortcode($atts = [], $content = null, $tag = '') {
     }
 
     $html .= '</div>';
-    
+
     return $html;
 }
 
@@ -254,7 +256,7 @@ function orbita_posts_shortcode($atts = [], $content = null, $tag = '') {
     if ($query->have_posts()) :
         while ($query->have_posts()) : $query->the_post();
             $html .= orbita_get_post_html(get_the_id());
-        endwhile; 
+        endwhile;
 
         $paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
 
@@ -262,7 +264,7 @@ function orbita_posts_shortcode($atts = [], $content = null, $tag = '') {
         if ($paged > 1) $html .= "&nbsp;&nbsp;";
         $html .= get_next_posts_link( 'mais antigos &raquo;', $query->max_num_pages );
     endif;
-    
+
     return $html;
 }
 
@@ -275,14 +277,14 @@ function orbita_form_shortcode() {
     if ( $_POST && isset($_POST['orbita_post_title']) ) {
 
         $alreadyPosted = get_page_by_title($_POST['orbita_post_title'], OBJECT, 'orbita_post');
-    
+
         if($alreadyPosted->ID && $alreadyPosted->post_author == get_current_user_id()) {
             $html = 'Parece que este post <a href="'.home_url('/?p='.$alreadyPosted->ID).'">já existe</a>.';
             return $html;
         }
 
         $default_category = get_term_by('slug', 'link', 'orbita_category');
-    
+
         $post = array(
             'post_title'    => $_POST['orbita_post_title'],
             'post_content'  => $_POST['orbita_post_content'],
@@ -313,7 +315,7 @@ function orbita_form_shortcode() {
         $html = orbita_get_header_html();
 
         $html .= 'Tudo certo! Agora você pode <a href="'.home_url('/?p='.$post_id).'">acessar seu post</a>.';
-        
+
         return $html;
     }
 
@@ -325,7 +327,7 @@ function orbita_form_shortcode() {
     $html .= '          <label for="orbita_post_title">Título</label>';
     $html .= '          <input required type="text" id="orbita_post_title" name="orbita_post_title" value="'. $_GET['t'] .'" placeholder="Prefira títulos em português">';
     $html .= '      </div>';
-    $html .= '      <div class="orbita-form-control"><br>';
+    $html .= '      <div class="orbita-form-control">';
     $html .= '          <p>Deixe o link vazio para iniciar uma discussão (que pode ser uma dúvida, por exemplo). Se você enviar um comentário ele irá aparecer no topo.</p>';
     $html .= '      </div>';
     $html .= '      <div class="orbita-form-control">';
@@ -345,7 +347,7 @@ function orbita_form_shortcode() {
 
     $html .= '<div class="orbita-bookmarklet ctx-atencao">';
     $html .= '  Se preferir, pode usar nosso bookmarklet! Arraste o botão abaixo para a sua barra de favoritos e clique nele quando quiser compartilhar um link.<br>';
-    $html .= '  <a onclick="return false" href="javascript:window.location=%22https://manualdousuario.net/orbita/postar?u=%22+encodeURIComponent(document.location)+%22&t=%22+encodeURIComponent(document.title)">postar no orbita</a>';
+    $html .= '  <a onclick="return false" href="javascript:window.location=%22https://manualdousuario.net/orbita/postar?u=%22+encodeURIComponent(document.location)+%22&t=%22+encodeURIComponent(document.title)">postar no Órbita</a>';
     $html .= '</div>';
 
     return $html;
@@ -368,12 +370,12 @@ function orbita_shortcodes_init() {
     add_shortcode( 'orbita-header', 'orbita_header_shortcode' );
     add_shortcode( 'orbita-vote', 'orbita_vote_shortcode' );
 }
- 
+
 add_action( 'init', 'orbita_shortcodes_init' );
 
 /****************** Enviar e-mails para cada comentário feito *********************/
 
-function orbita_comment_post($comment_id) { 
+function orbita_comment_post($comment_id) {
     $comment = get_comment($comment_id);
     $admin_email = get_option('admin_email');
     $headers = array('Content-Type: text/html; charset=UTF-8');
@@ -387,9 +389,9 @@ function orbita_comment_post($comment_id) {
         'Link para editar: <a href="' . $edit_url . '">Clique aqui para editar o comentário</a>',
         $headers
     );
-}; 
+};
 
-add_action( 'comment_post', 'orbita_comment_post', 10, 3 ); 
+add_action( 'comment_post', 'orbita_comment_post', 10, 3 );
 
 /****************** Denúncia de comentários e posts *********************/
 
@@ -422,7 +424,7 @@ function orbita_add_report_button_to_content( $comment_content, $comment, $args)
     if ( $depth < $thread_comments_depth ) {
         return $comment_content;
     }
-    
+
     $comment_id = $comment->comment_ID;
     $class = 'orbita-report-link';
 
@@ -487,10 +489,10 @@ add_action('wp_ajax_orbita_report', 'orbita_report_comment_or_post');
 
 /****************** Ativação e desativação do plugin *********************/
 
-function orbita_activate() { 
-    orbita_setup_post_type(); 
+function orbita_activate() {
+    orbita_setup_post_type();
     orbita_shortcodes_init();
-    flush_rewrite_rules(); 
+    flush_rewrite_rules();
 }
 register_activation_hook( __FILE__, 'orbita_activate' );
 
