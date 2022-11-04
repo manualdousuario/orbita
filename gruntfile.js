@@ -51,7 +51,7 @@ module.exports = function (grunt) {
               mode: "zip"
           },
           files: [
-              { src: ["public/*", "orbita.php", "single-orbita.php"]}
+              { src: ["public/*", "orbita.php", "single-orbita.php", "index.php"]}
           ]
       }
     },
