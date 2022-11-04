@@ -17,9 +17,8 @@
 - [x] mobile: header
 
 ## Segurança
-- [ ] coding standard WP
+- [x] coding standard WP
 - [x] nonce no post
-- [ ] nonces no vote e report
 - [x] escaping data
 - [ ] adicionar object cache
 - [ ] admin-ajax/ REST API issue

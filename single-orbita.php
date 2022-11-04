@@ -1,4 +1,13 @@
 <?php
+/**
+ * Órbita
+ *
+ * @package           orbita
+ * @author            Gabriel Nunes
+ * @copyright         2022 Gabriel Nunes
+ * @license           GPL-3.0
+ **/
+
 get_header();
 ?>
 
