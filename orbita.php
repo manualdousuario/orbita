@@ -269,6 +269,16 @@ function orbita_posts_shortcode($atts = [], $content = null, $tag = '') {
 }
 
 function orbita_form_shortcode() {
+    if( isset( $_POST['orbita_nonce'] ) ){
+        if( ! wp_verify_nonce( $_POST['orbita_nonce'], 'orbita_nonce' ) ){
+            return;
+        }
+    }
+
+    if( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ){
+        return;
+    }
+
     if (!is_user_logged_in()) {
         $html = 'Para iniciar debates na Órbita, <a href="' . wp_login_url(home_url( '/orbita/postar' )) . '">faça login</a> ou <a href="' . wp_registration_url() . '">cadastre-se gratuitamente</a>.';
         return $html;
@@ -323,6 +333,7 @@ function orbita_form_shortcode() {
 
     $html .= '<div class="orbita-form">';
     $html .= '  <form id="new_post" name="new_post" method="post"  enctype="multipart/form-data">';
+    $html .= '      <input type="hidden" name="orbita_nonce" value="' . wp_create_nonce( "orbita_nonce" ) . '">';
     $html .= '      <div class="orbita-form-control">';
     $html .= '          <label for="orbita_post_title">Título</label>';
     $html .= '          <input required type="text" id="orbita_post_title" name="orbita_post_title" value="'. $_GET['t'] .'" placeholder="Prefira títulos em português">';
@@ -394,7 +405,6 @@ function orbita_comment_post($comment_id) {
 add_action( 'comment_post', 'orbita_comment_post', 10, 3 );
 
 /****************** Denúncia de comentários e posts *********************/
-
 
 function orbita_get_comment_depth( $my_comment_id ) {
 	$depth_level = 0;
@@ -485,7 +495,6 @@ function orbita_report_comment_or_post()
 
 add_action('wp_ajax_nopriv_orbita_report', 'orbita_report_comment_or_post');
 add_action('wp_ajax_orbita_report', 'orbita_report_comment_or_post');
-
 
 /****************** Ativação e desativação do plugin *********************/
 

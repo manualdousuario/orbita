@@ -18,7 +18,8 @@
 
 ## Segurança
 - [ ] coding standard WP
-- [ ] nonce
+- [x] nonce no post
+- [ ] nonces no vote e report
 - [ ] escaping data
 - [ ] adicionar object cache
 - [ ] admin-ajax/ REST API issue
