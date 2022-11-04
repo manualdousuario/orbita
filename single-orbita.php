@@ -37,7 +37,7 @@ get_header();
             </header>
 
             <div class="entry-content">
-                <?php the_content(); ?>
+                <?php  esc_textarea( the_content() ); ?>
             </div>
 
             <footer class="entry-footer">

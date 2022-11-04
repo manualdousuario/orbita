@@ -20,7 +20,7 @@
 - [ ] coding standard WP
 - [x] nonce no post
 - [ ] nonces no vote e report
-- [ ] escaping data
+- [x] escaping data
 - [ ] adicionar object cache
 - [ ] admin-ajax/ REST API issue
 - [ ] otimizar funçoes
