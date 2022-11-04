@@ -24,3 +24,4 @@
 - [ ] adicionar object cache
 - [ ] admin-ajax/ REST API issue
 - [ ] otimizar funçoes
+- [ ] index.php e ABSPATH
