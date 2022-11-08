@@ -3,8 +3,8 @@
  * Órbita
  *
  * @package           orbita
- * @author            Gabriel Nunes
- * @copyright         2022 Gabriel Nunes
+ * @author            Gabriel Nunes, Clarissa R. Mendes
+ * @copyright         2022 Manual do Usuário
  * @license           GPL-3.0
  **/
 
@@ -52,7 +52,7 @@ get_header();
 			</div>
 
 			<footer class="entry-footer">
-				<span style="float: right">
+				<span class="orbita-footer">
 					<a href="mailto:?subject=<?php the_title(); ?>&amp;body=Veja este post: <?php echo esc_url( get_permalink() ); ?>" title="Compartilhe por e-mail" rel="noopener">
 					<xml version="1.0" encoding="iso-8859-1"?><svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 						viewBox="0 0 490.2 490.2" width="30" style="enable-background:new 0 0 490.2 490.2;" xml:space="preserve">

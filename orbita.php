@@ -3,8 +3,8 @@
  * Órbita
  *
  * @package           orbita
- * @author            Gabriel Nunes
- * @copyright         2022 Gabriel Nunes
+ * @author            Gabriel Nunes, Clarissa R. Mendes
+ * @copyright         2022 Manual do Usuário
  * @license           GPL-3.0
  *
  * @wordpress-plugin
