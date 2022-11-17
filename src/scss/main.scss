@@ -6,8 +6,6 @@ $desktop: "only screen and (min-width : 700px)";
   --orbita-tertiary-color: #939393;
   --orbita-background-color: #e6e6e6;
   --orbita-background-seconday-color: #cecece;
-  --orbita-link-color: royalblue;
-  --orbita-link-hover-color: midnightblue;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -17,8 +15,6 @@ $desktop: "only screen and (min-width : 700px)";
     --orbita-tertiary-color: #5f5f5f;
     --orbita-background-color: #212121;
     --orbita-background-seconday-color: #404040;
-    --orbita-link-color: rgb(104, 135, 231);
-    --orbita-link-hover-color: rgb(101, 101, 221);
   }
 }
 
@@ -47,7 +43,6 @@ $desktop: "only screen and (min-width : 700px)";
   }
 
   &-title a {
-    text-decoration: none !important;
     line-height: 30pt;
 
     @media #{$desktop} {
@@ -77,18 +72,11 @@ $desktop: "only screen and (min-width : 700px)";
     font-size: 0.75rem;
     font-family: monospace;
 
-    a {
-      text-decoration: underline !important;
-
-      &:hover {
-        text-decoration: none !important;
-      }
-    }
-
     .orbita-report-link {
       font-size: 0.75rem;
       float: none;
       text-transform: lowercase;
+      cursor: pointer;
     }
   }
 }
@@ -120,23 +108,22 @@ $desktop: "only screen and (min-width : 700px)";
   font-family: -apple-system, sans-serif;
   font-size: 0.9rem;
 
-  a {
+  div a {
     margin-left: 1rem;
-    color: var(--orbita-secondary-color);
-    border-bottom: 0.5px solid var(--orbita-secondary-color);
-    text-decoration: none !important;
     display: inline;
     line-height: 1;
 
-    &:visited,
-    &:active {
-      color: var(--orbita-secondary-color);
+    &:visited {
+      color: var(--color-link);
     }
 
     &:hover {
-      color: var(--orbita-tertiary-color);
-      border-bottom-color: var(--orbita-tertiary-color);
+      color: var(--color-link-states);
     }
+  }
+    margin-left: 1rem;
+    display: inline;
+    line-height: 1;
   }
 
   @media #{$desktop} {
@@ -144,7 +131,7 @@ $desktop: "only screen and (min-width : 700px)";
     padding: 0.5rem 1rem;
     font-size: 1rem;
     flex-direction: row;
-    max-width: 60ch;
+    max-width: 100%;
   }
 
   .orbita-post-button {
@@ -266,15 +253,8 @@ $desktop: "only screen and (min-width : 700px)";
   a {
     display: inline-block;
     padding: 0.2em 8px;
-    text-decoration: none;
     margin-top: 8px;
-    background-color: var(--orbita-tertiary-color);
-    color: var(--orbita-primary-color);
     cursor: grab;
-
-    &:hover {
-      color: var(--orbita-primary-color);
-    }
 
     &:active {
       cursor: grabbing;
@@ -290,6 +270,7 @@ $desktop: "only screen and (min-width : 700px)";
   text-decoration: underline;
   padding: 0;
   vertical-align: baseline;
+  cursor: pointer;
 
   &:hover {
     text-decoration: none;
