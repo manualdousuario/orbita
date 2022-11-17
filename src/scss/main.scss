@@ -108,7 +108,19 @@ $desktop: "only screen and (min-width : 700px)";
   font-family: -apple-system, sans-serif;
   font-size: 0.9rem;
 
-  a {
+  div a {
+    margin-left: 1rem;
+    display: inline;
+    line-height: 1;
+
+    &:visited {
+      color: var(--color-link);
+    }
+
+    &:hover {
+      color: var(--color-link-states);
+    }
+  }
     margin-left: 1rem;
     display: inline;
     line-height: 1;
