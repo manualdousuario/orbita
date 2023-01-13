@@ -4,8 +4,6 @@
   --orbita-tertiary-color: #939393;
   --orbita-background-color: #e6e6e6;
   --orbita-background-seconday-color: #cecece;
-  --orbita-link-color: royalblue;
-  --orbita-link-hover-color: midnightblue;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -15,18 +13,16 @@
     --orbita-tertiary-color: #5f5f5f;
     --orbita-background-color: #212121;
     --orbita-background-seconday-color: #404040;
-    --orbita-link-color: rgb(104, 135, 231);
-    --orbita-link-hover-color: rgb(101, 101, 221);
   }
 }
-.orbita_post-template-default .post-navigation,
-.orbita_post-template-default .widget-area {
+.orbita_post-template-default .post-navigation {
   display: none;
 }
 
-.orbita_post {
-  padding: 6rem 0;
-  margin: 0 auto;
+.orbita_post .orbita-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .orbita-post {
@@ -36,17 +32,19 @@
   padding-bottom: 1rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
-@media only screen and (min-width : 700px) {
+@media only screen and (min-width: 700px) {
   .orbita-post {
     padding-bottom: 0;
     border-bottom: 0;
   }
 }
+.orbita-post .orbita-vote {
+  margin-top: 8px;
+}
 .orbita-post-title a {
-  text-decoration: none !important;
   line-height: 30pt;
 }
-@media only screen and (min-width : 700px) {
+@media only screen and (min-width: 700px) {
   .orbita-post-title a {
     line-height: 28pt;
   }
@@ -70,22 +68,17 @@
   font-size: 0.75rem;
   font-family: monospace;
 }
-.orbita-post-date a {
-  text-decoration: underline !important;
-}
-.orbita-post-date a:hover {
-  text-decoration: none !important;
-}
 .orbita-post-date .orbita-report-link {
   font-size: 0.75rem;
   float: none;
   text-transform: lowercase;
+  cursor: pointer;
 }
 
 .orbita-ranking {
   counter-increment: css-counter 0;
 }
-@media only screen and (min-width : 700px) {
+@media only screen and (min-width: 700px) {
   .orbita-ranking {
     line-height: 1.7;
   }
@@ -101,6 +94,7 @@
 }
 
 .orbita-header {
+  width: 100%;
   margin-bottom: 2rem;
   display: flex;
   flex-direction: column;
@@ -108,28 +102,24 @@
   font-family: -apple-system, sans-serif;
   font-size: 0.9rem;
 }
-.orbita-header a {
+.orbita-header div a {
   margin-left: 1rem;
-  color: var(--orbita-secondary-color);
-  border-bottom: 0.5px solid var(--orbita-secondary-color);
-  text-decoration: none !important;
   display: inline;
   line-height: 1;
 }
-.orbita-header a:visited, .orbita-header a:active {
-  color: var(--orbita-secondary-color);
+.orbita-header div a:visited {
+  color: var(--color-link);
 }
-.orbita-header a:hover {
-  color: var(--orbita-tertiary-color);
-  border-bottom-color: var(--orbita-tertiary-color);
+.orbita-header div a:hover {
+  color: var(--color-link-states);
 }
-@media only screen and (min-width : 700px) {
+@media only screen and (min-width: 700px) {
   .orbita-header {
     background-color: var(--orbita-background-seconday-color);
     padding: 0.5rem 1rem;
     font-size: 1rem;
     flex-direction: row;
-    max-width: 60ch;
+    max-width: 100%;
   }
 }
 .orbita-header .orbita-post-button {
@@ -143,7 +133,7 @@
   line-height: 2;
   margin-bottom: 15px;
 }
-@media only screen and (min-width : 700px) {
+@media only screen and (min-width: 700px) {
   .orbita-header .orbita-post-button {
     margin-right: auto;
     margin-bottom: 0;
@@ -157,8 +147,8 @@
 .orbita-vote {
   border: 0;
   padding-right: 5px;
-  width: 16px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
   position: relative;
   cursor: default;
   text-indent: -9999px;
@@ -205,17 +195,17 @@
   display: block;
   cursor: pointer;
 }
-.orbita-form-control input[type=text],
-.orbita-form-control input[type=url] {
+.orbita-form-control input[type="text"],
+.orbita-form-control input[type="url"] {
   width: 100%;
 }
-@media only screen and (min-width : 700px) {
-  .orbita-form-control input[type=text],
-.orbita-form-control input[type=url] {
+@media only screen and (min-width: 700px) {
+  .orbita-form-control input[type="text"],
+  .orbita-form-control input[type="url"] {
     width: 50%;
   }
 }
-.orbita-form-control input[type=url] {
+.orbita-form-control input[type="url"] {
   background-color: var(--light-bg);
   color: var(--txt-color);
   border: 1px solid var(--border-color);
@@ -234,7 +224,7 @@
   margin-top: 32px;
   display: none;
 }
-@media only screen and (min-width : 700px) {
+@media only screen and (min-width: 700px) {
   .orbita-bookmarklet {
     display: block;
   }
@@ -242,14 +232,8 @@
 .orbita-bookmarklet a {
   display: inline-block;
   padding: 0.2em 8px;
-  text-decoration: none;
   margin-top: 8px;
-  background-color: var(--orbita-tertiary-color);
-  color: var(--orbita-primary-color);
   cursor: grab;
-}
-.orbita-bookmarklet a:hover {
-  color: var(--orbita-primary-color);
 }
 .orbita-bookmarklet a:active {
   cursor: grabbing;
@@ -263,6 +247,7 @@
   text-decoration: underline;
   padding: 0;
   vertical-align: baseline;
+  cursor: pointer;
 }
 .orbita-report-link:hover {
   text-decoration: none;

@@ -19,15 +19,17 @@ $desktop: "only screen and (min-width : 700px)";
 }
 
 .orbita_post-template-default {
-  .post-navigation,
-  .widget-area {
+  .post-navigation {
     display: none;
   }
 }
 
 .orbita_post {
-  padding: 6rem 0;
-  margin: 0 auto;
+  .orbita-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
 }
 
 .orbita-post {
@@ -40,6 +42,10 @@ $desktop: "only screen and (min-width : 700px)";
   @media #{$desktop} {
     padding-bottom: 0;
     border-bottom: 0;
+  }
+
+  .orbita-vote {
+    margin-top: 8px;
   }
 
   &-title a {
@@ -101,6 +107,7 @@ $desktop: "only screen and (min-width : 700px)";
 }
 
 .orbita-header {
+  width: 100%;
   margin-bottom: 2rem;
   display: flex;
   flex-direction: column;
@@ -120,10 +127,6 @@ $desktop: "only screen and (min-width : 700px)";
     &:hover {
       color: var(--color-link-states);
     }
-  }
-    margin-left: 1rem;
-    display: inline;
-    line-height: 1;
   }
 
   @media #{$desktop} {
@@ -160,8 +163,8 @@ $desktop: "only screen and (min-width : 700px)";
 .orbita-vote {
   border: 0;
   padding-right: 5px;
-  width: 16px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
   position: relative;
   cursor: default;
   text-indent: -9999px;

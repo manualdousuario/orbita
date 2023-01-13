@@ -159,7 +159,7 @@ function orbita_get_header_html() {
 	$html .= '  <div>';
 	$html .= '      <a href="/orbita">Capa</a>';
 	$html .= '      <a href="/orbita/guia-de-uso">Guia de uso</a>';
-	$html .= '      <a href="/orbita/arquivo">Arquivo</a>';
+	$html .= '      <a href="/orbita/tudo">Arquivo</a>';
 	$html .= '  </div>';
 	$html .= '</div>';
 
@@ -172,9 +172,9 @@ function orbita_get_header_html() {
  * @param Post_ID $post_id Post ID to show the post.
  */
 function orbita_get_post_html( $post_id ) {
-	global $orbita_post;
-	$orbita_post = get_post( $post_id, OBJECT );
-	setup_postdata( $orbita_post );
+	global $post;
+	$post = get_post( $post_id, OBJECT );
+	setup_postdata( $post );
 
 	$external_url = get_post_meta( $post_id, 'external_url', true );
 	if ( ! $external_url ) {
@@ -255,6 +255,8 @@ function orbita_ranking_calculator( $args, $comment_points, $vote_points ) {
 
 	endwhile;
 
+	wp_reset_query();
+
 	return $posts_array;
 }
 
@@ -286,7 +288,11 @@ function orbita_ranking_shortcode( $atts = array(), $content = null, $tag = '' )
 		),
 	);
 
-	$orbita_posts_array = orbita_ranking_calculator( $args_orbita, $orbita_rank_atts['comment-points'], $orbita_rank_atts['vote-points'] );
+	$orbita_posts_array = orbita_ranking_calculator(
+		$args_orbita, 
+		$orbita_rank_atts['comment-points'],
+		$orbita_rank_atts['vote-points']
+	);
 
 	$args_blog = array(
 		'posts_per_page' => 20,
@@ -298,7 +304,11 @@ function orbita_ranking_shortcode( $atts = array(), $content = null, $tag = '' )
 		),
 	);
 
-	$blog_posts_array = orbita_ranking_calculator( $args_blog, $orbita_rank_atts['comment-points'], $orbita_rank_atts['vote-points'] );
+	$blog_posts_array = orbita_ranking_calculator( 
+		$args_blog, 
+		$orbita_rank_atts['comment-points'], 
+		$orbita_rank_atts['vote-points'] 
+	);
 
 	$posts_array = array_merge( $orbita_posts_array, $blog_posts_array );
 
@@ -314,6 +324,8 @@ function orbita_ranking_shortcode( $atts = array(), $content = null, $tag = '' )
 	}
 
 	$html .= '</div>';
+
+	wp_reset_query();
 
 	return $html;
 }
@@ -367,6 +379,8 @@ function orbita_posts_shortcode( $atts = array(), $content = null, $tag = '' ) {
 		$html .= get_next_posts_link( 'mais antigos &raquo;', $query->max_num_pages );
 	endif;
 
+	wp_reset_query();
+
 	return $html;
 }
 
@@ -391,7 +405,7 @@ function orbita_form_shortcode() {
 
 	if ( $_POST && isset( $_POST['orbita_post_title'] ) ) {
 
-		$already_posted = get_page_by_title( sanitize_title( wp_unslash( $_POST['orbita_post_title'] ) ), OBJECT, 'orbita_post' );
+		$already_posted = get_page_by_title( wp_unslash( $_POST['orbita_post_title'] ), OBJECT, 'orbita_post' );
 
 		if ( get_current_user_id() === $already_posted->ID && $already_posted->post_author ) {
 			$html = 'Parece que este post <a href="' . home_url( '/?p=' . $already_posted->ID ) . '">já existe</a>.';
@@ -413,7 +427,7 @@ function orbita_form_shortcode() {
 		}
 
 		$post    = array(
-			'post_title'   => sanitize_title( wp_unslash( $_POST['orbita_post_title'] ) ),
+			'post_title'   => wp_unslash( $_POST['orbita_post_title'] ),
 			'post_content' => $orbita_post_content,
 			'tax_input'    => array(
 				'orbita_category' => array( $default_category->term_id ),
@@ -435,7 +449,7 @@ function orbita_form_shortcode() {
 
 		$send_email = wp_mail(
 			$admin_email,
-			"[Órbita] Novo post: '" . sanitize_title( wp_unslash( $_POST['orbita_post_title'] ) ),
+			"[Órbita] Novo post: '" . wp_unslash( $_POST['orbita_post_title']),
 			'Link para editar: <a href="' . esc_url( $edit_url ) . '">Clique aqui para editar o post</a>',
 			$headers
 		);
