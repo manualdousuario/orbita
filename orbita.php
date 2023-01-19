@@ -480,7 +480,7 @@ function orbita_form_shortcode() {
 	$html .= '      <input type="hidden" name="orbita_nonce" value="' . wp_create_nonce( 'orbita_nonce' ) . '">';
 	$html .= '      <div class="orbita-form-control">';
 	$html .= '          <label for="orbita_post_title">Título</label>';
-	$html .= '          <input required type="text" id="orbita_post_title" name="orbita_post_title" value="' . $get_t . '" placeholder="Prefira títulos em português">';
+	$html .= '          <textarea required id="orbita_post_title" name="orbita_post_title" value="' . $get_t . '" placeholder="Prefira títulos em português" rows="1" onkeyup="const charactersPerLine = this.offsetWidth / 10;this.rows = Math.round(this.value.length / charactersPerLine) + 1;" />';
 	$html .= '      </div>';
 	$html .= '      <div class="orbita-form-control">';
 	$html .= '          <p>Deixe o link vazio para iniciar uma discussão (que pode ser uma dúvida, por exemplo). Se você enviar um comentário ele irá aparecer no topo.</p>';

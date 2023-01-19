@@ -242,6 +242,15 @@ $desktop: "only screen and (min-width : 700px)";
     display: block;
     font-size: 0.75rem;
   }
+
+  #orbita_post_title {
+    resize: none;
+    width: 100%;
+
+    @media #{$desktop} {
+      width: 50%;
+    }
+  }
 }
 
 .orbita-bookmarklet {
