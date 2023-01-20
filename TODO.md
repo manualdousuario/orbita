@@ -21,6 +21,6 @@
 - [x] nonce no post
 - [x] escaping data
 - [ ] adicionar object cache
-- [ ] admin-ajax/ REST API issue
+- [x] admin-ajax/ REST API issue
 - [ ] otimizar funçoes
 - [x] index.php e ABSPATH

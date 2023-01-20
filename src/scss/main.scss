@@ -107,14 +107,15 @@ $desktop: "only screen and (min-width : 700px)";
   }
 
   .orbita-post-button {
-    background-color: var(--color-link);
-    color: var(--color-primary);
+    background-color: #4169e1;
+    color: white;
     border-radius: var(--borda-curva);
     padding: 0.1rem 1rem;
     text-decoration: none;
     margin-left: 0;
     border-bottom: 0;
-    margin-bottom: 15px;
+    box-shadow: 2px 2px 6px var(--sombra);
+    transition: background 0.3s, box-shadow 0.6s ease-in-out;
 
     @media #{$desktop} {
       margin-right: auto;
@@ -122,8 +123,9 @@ $desktop: "only screen and (min-width : 700px)";
     }
 
     &:hover {
-      background-color: var(--color-primary);
-      color: var(--cor-de-fundo);
+      background-color: #355bd0;
+      transition: background 0.3s, box-shadow 0.6s ease-in-out;
+      box-shadow: none;
     }
   }
 }

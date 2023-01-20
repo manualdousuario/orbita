@@ -187,7 +187,7 @@ function orbita_get_post_html( $post_id ) {
 		$external_url = get_permalink();
 	}
 	$regex       = '/manualdousuario.net\/orbita/i';
-	$only_domain = preg_match( $regex, $external_url ) ? 'debate' : wp_parse_url( $external_url, PHP_URL_HOST );
+	$only_domain = preg_match( $regex, $external_url ) ? 'debate' : wp_parse_url( str_replace('www.', '', $external_url), PHP_URL_HOST );
 	$count_key   = 'post_like_count';
 	$count       = get_post_meta( $post_id, $count_key, true );
 
