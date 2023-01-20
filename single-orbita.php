@@ -52,8 +52,10 @@ get_header();
 			</div>
 
 			<footer class="entry-footer">
-				<p>🪐 <a href="/orbita">Órbita</a></p>
+				<p><a href="/orbita">&laquo; Voltar ao índice de links</a></p>
 			</footer>
+
+		</article>
 			<?php
 			// If comments are open or we have at least one comment, load up the comment template.
 			if ( comments_open() || get_comments_number() ) :

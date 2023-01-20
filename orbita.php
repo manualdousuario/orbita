@@ -51,6 +51,10 @@ add_action( 'wp_enqueue_scripts', 'orbita_enqueue_styles' );
  */
 function orbita_enqueue_scripts() {
 	wp_enqueue_script( 'orbita', plugins_url( '/public/main.min.js', __FILE__ ), array(), '1', false );
+	wp_localize_script( 'orbita', 'orbitaApi', array(
+		'restURL' => rest_url(),
+		'restNonce' => wp_create_nonce('wp_rest')
+	));
 }
 
 add_action( 'wp_enqueue_scripts', 'orbita_enqueue_scripts' );
@@ -133,6 +137,7 @@ function orbita_get_vote_html( $post_id ) {
 	$users_vote_array = get_post_meta( $post_id, $users_vote_key, true );
 	$already_voted    = false;
 	$additional_class = '';
+	$title = "Votar";
 
 	if ( $users_vote_array && array_search( get_current_user_id(), $users_vote_array, true ) !== false ) {
 		$already_voted = true;
@@ -142,9 +147,10 @@ function orbita_get_vote_html( $post_id ) {
 	}
 	if ( $already_voted ) {
 		$additional_class = 'orbita-vote-already-voted';
+		$title = "Você já votou!";
 	}
 
-	$html  = '<button title="Votar" class="orbita-vote ' . $additional_class . '" data-url="' . admin_url( 'admin-ajax.php' ) . '" data-post-id="' . $post_id . '">';
+	$html  = '<button title="' . $title . '" class="orbita-vote ' . $additional_class . '" data-post-id="' . $post_id . '">⬆️';
 	$html .= '</button>';
 
 	return $html;
@@ -190,7 +196,7 @@ function orbita_get_post_html( $post_id ) {
 	}
 
 	wp_timezone_string( 'America/Sao_Paulo' );
-	$human_date = human_time_diff( strtotime( 'now' ), strtotime( get_the_date( 'm/d/Y H:i' ) ) );
+	$human_date = human_time_diff(get_the_time('U'), current_time( 'timestamp' ));
 
 	$votes_text = $count > 1 ? 'votos' : 'voto';
 
@@ -200,10 +206,10 @@ function orbita_get_post_html( $post_id ) {
 	$html .= '    <div class="orbita-post-title">';
 	$html .= '          <a href="' . esc_url( $external_url ) . '" rel="ugc" title="' . get_the_title() . '">' . get_the_title() . '</a>';
 	$html .= '          <div class="orbita-post-info">';
-	$html .= '              <span class="orbita-post-domain">' . esc_url( $only_domain ) . '</span>';
+	$html .= '              <span class="orbita-post-domain">' . $only_domain . '</span>';
 	$html .= '          </div>';
 	$html .= '          <div class="orbita-post-date">';
-	$html .= '              <span data-votes-post-id="' . esc_attr( $post_id ) . '">' . $count . ' </span> ' . $votes_text . ' | por ' . get_the_author_meta( 'display_name', $orbita_post->post_author ) . ' ' . $human_date . ' atrás | <a href=" ' . get_permalink() . '">' . get_comments_number_text( 'sem comentários', '1 comentário', '% comentários' ) . '</a> | <button data-url="' . admin_url( 'admin-ajax.php' ) . '" data-post-id="' . esc_attr( $post_id ) . '" class="orbita-report-link">Reportar</button>';
+	$html .= '              <span data-votes-post-id="' . esc_attr( $post_id ) . '">' . $count . ' </span> ' . $votes_text . ' | por ' . get_the_author_meta( 'display_name', $orbita_post->post_author ) . ' ' . $human_date . ' atrás | <a href=" ' . get_permalink() . '">' . get_comments_number_text( 'sem comentários', '1 comentário', '% comentários' ) . '</a> | <button data-post-id="' . esc_attr( $post_id ) . '" class="orbita-report-link">Reportar</button>';
 	$html .= '          </div>';
 	$html .= '      </div>';
 	$html .= '</div>';
@@ -480,7 +486,7 @@ function orbita_form_shortcode() {
 	$html .= '      <input type="hidden" name="orbita_nonce" value="' . wp_create_nonce( 'orbita_nonce' ) . '">';
 	$html .= '      <div class="orbita-form-control">';
 	$html .= '          <label for="orbita_post_title">Título</label>';
-	$html .= '          <input required type="text" id="orbita_post_title" name="orbita_post_title" value="' . $get_t . '" placeholder="Prefira títulos em português">';
+	$html .= '          <textarea required type="text" class="orbita-post-title-textarea" id="orbita_post_title" name="orbita_post_title" value="' . $get_t . '" rows="1" placeholder="Prefira títulos em português"></textarea>';
 	$html .= '      </div>';
 	$html .= '      <div class="orbita-form-control">';
 	$html .= '          <p>Deixe o link vazio para iniciar uma discussão (que pode ser uma dúvida, por exemplo). Se você enviar um comentário ele irá aparecer no topo.</p>';
@@ -593,7 +599,7 @@ function orbita_add_report_button_to_reply_link( $comment_reply_link, $args, $co
 	$class      = 'orbita-report-link';
 
 	$pattern            = '#(<a.+class=.+comment-(reply|login)-l(i|o)(.*)[^>]+>)(.+)(</a>)#msiU';
-	$replacement        = '$0 <button data-url="' . admin_url( 'admin-ajax.php' ) . '" data-comment-id="' . $comment_id . '" class="' . $class . '">Reportar</button>';
+	$replacement        = '$0 <button data-comment-id="' . $comment_id . '" class="' . $class . '">Reportar</button>';
 	$comment_reply_link = preg_replace( $pattern, $replacement, $comment_reply_link );
 
 	return $comment_reply_link;
@@ -617,7 +623,7 @@ function orbita_add_report_button_to_content( $comment_content, $comment, $args 
 	$comment_id = $comment->comment_ID;
 	$class      = 'orbita-report-link';
 
-	$comment_content .= '<br /><br /><button data-url="' . admin_url( 'admin-ajax.php' ) . '" data-comment-id="' . $comment_id . '" class="' . $class . '">Reportar</button>';
+	$comment_content .= '<br /><br /><button data-comment-id="' . $comment_id . '" class="' . $class . '">Reportar</button>';
 
 	return $comment_content;
 }
@@ -629,12 +635,6 @@ add_filter( 'get_comment_text', 'orbita_add_report_button_to_content', 10, 4 );
  * Report Comment or Post
  */
 function orbita_report_comment_or_post() {
-	if ( isset( $_POST['orbita_nonce'] ) ) {
-		if ( ! wp_verify_nonce( sanitize_key( wp_unslash( $_POST['orbita_nonce'] ) ), 'orbita_nonce' ) ) {
-			return;
-		}
-	}
-
 	if ( ! $_POST ) {
 		return;
 	}
@@ -691,11 +691,15 @@ function orbita_report_comment_or_post() {
 		echo wp_json_encode( array( 'success' => false ) );
 	}
 
-	wp_die();
+	die();
 }
 
-add_action( 'wp_ajax_nopriv_orbita_report', 'orbita_report_comment_or_post' );
-add_action( 'wp_ajax_orbita_report', 'orbita_report_comment_or_post' );
+add_action('rest_api_init', function() {
+	register_rest_route('orbitaApi/v1', '/report/', array(
+		'methods' => 'POST',
+		'callback' => 'orbita_report_comment_or_post'
+	));
+});
 
 /****************** Plugin activation and deactivation *********************/
 
@@ -729,10 +733,6 @@ register_deactivation_hook( __FILE__, 'orbita_deactivate' );
  * @param Post_ID $post_id Post ID to increase votes.
  */
 function orbita_increase_post_like( $post_id ) {
-	if ( ! is_user_logged_in() ) {
-		return false;
-	}
-
 	$users_vote_key   = 'post_users_vote';
 	$users_vote_array = get_post_meta( $post_id, $users_vote_key, true );
 
@@ -768,16 +768,10 @@ function orbita_increase_post_like( $post_id ) {
  * Update votes
  */
 function orbita_update_post_likes() {
-	if ( isset( $_POST['orbita_nonce'] ) ) {
-		if ( ! wp_verify_nonce( sanitize_key( wp_unslash( $_POST['orbita_nonce'] ) ), 'orbita_nonce' ) ) {
-			return;
-		}
-	}
-
-	if ( ! is_user_logged_in() ) {
+	if ( ! get_current_user_id() ) {
 		return;
 	}
-
+	
 	if ( ! $_POST ) {
 		return;
 	}
@@ -801,8 +795,12 @@ function orbita_update_post_likes() {
 		echo wp_json_encode( array( 'success' => false ) );
 	}
 
-	wp_die();
+	die();
 }
 
-add_action( 'wp_ajax_nopriv_orbita_update_post_likes', 'orbita_update_post_likes' );
-add_action( 'wp_ajax_orbita_update_post_likes', 'orbita_update_post_likes' );
+add_action('rest_api_init', function() {
+	register_rest_route('orbitaApi/v1', '/likes/', array(
+		'methods' => 'POST',
+		'callback' => 'orbita_update_post_likes'
+	));
+});
