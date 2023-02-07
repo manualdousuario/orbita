@@ -452,11 +452,13 @@ function orbita_form_shortcode() {
 		$headers     = array( 'Content-Type: text/html; charset=UTF-8' );
 		$admin_url   = get_admin_url();
 		$edit_url    = $admin_url . 'post.php?post=' . $post_id . '&action=edit';
+		$post_url    = get_permalink($post_id);
 
 		$send_email = wp_mail(
 			$admin_email,
 			"[Órbita] Novo post: '" . wp_unslash( $_POST['orbita_post_title']),
-			'Link para editar: <a href="' . esc_url( $edit_url ) . '">Clique aqui para editar o post</a>',
+			'Link do post: <a href="' . esc_url( $post_url ) . '">Clique aqui para ver o post</a><br>
+			Link para editar: <a href="' . esc_url( $edit_url ) . '">Clique aqui para editar o post</a>',
 			$headers
 		);
 
@@ -556,10 +558,11 @@ function orbita_comment_post( $comment_id ) {
 	$headers     = array( 'Content-Type: text/html; charset=UTF-8' );
 	$post_title  = get_the_title( $comment->comment_post_ID );
 	$edit_url    = get_admin_url() . 'post.php?post=' . $comment->comment_post_ID . '&action=edit';
+	$post_url    = get_permalink( $comment->comment_post_ID );
 
 	$send_email = wp_mail(
 		$admin_email,
-		"[Manual] Novo comentário em '" . $post_title . "'",
+		"[Manual] Novo comentário em '<a href='" . $post_url . "'>" . $post_title . "</a>'",
 		$comment->comment_content . '<br>' .
 		'Comentado por: ' . $comment->comment_author . ' <' . $comment->comment_author_email . '><br><br>' .
 		'Link para editar: <a href="' . $edit_url . '">Clique aqui para editar o comentário</a>',
@@ -660,18 +663,21 @@ function orbita_report_comment_or_post() {
 	$user               = $current_user->user_login ? $current_user->user_login : 'um Usuário anônimo';
 	$post               = get_post( $report_post_id );
 	$comment            = get_comment( $comment_post_id );
+	$post_url           = '';
 
 	if ( isset( $post ) ) {
 		$edit_url           = $admin_url . 'post.php?post=' . sanitize_text_field( wp_unslash( $_POST['post_id'] ) ) . '&action=edit';
 		$report_id          = sanitize_text_field( wp_unslash( $_POST['post_id'] ) );
 		$report_type        = 'Post';
 		$report_description = "O post '" . $post->post_title . "' no Órbita foi denunciado por '" . $user . "'.";
+		$post_url           = get_permalink( $_POST['post_id'] );
 	} elseif ( isset( $comment ) ) {
 		$edit_url           = $admin_url . 'comment.php?action=editcomment&c=' . sanitize_text_field( wp_unslash( $_POST['comment_id'] ) );
 		$post               = get_post( $comment->comment_post_ID );
 		$report_id          = sanitize_text_field( wp_unslash( $_POST['comment_id'] ) );
 		$report_type        = 'Comentário';
 		$report_description = "Um comentário feito em '" . $post->post_title . "' foi denunciado por '" . $user . "'";
+		$post_url           = get_permalink( $post );
 	}
 
 	$admin_email = get_option( 'admin_email' );
@@ -681,7 +687,8 @@ function orbita_report_comment_or_post() {
 		$admin_email,
 		'[Órbita] Nova denúncia de ' . $report_type . ' #' . $report_id,
 		$report_description . '<br><br>' .
-		'Link para editar: <a href="' . $edit_url . '">Clique aqui para editar o ' . $report_type . '</a>',
+		'Link do post: <a href="' . esc_url( $post_url ) . '">Clique aqui para ver o post</a><br>
+		Link para editar: <a href="' . $edit_url . '">Clique aqui para editar o ' . $report_type . '</a>',
 		$headers
 	);
 
