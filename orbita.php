@@ -562,10 +562,11 @@ function orbita_comment_post( $comment_id ) {
 
 	$send_email = wp_mail(
 		$admin_email,
-		"[Manual] Novo comentário em '<a href='" . $post_url . "'>" . $post_title . "</a>'",
-		$comment->comment_content . '<br>' .
-		'Comentado por: ' . $comment->comment_author . ' <' . $comment->comment_author_email . '><br><br>' .
-		'Link para editar: <a href="' . $edit_url . '">Clique aqui para editar o comentário</a>',
+		"[Órbita] Novo comentário em '" . $post_title . "'",
+		$comment->comment_content . '<br><br>' .
+		'Comentado por: ' . $comment->comment_author . ' <' . $comment->comment_author_email . '><br>' .
+		'Link do post: <a href="' . esc_url( $post_url ) . '">Clique aqui para ver o post</a><br> 
+		Link para editar: <a href="' . $edit_url . '">Clique aqui para editar o comentário</a>',
 		$headers
 	);
 };
