@@ -24,5 +24,6 @@ jobs:
 
     - name: Build
       run: |
+        gem install sass
         npm install
         grunt
