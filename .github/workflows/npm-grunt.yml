@@ -30,16 +30,20 @@ jobs:
         npm install
         grunt
         
-    - name: Package Plugin
-      run: |
-        zip -r orbita.zip . -x "node_modules/*"
-        
-    - name: Publish Release
-      uses: actions/upload-release-asset@v1
+    - name: Create artifact
+      uses: montudor/action-zip@v0.1.0
+      with:
+        args: zip -X -r build/orbita.zip . -x *.git* node_modules/\* .* "*/\.*" CODE_OF_CONDUCT.md CONTRIBUTING.md ISSUE_TEMPLATE.md PULL_REQUEST_TEMPLATE.md *.dist build**
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+          name: graphql-api
+          path: build/orbita.zip
+          
+    - name: Upload to release
+      uses: JasonEtco/upload-to-release@master
+      with:
+        args: build/orbita.zip application/zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ github.release.upload_url }}
-        asset_path: orbita.zip
-        asset_name: orbita.zip
-        asset_content_type: application/zip
