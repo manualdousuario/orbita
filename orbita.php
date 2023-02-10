@@ -209,7 +209,7 @@ function orbita_get_post_html( $post_id ) {
 	$html .= '              <span class="orbita-post-domain">' . $only_domain . '</span>';
 	$html .= '          </div>';
 	$html .= '          <div class="orbita-post-date">';
-	$html .= '              <span data-votes-post-id="' . esc_attr( $post_id ) . '">' . $count . ' </span> ' . $votes_text . ' | por ' . get_the_author_meta( 'display_name', $orbita_post->post_author ) . ' ' . $human_date . ' atrás | <a href=" ' . get_permalink() . '#comments">' . get_comments_number_text( 'sem comentários', '1 comentário', '% comentários' ) . '</a> | <button data-post-id="' . esc_attr( $post_id ) . '" class="orbita-report-link">Reportar</button>';
+	$html .= '              <span data-votes-post-id="' . esc_attr( $post_id ) . '">' . $count . ' </span> ' . $votes_text . ' | por ' . get_the_author_meta( 'display_name', $orbita_post->post_author ) . ' ' . $human_date . ' atrás | <a href=" ' . get_permalink() . '#comments">' . get_comments_number_text( 'sem comentários', '1 comentário', '% comentários' ) . '</a>';
 	$html .= '          </div>';
 	$html .= '      </div>';
 	$html .= '</div>';
