@@ -1,9 +1,7 @@
-name: NodeJS with Grunt
+name: Publicar novas releases do Plugin
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
     branches: [ "main" ]
 
 jobs:
@@ -31,3 +29,17 @@ jobs:
         gem install sass
         npm install
         grunt
+        
+    - name: Package Plugin
+      run: |
+        zip -r orbita.zip . -x "node_modules/*"
+        
+    - name: Publish Release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.release.upload_url }}
+        asset_path: orbita.zip
+        asset_name: orbita.zip
+        asset_content_type: application/zip
