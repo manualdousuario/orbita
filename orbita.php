@@ -163,9 +163,9 @@ function orbita_get_header_html() {
 	$html  = '<div class="orbita-header">';
 	$html .= '  <a href="/orbita/postar/" class="orbita-post-button">Postar</a>';
 	$html .= '  <div>';
-	$html .= '      <a href="/orbita">Capa</a>';
+	$html .= '      <a href="/orbita">Populares</a>';
+	$html .= '      <a href="/orbita/tudo">Links novos</a>';
 	$html .= '      <a href="/orbita/guia-de-uso">Guia de uso</a>';
-	$html .= '      <a href="/orbita/tudo">Arquivo</a>';
 	$html .= '  </div>';
 	$html .= '</div>';
 
