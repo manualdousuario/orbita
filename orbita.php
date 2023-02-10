@@ -448,20 +448,6 @@ function orbita_form_shortcode() {
 
 		orbita_increase_post_like( $post_id );
 
-		$admin_email = get_option( 'admin_email' );
-		$headers     = array( 'Content-Type: text/html; charset=UTF-8' );
-		$admin_url   = get_admin_url();
-		$edit_url    = $admin_url . 'post.php?post=' . $post_id . '&action=edit';
-		$post_url    = get_permalink($post_id);
-
-		$send_email = wp_mail(
-			$admin_email,
-			"[Órbita] Novo post: '" . wp_unslash( $_POST['orbita_post_title']),
-			'Link do post: <a href="' . esc_url( $post_url ) . '">Clique aqui para ver o post</a><br>
-			Link para editar: <a href="' . esc_url( $edit_url ) . '">Clique aqui para editar o post</a>',
-			$headers
-		);
-
 		$html = orbita_get_header_html();
 
 		$html .= 'Tudo certo! Agora você pode <a href="' . home_url( '/?p=' . $post_id ) . '">acessar seu post</a>.';
@@ -544,34 +530,6 @@ function orbita_shortcodes_init() {
 }
 
 add_action( 'init', 'orbita_shortcodes_init' );
-
-/****************** Send emails for each comment made *********************/
-
-/**
- * Comment Post
- *
- * @param Comment $comment_id Comment ID of a post.
- */
-function orbita_comment_post( $comment_id ) {
-	$comment     = get_comment( $comment_id );
-	$admin_email = get_option( 'admin_email' );
-	$headers     = array( 'Content-Type: text/html; charset=UTF-8' );
-	$post_title  = get_the_title( $comment->comment_post_ID );
-	$edit_url    = get_admin_url() . 'post.php?post=' . $comment->comment_post_ID . '&action=edit';
-	$post_url    = get_permalink( $comment->comment_post_ID );
-
-	$send_email = wp_mail(
-		$admin_email,
-		"[Órbita] Novo comentário em '" . $post_title . "'",
-		$comment->comment_content . '<br><br>' .
-		'Comentado por: ' . $comment->comment_author . ' <' . $comment->comment_author_email . '><br>' .
-		'Link do post: <a href="' . esc_url( $post_url ) . '">Clique aqui para ver o post</a><br> 
-		Link para editar: <a href="' . $edit_url . '">Clique aqui para editar o comentário</a>',
-		$headers
-	);
-};
-
-add_action( 'comment_post', 'orbita_comment_post', 10, 3 );
 
 /****************** Reporting comments and posts *********************/
 
