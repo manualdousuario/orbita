@@ -33,13 +33,13 @@ jobs:
     - name: Create artifact
       uses: montudor/action-zip@v0.1.0
       with:
-        args: zip -X -r build/orbita.zip . -x *.git* node_modules/\* .* "*/\.*" CODE_OF_CONDUCT.md CONTRIBUTING.md ISSUE_TEMPLATE.md PULL_REQUEST_TEMPLATE.md *.dist build**
+        args: zip -qq -r orbita.zip . public
 
     - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
           name: graphql-api
-          path: build/orbita.zip
+          path: orbita.zip
           
     - name: Upload to release
       uses: JasonEtco/upload-to-release@master
