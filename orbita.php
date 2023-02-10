@@ -198,7 +198,7 @@ function orbita_get_post_html( $post_id ) {
 	wp_timezone_string( 'America/Sao_Paulo' );
 	$human_date = human_time_diff(get_the_time('U'), current_time( 'timestamp' ));
 
-	$votes_text = $count > 1 ? 'votos' : 'voto';
+	$votes_text = ($count > 1 && $count != 'nenhum') ? 'votos' : 'voto';
 
 	$html  = '<article class="orbita-post">';
 	$html .= orbita_get_vote_html( $post_id );
@@ -423,7 +423,7 @@ function orbita_form_shortcode() {
 		if ( ! isset( $_POST['orbita_post_content'] ) ) {
 			$orbita_post_content = '';
 		} else {
-			$orbita_post_content = sanitize_text_field( wp_unslash( $_POST['orbita_post_content'] ) );
+			$orbita_post_content = $_POST['orbita_post_content'];
 		}
 
 		if ( ! isset( $_POST['orbita_post_url'] ) ) {
