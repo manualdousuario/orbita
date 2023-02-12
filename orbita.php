@@ -38,10 +38,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Define plugin version constant
+ */
+define( 'ORBITA_VERSION', '1.0.4' );
+
+/**
  * Enqueue style file
  */
 function orbita_enqueue_styles() {
-	wp_enqueue_style( 'orbita', plugins_url( '/public/main.css', __FILE__ ), array(), '1', false );
+	wp_register_style( 'orbita', plugins_url( '/public/main.css', __FILE__ ), array(), ORBITA_VERSION, 'all' );
 }
 
 add_action( 'wp_enqueue_scripts', 'orbita_enqueue_styles' );
@@ -50,7 +55,7 @@ add_action( 'wp_enqueue_scripts', 'orbita_enqueue_styles' );
  * Enqueue script file
  */
 function orbita_enqueue_scripts() {
-	wp_enqueue_script( 'orbita', plugins_url( '/public/main.min.js', __FILE__ ), array(), '1', false );
+	wp_register_script( 'orbita', plugins_url( '/public/main.min.js', __FILE__ ), array(), ORBITA_VERSION, true );
 	wp_localize_script( 'orbita', 'orbitaApi', array(
 		'restURL' => rest_url(),
 		'restNonce' => wp_create_nonce('wp_rest')
@@ -157,9 +162,12 @@ function orbita_get_vote_html( $post_id ) {
 }
 
 /**
- * Get Header
+ * Get Header and load assets
  */
 function orbita_get_header_html() {
+	wp_enqueue_style( 'orbita' );
+	wp_enqueue_script( 'orbita' );
+
 	$html  = '<div class="orbita-header">';
 	$html .= '  <a href="/orbita/postar/" class="orbita-post-button">Postar</a>';
 	$html .= '  <div>';
@@ -295,7 +303,7 @@ function orbita_ranking_shortcode( $atts = array(), $content = null, $tag = '' )
 	);
 
 	$orbita_posts_array = orbita_ranking_calculator(
-		$args_orbita, 
+		$args_orbita,
 		$orbita_rank_atts['comment-points'],
 		$orbita_rank_atts['vote-points']
 	);
@@ -310,10 +318,10 @@ function orbita_ranking_shortcode( $atts = array(), $content = null, $tag = '' )
 		),
 	);
 
-	$blog_posts_array = orbita_ranking_calculator( 
-		$args_blog, 
-		$orbita_rank_atts['comment-points'], 
-		$orbita_rank_atts['vote-points'] 
+	$blog_posts_array = orbita_ranking_calculator(
+		$args_blog,
+		$orbita_rank_atts['comment-points'],
+		$orbita_rank_atts['vote-points']
 	);
 
 	$posts_array = array_merge( $orbita_posts_array, $blog_posts_array );
@@ -601,7 +609,7 @@ function orbita_update_post_likes() {
 	if ( ! get_current_user_id() ) {
 		return;
 	}
-	
+
 	if ( ! $_POST ) {
 		return;
 	}
