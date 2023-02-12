@@ -1,13 +1,12 @@
 # 🪐 Órbita
 
-Plugin de Wordpress para criar um painel de debates baseado em links, similar ao Hacker News, para o [Manual do Usuário](https://manualdousuario.net).
+Plugin de WordPress para criar um painel de debates baseado em links, similar ao Hacker News, para o [Manual do Usuário](https://manualdousuario.net).
 
 ## Rodar o projeto
 
 Requisitos
 - Node.js
 - Grunt
-- [Child theme do MdU](https://github.com/rghedin/ten-years)
 
 Clone o repositório
 
