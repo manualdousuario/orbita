@@ -166,12 +166,9 @@ function orbita_get_vote_html( $post_id ) {
 }
 
 /**
- * Get Header and load assets
+ * Get Header
  */
 function orbita_get_header_html() {
-	wp_enqueue_style( 'orbita' );
-	wp_enqueue_script( 'orbita' );
-
 	$html  = '<div class="orbita-header">';
 	$html .= '  <a href="/orbita/postar/" class="orbita-post-button">Postar</a>';
 	$html .= '  <div>';
@@ -531,6 +528,14 @@ function orbita_vote_shortcode() {
 }
 
 /**
+ * Load assets
+ */
+function orbita_assets_shortcode() {
+	wp_enqueue_style( 'orbita' );
+	wp_enqueue_script( 'orbita' );
+}
+
+/**
  * Shortcodes Init
  */
 function orbita_shortcodes_init() {
@@ -539,6 +544,7 @@ function orbita_shortcodes_init() {
 	add_shortcode( 'orbita-posts', 'orbita_posts_shortcode' );
 	add_shortcode( 'orbita-header', 'orbita_header_shortcode' );
 	add_shortcode( 'orbita-vote', 'orbita_vote_shortcode' );
+	add_shortcode( 'orbita-assets', 'orbita_assets_shortcode' );
 }
 
 add_action( 'init', 'orbita_shortcodes_init' );
@@ -640,6 +646,9 @@ function orbita_update_post_likes() {
 	die();
 }
 
+/**
+ * REST API
+ */
 add_action(
 	'rest_api_init',
 	function() {
