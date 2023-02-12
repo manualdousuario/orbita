@@ -33,6 +33,22 @@ Gerar arquivo `orbita.zip`
 grunt compress
 ```
 
+## Shortcodes
+
+`[orbita-css]`: carrega arquivo CSS
+
+`[orbita-js]`: carrega arquivo JavaScript
+
+`[orbita-form]`: formulário de postagem
+
+`[orbita-ranking]`: ranking com posts mais votados
+
+`[orbita-posts]`: listagem de post
+
+`[orbita-header]`: menu
+
+`[orbita-vote]`: componente de votoção
+
 ## Instalar o plugin
 
 1. Faça login no seu admin do WordPress
