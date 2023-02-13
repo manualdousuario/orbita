@@ -78,6 +78,8 @@ function orbita_setup_post_type() {
 			'capability_type'     => 'post',
 			'exclude_from_search' => true,
 			'rewrite'             => array( 'slug' => 'orbita-post' ),
+			'menu_icon'.          => 'dashicons-marker',
+			'menu_position'       => 8,
 		)
 	);
 
