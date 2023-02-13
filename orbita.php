@@ -38,10 +38,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Define plugin version constant
+ */
+define( 'ORBITA_VERSION', '1.1.1' );
+
+/**
  * Enqueue style file
  */
 function orbita_enqueue_styles() {
-	wp_enqueue_style( 'orbita', plugins_url( '/public/main.css', __FILE__ ), array(), '1', false );
+	wp_register_style( 'orbita', plugins_url( '/public/main.css', __FILE__ ), array(), ORBITA_VERSION, 'all' );
 }
 
 add_action( 'wp_enqueue_scripts', 'orbita_enqueue_styles' );
@@ -50,11 +55,15 @@ add_action( 'wp_enqueue_scripts', 'orbita_enqueue_styles' );
  * Enqueue script file
  */
 function orbita_enqueue_scripts() {
-	wp_enqueue_script( 'orbita', plugins_url( '/public/main.min.js', __FILE__ ), array(), '1', false );
-	wp_localize_script( 'orbita', 'orbitaApi', array(
-		'restURL' => rest_url(),
-		'restNonce' => wp_create_nonce('wp_rest')
-	));
+	wp_register_script( 'orbita', plugins_url( '/public/main.min.js', __FILE__ ), array(), ORBITA_VERSION, true );
+	wp_localize_script(
+		'orbita',
+		'orbitaApi',
+		array(
+			'restURL'   => rest_url(),
+			'restNonce' => wp_create_nonce( 'wp_rest' ),
+		)
+	);
 }
 
 add_action( 'wp_enqueue_scripts', 'orbita_enqueue_scripts' );
@@ -139,7 +148,7 @@ function orbita_get_vote_html( $post_id ) {
 	$users_vote_array = get_post_meta( $post_id, $users_vote_key, true );
 	$already_voted    = false;
 	$additional_class = '';
-	$title = "Votar";
+	$title            = 'Votar';
 
 	if ( $users_vote_array && array_search( get_current_user_id(), $users_vote_array, true ) !== false ) {
 		$already_voted = true;
@@ -149,7 +158,7 @@ function orbita_get_vote_html( $post_id ) {
 	}
 	if ( $already_voted ) {
 		$additional_class = 'orbita-vote-already-voted';
-		$title = "Você já votou!";
+		$title            = 'Você já votou!';
 	}
 
 	$html  = '<button title="' . $title . '" class="orbita-vote ' . $additional_class . '" data-post-id="' . $post_id . '">⬆️';
@@ -162,6 +171,9 @@ function orbita_get_vote_html( $post_id ) {
  * Get Header
  */
 function orbita_get_header_html() {
+	wp_enqueue_style( 'orbita' );
+	wp_enqueue_script( 'orbita' );
+
 	$html  = '<div class="orbita-header">';
 	$html .= '  <a href="/orbita/postar/" class="orbita-post-button">Postar</a>';
 	$html .= '  <div>';
@@ -189,7 +201,7 @@ function orbita_get_post_html( $post_id ) {
 		$external_url = get_permalink();
 	}
 	$regex       = '/manualdousuario.net\/orbita/i';
-	$only_domain = preg_match( $regex, $external_url ) ? 'debate' : wp_parse_url( str_replace('www.', '', $external_url), PHP_URL_HOST );
+	$only_domain = preg_match( $regex, $external_url ) ? 'debate' : wp_parse_url( str_replace( 'www.', '', $external_url ), PHP_URL_HOST );
 	$count_key   = 'post_like_count';
 	$count       = get_post_meta( $post_id, $count_key, true );
 
@@ -198,9 +210,9 @@ function orbita_get_post_html( $post_id ) {
 	}
 
 	wp_timezone_string( 'America/Sao_Paulo' );
-	$human_date = human_time_diff(get_the_time('U'), current_time( 'timestamp' ));
+	$human_date = human_time_diff( get_the_time( 'U' ), current_time( 'timestamp' ) );
 
-	$votes_text = ($count > 1 && $count != 'nenhum') ? 'votos' : 'voto';
+	$votes_text = ( $count > 1 && 'nenhum' !== $count ) ? 'votos' : 'voto';
 
 	$html  = '<article class="orbita-post">';
 	$html .= orbita_get_vote_html( $post_id );
@@ -297,7 +309,7 @@ function orbita_ranking_shortcode( $atts = array(), $content = null, $tag = '' )
 	);
 
 	$orbita_posts_array = orbita_ranking_calculator(
-		$args_orbita, 
+		$args_orbita,
 		$orbita_rank_atts['comment-points'],
 		$orbita_rank_atts['vote-points']
 	);
@@ -312,10 +324,10 @@ function orbita_ranking_shortcode( $atts = array(), $content = null, $tag = '' )
 		),
 	);
 
-	$blog_posts_array = orbita_ranking_calculator( 
-		$args_blog, 
-		$orbita_rank_atts['comment-points'], 
-		$orbita_rank_atts['vote-points'] 
+	$blog_posts_array = orbita_ranking_calculator(
+		$args_blog,
+		$orbita_rank_atts['comment-points'],
+		$orbita_rank_atts['vote-points']
 	);
 
 	$posts_array = array_merge( $orbita_posts_array, $blog_posts_array );
@@ -603,7 +615,7 @@ function orbita_update_post_likes() {
 	if ( ! get_current_user_id() ) {
 		return;
 	}
-	
+
 	if ( ! $_POST ) {
 		return;
 	}
@@ -630,9 +642,19 @@ function orbita_update_post_likes() {
 	die();
 }
 
-add_action('rest_api_init', function() {
-	register_rest_route('orbitaApi/v1', '/likes/', array(
-		'methods' => 'POST',
-		'callback' => 'orbita_update_post_likes'
-	));
-});
+/**
+ * REST API
+ */
+add_action(
+	'rest_api_init',
+	function() {
+		register_rest_route(
+			'orbitaApi/v1',
+			'/likes/',
+			array(
+				'methods'  => 'POST',
+				'callback' => 'orbita_update_post_likes',
+			)
+		);
+	}
+);

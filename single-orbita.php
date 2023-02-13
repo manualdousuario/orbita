@@ -36,6 +36,8 @@ get_header();
 				wp_timezone_string( 'America/Sao_Paulo' );
 				$date = get_the_date( 'd/m/Y H:i' );
 
+				echo do_shortcode( '[orbita-header]' );
+
 				if ( $external_url ) :
 					the_title( '<h1 class="entry-title">🔗 <a href="' . esc_url( $external_url ) . '" rel="ugc">', '</a></h1>' );
 				else :
