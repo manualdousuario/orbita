@@ -8,6 +8,12 @@
  * @license           GPL-3.0
  **/
 
+/**
+ * Assets
+ */
+echo do_shortcode( '[orbita-css]' );
+echo do_shortcode( '[orbita-js]' );
+
 get_header();
 ?>
 
