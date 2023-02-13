@@ -169,6 +169,9 @@ function orbita_get_vote_html( $post_id ) {
  * Get Header
  */
 function orbita_get_header_html() {
+	wp_enqueue_style( 'orbita' );
+	wp_enqueue_script( 'orbita' );
+
 	$html  = '<div class="orbita-header">';
 	$html .= '  <a href="/orbita/postar/" class="orbita-post-button">Postar</a>';
 	$html .= '  <div>';
@@ -528,20 +531,6 @@ function orbita_vote_shortcode() {
 }
 
 /**
- * Load CSS file
- */
-function orbita_css_shortcode() {
-	wp_enqueue_style( 'orbita' );
-}
-
-/**
- * Load JavaScript file
- */
-function orbita_js_shortcode() {
-	wp_enqueue_script( 'orbita' );
-}
-
-/**
  * Shortcodes Init
  */
 function orbita_shortcodes_init() {
@@ -550,8 +539,6 @@ function orbita_shortcodes_init() {
 	add_shortcode( 'orbita-posts', 'orbita_posts_shortcode' );
 	add_shortcode( 'orbita-header', 'orbita_header_shortcode' );
 	add_shortcode( 'orbita-vote', 'orbita_vote_shortcode' );
-	add_shortcode( 'orbita-css', 'orbita_css_shortcode' );
-	add_shortcode( 'orbita-js', 'orbita_js_shortcode' );
 }
 
 add_action( 'init', 'orbita_shortcodes_init' );
