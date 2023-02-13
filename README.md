@@ -35,10 +35,6 @@ grunt compress
 
 ## Shortcodes
 
-`[orbita-css]`: carrega arquivo CSS
-
-`[orbita-js]`: carrega arquivo JavaScript
-
 `[orbita-form]`: formulário de postagem
 
 `[orbita-ranking]`: ranking com posts mais votados
