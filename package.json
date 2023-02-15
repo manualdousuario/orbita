@@ -1,5 +1,5 @@
 {
-  "name": "orbita",
+  "name": "orbita-manual",
   "version": "1.0.0",
   "devDependencies": {
     "grunt": "^1.4.1",
