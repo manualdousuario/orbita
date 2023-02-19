@@ -78,15 +78,17 @@ $desktop: "only screen and (min-width : 700px)";
 .orbita-header {
   width: 100%;
   margin-bottom: 2rem;
+  background-color: var(--cor-de-fundo);
+  padding: 0.5rem 0;
   border-radius: var(--borda-curva);
   display: flex;
   flex-direction: column;
   align-items: center;
   font-family: -apple-system, sans-serif;
-  font-size: 0.9rem;
+  line-height: 2;
 
   div a {
-    margin-left: 1rem;
+    margin: 0 .3rem;
     display: inline;
 
     &:visited {
@@ -96,18 +98,20 @@ $desktop: "only screen and (min-width : 700px)";
     &:hover {
       color: var(--color-link-states);
     }
+
+    @media #{$desktop} {
+      margin: 0 0 0 1rem;
+    }
   }
 
   @media #{$desktop} {
-    background-color: var(--cor-de-fundo);
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
     flex-direction: row;
     max-width: 100%;
+    line-height: inherit;
+    padding: 0.5rem 1rem;
   }
 
   .orbita-post-button {
-
     @media #{$desktop} {
       margin-right: auto;
     }
