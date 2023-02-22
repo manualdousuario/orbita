@@ -19,6 +19,7 @@ get_header();
 			the_post();
 
 			$external_url = get_post_meta( get_the_id(), 'external_url', true );
+			$only_domain  = wp_parse_url( str_replace( 'www.', '', $external_url ), PHP_URL_HOST );
 			$count        = get_post_meta( get_the_id(), 'post_like_count', true );
 
 			if ( ! $count ) {
@@ -39,7 +40,7 @@ get_header();
 				echo do_shortcode( '[orbita-header]' );
 
 				if ( $external_url ) :
-					the_title( '<h1 class="entry-title">🔗 <a href="' . esc_url( $external_url ) . '" rel="ugc">', '</a></h1>' );
+					the_title( '<h1 class="entry-title">🔗 <a href="' . esc_url( $external_url ) . '" rel="ugc">', '</a> <span class="orbita-post-domain">' . $only_domain . '</span> </h1>' );
 				else :
 					the_title( '<h1 class="entry-title">', '</h1>' );
 				endif;
