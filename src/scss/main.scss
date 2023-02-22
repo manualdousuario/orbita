@@ -135,6 +135,10 @@ $desktop: "only screen and (min-width : 700px)";
   }
 }
 
+.orbita-form {
+  margin-bottom: 6rem;
+}
+
 .orbita-form-control {
   margin-bottom: 0.5rem;
 
@@ -186,21 +190,6 @@ $desktop: "only screen and (min-width : 700px)";
 
   @media #{$desktop} {
     display: block;
-  }
-
-  a {
-    display: inline-block;
-    padding: 0.2em 8px;
-    margin-top: 8px;
-    cursor: grab;
-    border-radius: var(--borda-curva);
-    background-color: rgba(255, 255, 255, 0.2);
-    text-decoration: none;
-    color: var(--color-primary);
-
-    &:active {
-      cursor: grabbing;
-    }
   }
 }
 
