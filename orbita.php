@@ -11,7 +11,7 @@
  * Plugin Name:     Órbita
  * Plugin URI:      https://gnun.es
  * Description:     Órbita é o plugin para criar um sistema Hacker News-like para o Manual do Usuário
- * Version:         1.1.4
+ * Version:         1.1.5
  * Author:          Gabriel Nunes
  * Author URI:      https://gnun.es
  * License:         GPL v3
@@ -201,7 +201,7 @@ function orbita_get_post_html( $post_id ) {
 		$external_url = get_permalink();
 	}
 	$regex       = '/manualdousuario.net\/orbita/i';
-	$only_domain = preg_match( $regex, $external_url ) ? 'debate' : wp_parse_url( str_replace( 'www.', '', $external_url ), PHP_URL_HOST );
+	$only_domain = preg_match( $regex, $external_url ) ? 'conversa' : wp_parse_url( str_replace( 'www.', '', $external_url ), PHP_URL_HOST );
 	$count_key   = 'post_like_count';
 	$count       = get_post_meta( $post_id, $count_key, true );
 
@@ -419,7 +419,7 @@ function orbita_form_shortcode() {
 	}
 
 	if ( ! is_user_logged_in() ) {
-		$html = 'Para iniciar debates na Órbita, <a href="' . wp_login_url( home_url( '/orbita/postar' ) ) . '">faça login</a> ou <a href="' . wp_registration_url() . '">cadastre-se gratuitamente</a>.';
+		$html = 'Para postar links ou iniciar conversas na Órbita, <a href="' . wp_login_url( home_url( '/orbita/postar' ) ) . '">faça login</a> ou <a href="' . wp_registration_url() . '">cadastre-se gratuitamente</a>.';
 		return $html;
 	}
 
