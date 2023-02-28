@@ -180,6 +180,7 @@ function orbita_get_header_html() {
 	$html .= '      <a href="/orbita">Populares</a>';
 	$html .= '      <a href="/orbita/tudo">Links novos</a>';
 	$html .= '      <a href="/orbita/guia-de-uso">Guia de uso</a>';
+	$html .= '      <a href="/feed/?post_type=orbita_post">RSS</a>';
 	$html .= '  </div>';
 	$html .= '</div>';
 
