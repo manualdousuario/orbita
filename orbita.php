@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define plugin version constant
  */
-define( 'ORBITA_VERSION', '1.1.4' );
+define( 'ORBITA_VERSION', '1.1.5' );
 
 /**
  * Enqueue style file
