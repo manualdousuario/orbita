@@ -219,7 +219,7 @@ function orbita_get_post_html( $post_id ) {
 	$html .= orbita_get_vote_html( $post_id );
 	$html .= '  <div class="orbita-post-infos">';
 	$html .= '    <div class="orbita-post-title">';
-	$html .= '          <a href="' . esc_url( $external_url ) . '" rel="ugc" title="' . get_the_title() . '">' . get_the_title() . '</a>';
+	$html .= '          <a href="' . esc_url( $external_url ) . '?utm_source=ManualdoUsuarioNet&utm_medium=Orbita" rel="ugc" title="' . get_the_title() . '">' . get_the_title() . '</a>';
 	$html .= '          <div class="orbita-post-info">';
 	$html .= '              <span class="orbita-post-domain">' . $only_domain . '</span>';
 	$html .= '          </div>';
@@ -503,7 +503,7 @@ function orbita_form_shortcode() {
 	$html .= '          <textarea rows="5" id="orbita_post_content" name="orbita_post_content"></textarea>';
 	$html .= '      </div>';
 	$html .= '      <div class="orbita-form-control">';
-	$html .= '          <p>Antes de postar, leia nossas <a href="https://manualdousuario.net/doc-comentarios/" target="_blank" rel="noreferrer noopener">dicas e orientações para comentários</a>.</p>';
+	$html .= '          <p>Antes de postar, leia nossas <a href="https://manualdousuario.net/doc-comentarios/">dicas e orientações para comentários</a>.</p>';
 	$html .= '      </div>';
 	$html .= '      <input type="submit" value="Publicar">';
 	$html .= '  </form>';
