@@ -1,38 +1,51 @@
-.orbita_post-template-default .post-navigation {
-  display: none;
+$desktop: "only screen and (min-width : 700px)";
+
+.orbita_post-template-default {
+  .post-navigation {
+    display: none;
+  }
 }
 
-.orbita_post .orbita-meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.orbita_post {
+  .orbita-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
 }
 
 .orbita-post {
   margin: 0 0 1.5rem;
   line-height: 1.2;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-}
-@media only screen and (min-width: 700px) {
-  .orbita-post {
+
+  @media #{$desktop} {
     padding-bottom: 0;
     border-bottom: 0;
   }
-}
 
-.orbita-post-tag {
-  font-size: 21px;
-  display: inline-block;
-  padding: 0 21px;
-  border-radius: var(--borda-curva);
-}
-.orbita-post-domain {
-  font-size: var(--small);
-  color: #a6a6a6;
-}
-.orbita-post-date {
-  font-family: monospace;
-  font-size: 95%;
+  &-info {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &-tag {
+    font-size: 21px;
+    display: inline-block;
+    padding: 0 21px;
+    border-radius: var(--borda-curva);
+  }
+
+  &-domain {
+    font-size: 95%;
+    color: #a6a6a6;
+  }
+
+  &-date {
+    font-size: 95%;
+    font-family: monospace;
+  }
 }
 
 .orbita-header {
@@ -46,33 +59,35 @@
   align-items: center;
   font-family: -apple-system, sans-serif;
   line-height: 2;
-}
-.orbita-header div a {
-  margin: 0 .3rem;
-  display: inline;
-}
-.orbita-header div a:visited {
-  color: var(--color-link);
-}
-.orbita-header div a:hover {
-  color: var(--color-link-states);
-}
-@media only screen and (min-width: 700px) {
-  .orbita-header div a {
-    margin: 0 0 0 1rem;
+
+  div a {
+    margin: 0 .3rem;
+    display: inline;
+
+    &:visited {
+      color: var(--color-link);
+    }
+
+    &:hover {
+      color: var(--color-link-states);
+    }
+
+    @media #{$desktop} {
+      margin: 0 0 0 1rem;
+    }
   }
-}
-@media only screen and (min-width: 700px) {
-  .orbita-header {
+
+  @media #{$desktop} {
     flex-direction: row;
     max-width: 100%;
     line-height: inherit;
     padding: 0.5rem 1rem;
   }
-}
-@media only screen and (min-width: 700px) {
-  .orbita-header .orbita-post-button {
-    margin-right: auto;
+
+  .orbita-post-button {
+    @media #{$desktop} {
+      margin-right: auto;
+    }
   }
 }
 
@@ -85,18 +100,20 @@
   border: 0;
   padding: 0;
   position: relative;
-  left: -2px;
   cursor: default;
   background: transparent !important;
   font-size: 90%;
   filter: grayscale();
-}
-.orbita-vote-can-vote {
-  cursor: pointer;
-}
-.orbita-vote-already-voted {
-  cursor: default !important;
-  opacity: 0.4;
+  left: -2px;
+
+  &-can-vote {
+    cursor: pointer;
+  }
+
+  &-already-voted {
+    cursor: default !important;
+    opacity: 0.5;
+  }
 }
 
 .orbita-form {
@@ -105,50 +122,54 @@
 
 .orbita-form-control {
   margin-bottom: 0.5rem;
-}
-.orbita-form-control label {
-  display: block;
-  cursor: pointer;
-}
-.orbita-form-control input[type="text"],
-.orbita-form-control input[type="url"] {
-  width: 100%;
-}
-@media only screen and (min-width: 700px) {
-  .orbita-form-control input[type="text"],
-  .orbita-form-control input[type="url"] {
-    width: 50%;
+
+  label {
+    display: block;
+    cursor: pointer;
   }
-}
-.orbita-form-control input[type="url"] {
-  background-color: var(--light-bg);
-  color: var(--txt-color);
-  border: 1px solid var(--border-color);
-}
-.orbita-form-control textarea {
-  max-width: 60ch;
-  background-color: var(--light-bg);
-}
-.orbita-form-control .orbita-help-block {
-  font-family: monospace;
-  display: block;
-  font-size: var(--small);
-}
-.orbita-form-control .orbita-post-title {
-  line-height: 1.2;
-}
-.orbita-form-control .orbita-post-title-textarea {
-  resize: none;
-  width: 100%;
+
+  input[type="text"],
+  input[type="url"] {
+    width: 100%;
+
+    @media #{$desktop} {
+      width: 50%;
+    }
+  }
+
+  input[type="url"] {
+    background-color: var(--light-bg);
+    color: var(--txt-color);
+    border: 1px solid var(--border-color);
+  }
+
+  textarea {
+    max-width: 60ch;
+    background-color: var(--light-bg);
+  }
+
+  .orbita-help-block {
+    font-family: monospace;
+    display: block;
+    font-size: var(--small);
+  }
+
+  .orbita-post-title {
+    line-height: 1.2;
+  }
+
+  .orbita-post-title-textarea {
+    resize: none;
+    width: 100%;
+  }
 }
 
 .orbita-bookmarklet {
   padding: 24px;
   margin-top: 32px;
   display: none;
-}
-@media only screen and (min-width: 700px) {
-  .orbita-bookmarklet {
+
+  @media #{$desktop} {
     display: block;
   }
 }
@@ -160,5 +181,3 @@
 .orbita-footer {
   float: right;
 }
-
-/*# sourceMappingURL=main.css.map */
