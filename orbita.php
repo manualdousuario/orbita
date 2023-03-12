@@ -87,7 +87,7 @@ function orbita_setup_post_type() {
 			'capability_type'     => 'post',
 			'exclude_from_search' => true,
 			'rewrite'             => array( 'slug' => 'orbita-post' ),
-			'menu_icon'          => 'dashicons-marker',
+			'menu_icon'           => 'dashicons-marker',
 			'menu_position'       => 8,
 		)
 	);
@@ -100,7 +100,7 @@ function orbita_setup_post_type() {
 				'name'          => __( 'Categorias' ),
 				'singular_name' => __( 'Categoria' ),
 			),
-			'rewrite'      => array( 'slug' => 'categoria' ),
+			'rewrite'      => array( 'slug' => 'category' ),
 			'hierarchical' => true,
 		)
 	);

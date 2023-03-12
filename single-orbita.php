@@ -27,6 +27,14 @@ get_header();
 			}
 			$votes_text = $count > 1 ? 'votos' : 'voto';
 
+			if ( ! $external_url ) {
+				$get_post_id = get_the_ID();
+				$get_term    = get_term_by( 'name', 'conversas', 'orbita_category' );
+				$get_term_id = $get_term->term_id;
+
+				wp_set_object_terms( $get_post_id, $get_term_id, 'orbita_category' );
+			}
+
 			?>
 
 		<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
