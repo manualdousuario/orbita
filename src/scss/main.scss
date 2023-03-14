@@ -103,7 +103,7 @@ $desktop: "only screen and (min-width : 700px)";
   cursor: default;
   background: transparent !important;
   font-size: 90%;
-  filter: grayscale();
+  filter: grayscale(1);
   left: -2px;
 
   &-can-vote {
