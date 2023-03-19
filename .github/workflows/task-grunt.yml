@@ -1,4 +1,4 @@
-name: NodeJS with Grunt
+name: Task Grunt
 
 on:
   push:
@@ -31,3 +31,13 @@ jobs:
         gem install sass
         npm install
         grunt
+        git config user.name 'update-version-action'
+        git config user.email '<>'
+        git add .
+        git commit -m 'Action: Task Grunt'
+
+    - name: Push
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        force: true
