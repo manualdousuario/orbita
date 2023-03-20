@@ -21,8 +21,8 @@ jobs:
         sed -i '14i \ * Version:         ${{ github.event.inputs.version }}' orbita.php
         sed -i '43d' orbita.php
         sed -i "43i define( 'ORBITA_VERSION', '${{ github.event.inputs.version }}' );" orbita.php
-        git config user.name 'update-version-action'
-        git config user.email '<>'
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
         git add .
         git commit -m 'Atualiza para a versão ${{ github.event.inputs.version }}'
 
@@ -30,4 +30,5 @@ jobs:
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
         force: true
