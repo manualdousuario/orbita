@@ -13,10 +13,6 @@ jobs:
       contents: write
       packages: write
 
-    strategy:
-      matrix:
-        node-version: [16.x, 18.x]
-
     steps:
     - uses: actions/checkout@v3
     - uses: ruby/setup-ruby@v1
@@ -24,10 +20,9 @@ jobs:
         ruby-version: "3.0"
         bundler-cache: true
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+    - uses: actions/setup-node@v3
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: "16.x"
 
     - name: Build
       run: |
