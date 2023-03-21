@@ -12,10 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-      with:
-        persist-credentials: false
-        fetch-depth: 0
+    - uses: actions/checkout@v3
 
     - name: Update version
       working-directory: ./
@@ -24,8 +21,8 @@ jobs:
         sed -i "14i \ * Version:         ${{ github.event.inputs.version }}" orbita.php
         sed -i "43d" orbita.php
         sed -i "43i define( 'ORBITA_VERSION', '${{ github.event.inputs.version }}' );" orbita.php
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
+        git config user.email "<>"
+        git config user.name "update-version-action"
         git add .
         git commit -m "Atualiza para a versão ${{ github.event.inputs.version }}"
 
