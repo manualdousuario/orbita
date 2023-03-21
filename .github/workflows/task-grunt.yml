@@ -1,10 +1,6 @@
 name: Task Grunt
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+on: [push, pull_request]
 
 permissions:
   actions: write
@@ -46,3 +42,5 @@ jobs:
 
     - name: Push
       uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
