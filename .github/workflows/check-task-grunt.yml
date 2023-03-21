@@ -1,9 +1,6 @@
 name: Check Task Grunt
 
-on:
-  pull-request:
-    branches:
-      - main
+on: [push, pull_request, pull_request_target]
 
 jobs:
   check-build:
