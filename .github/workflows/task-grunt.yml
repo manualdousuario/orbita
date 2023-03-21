@@ -6,6 +6,18 @@ on:
   pull_request:
     branches: [ "main" ]
 
+permissions:
+  actions: write
+  checks: write
+  contents: write
+  deployments: write
+  issues: write
+  packages: write
+  pull-requests: write
+  repository-projects: write
+  security-events: write
+  statuses: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -27,8 +39,8 @@ jobs:
         gem install sass
         npm install
         grunt
-        git config user.email "<>"
-        git config user.name "task-grunt-action"
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
         git add .
         git commit -m "Action: Task Grunt"
 

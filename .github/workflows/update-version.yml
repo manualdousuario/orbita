@@ -7,6 +7,18 @@ on:
         description: "Add new version"
         required: true
 
+permissions:
+  actions: write
+  checks: write
+  contents: write
+  deployments: write
+  issues: write
+  packages: write
+  pull-requests: write
+  repository-projects: write
+  security-events: write
+  statuses: write
+
 jobs:
   version:
     runs-on: ubuntu-latest
@@ -21,8 +33,8 @@ jobs:
         sed -i "14i \ * Version:         ${{ github.event.inputs.version }}" orbita.php
         sed -i "43d" orbita.php
         sed -i "43i define( 'ORBITA_VERSION', '${{ github.event.inputs.version }}' );" orbita.php
-        git config user.email "<>"
-        git config user.name "update-version-action"
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
         git add .
         git commit -m "Atualiza para a versão ${{ github.event.inputs.version }}"
 
