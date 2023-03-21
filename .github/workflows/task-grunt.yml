@@ -1,6 +1,6 @@
 name: Task Grunt
 
-on: [push, pull_request]
+on: [push, pull_request, pull_request_target]
 
 jobs:
   build:
@@ -32,4 +32,4 @@ jobs:
     - name: Push
       uses: ad-m/github-push-action@master
       with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        github_token: ${{ secrets.GITHUB_TOKEN }}
