@@ -6,7 +6,6 @@ Plugin de WordPress para criar um painel de debates baseado em links, similar ao
 
 Requisitos
 - Node.js
-- Grunt
 
 Clone o repositório
 
