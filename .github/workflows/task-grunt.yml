@@ -1,11 +1,13 @@
 name: Task Grunt
 
-on: [push, pull_request, pull_request_target]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions: write-all
 
     steps:
     - uses: actions/checkout@v3
