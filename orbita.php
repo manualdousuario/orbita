@@ -215,6 +215,10 @@ function orbita_get_post_html( $post_id ) {
 
 	$votes_text = ( $count > 1 && 'nenhum' !== $count ) ? 'votos' : 'voto';
 
+	$author_id = get_the_author_meta( 'ID', $post->post_author );
+
+	$author_name = $author_id ? get_the_author_meta( 'display_name', $post->post_author ) : '[Conta Apagada]';
+
 	$html  = '<article class="orbita-post">';
 	$html .= orbita_get_vote_html( $post_id );
 	$html .= '  <div class="orbita-post-infos">';
@@ -224,7 +228,7 @@ function orbita_get_post_html( $post_id ) {
 	$html .= '              <span class="orbita-post-domain">' . $only_domain . '</span>';
 	$html .= '          </div>';
 	$html .= '          <div class="orbita-post-date">';
-	$html .= '              <span data-votes-post-id="' . esc_attr( $post_id ) . '">' . $count . ' </span> ' . $votes_text . ' | por ' . get_the_author_meta( 'display_name', $orbita_post->post_author ) . ' ' . $human_date . ' atrás | <a href=" ' . get_permalink() . '">' . get_comments_number_text( 'sem comentários', '1 comentário', '% comentários' ) . '</a>';
+	$html .= '              <span data-votes-post-id="' . esc_attr( $post_id ) . '">' . $count . ' </span> ' . $votes_text . ' | por ' . $author_name . ' ' . $human_date . ' atrás | <a href=" ' . get_permalink() . '">' . get_comments_number_text( 'sem comentários', '1 comentário', '% comentários' ) . '</a>';
 	$html .= '          </div>';
 	$html .= '      </div>';
 	$html .= '</div>';
