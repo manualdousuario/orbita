@@ -15,11 +15,8 @@ $desktop: "only screen and (min-width : 700px)";
 }
 
 .orbita-post {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.5rem;
-  margin-bottom: .8rem;
-  padding-bottom: 1rem;
+  margin: 0 0 1.5rem;
+  line-height: 1.2;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 
   @media #{$desktop} {
@@ -41,37 +38,13 @@ $desktop: "only screen and (min-width : 700px)";
   }
 
   &-domain {
-    font-size: var(--small);
-    color: var(--border-color);
+    font-size: 95%;
+    color: #a6a6a6;
   }
 
   &-date {
-    font-size: var(--small);
+    font-size: 95%;
     font-family: monospace;
-
-    .orbita-report-link {
-      background-color: transparent;
-      border: 0;
-      padding: 0;
-      color: var(--color-primary);
-      text-decoration: underline;
-      font-size: var(--small);
-      float: none;
-      text-transform: lowercase;
-      cursor: pointer;
-    }
-  }
-}
-
-.orbita-ranking {
-  counter-increment: css-counter 0;
-
-  .orbita-post {
-    counter-increment: css-counter 1;
-
-    &:before {
-      content: counter(css-counter) ". ";
-    }
   }
 }
 
@@ -118,12 +91,20 @@ $desktop: "only screen and (min-width : 700px)";
   }
 }
 
+.orbita-ranking ol {
+  list-style: none;
+  margin-left: 0;
+}
+
 .orbita-vote {
   border: 0;
   padding: 0;
   position: relative;
   cursor: default;
   background: transparent !important;
+  font-size: 90%;
+  filter: grayscale(1);
+  left: -2px;
 
   &-can-vote {
     cursor: pointer;
@@ -193,17 +174,8 @@ $desktop: "only screen and (min-width : 700px)";
   }
 }
 
-.orbita-report-link {
-  float: right;
-  cursor: pointer;
-
-  &-already-reported {
-    background: transparent;
-    border: 0;
-    text-decoration: none;
-    color: var(--color-primary);
-    cursor: default !important;
-  }
+.orbita-navigation {
+  margin-top: 6rem !important;
 }
 
 .orbita-footer {

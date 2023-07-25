@@ -11,7 +11,7 @@
  * Plugin Name:     Órbita
  * Plugin URI:      https://gnun.es
  * Description:     Órbita é o plugin para criar um sistema Hacker News-like para o Manual do Usuário
- * Version:         1.1.5
+ * Version:         1.1.6
  * Author:          Gabriel Nunes
  * Author URI:      https://gnun.es
  * License:         GPL v3
@@ -202,7 +202,7 @@ function orbita_get_post_html( $post_id ) {
 		$external_url = get_permalink();
 	}
 	$regex       = '/manualdousuario.net\/orbita/i';
-	$only_domain = preg_match( $regex, $external_url ) ? 'conversa' : wp_parse_url( str_replace( 'www.', '', $external_url ), PHP_URL_HOST );
+	$only_domain = preg_match( $regex, $external_url ) ? '💬' : wp_parse_url( str_replace( 'www.', '', $external_url ), PHP_URL_HOST );
 	$count_key   = 'post_like_count';
 	$count       = get_post_meta( $post_id, $count_key, true );
 
@@ -219,20 +219,16 @@ function orbita_get_post_html( $post_id ) {
 
 	$author_name = $author_id ? get_the_author_meta( 'display_name', $post->post_author ) : '[Conta Apagada]';
 
-	$html  = '<article class="orbita-post">';
+	$html  = '<li class="orbita-post">';
 	$html .= orbita_get_vote_html( $post_id );
-	$html .= '  <div class="orbita-post-infos">';
-	$html .= '    <div class="orbita-post-title">';
 	$html .= '          <a href="' . esc_url( $external_url ) . '?utm_source=ManualdoUsuarioNet&utm_medium=Orbita" rel="ugc" title="' . get_the_title() . '">' . get_the_title() . '</a>';
-	$html .= '          <div class="orbita-post-info">';
+	$html .= '          <span class="orbita-post-info">';
 	$html .= '              <span class="orbita-post-domain">' . $only_domain . '</span>';
-	$html .= '          </div>';
-	$html .= '          <div class="orbita-post-date">';
-	$html .= '              <span data-votes-post-id="' . esc_attr( $post_id ) . '">' . $count . ' </span> ' . $votes_text . ' | por ' . $author_name . ' ' . $human_date . ' atrás | <a href=" ' . get_permalink() . '">' . get_comments_number_text( 'sem comentários', '1 comentário', '% comentários' ) . '</a>';
-	$html .= '          </div>';
-	$html .= '      </div>';
-	$html .= '</div>';
-	$html .= '</article>';
+	$html .= '          </span><br>';
+	$html .= '          <span class="orbita-post-date">';
+	$html .= '              <span data-votes-post-id="' . esc_attr( $post_id ) . '">' . $count . ' </span> ' . $votes_text . ' / por ' . $author_name . ' há ' . $human_date . ' / <a href=" ' . get_permalink() . '">' . get_comments_number_text( 'sem comentários', '1 comentário', '% comentários' ) . '</a>';
+	$html .= '</span>';
+	$html .= '</li>';
 
 	return $html;
 }
@@ -341,14 +337,14 @@ function orbita_ranking_shortcode( $atts = array(), $content = null, $tag = '' )
 	$posts_array = array_slice( $posts_array, 0, 30 );
 
 	$html = '<div class="orbita-ranking">';
-
 	$html .= orbita_get_header_html();
+	$html .= '<ol>';
 
 	foreach ( $posts_array as $post ) {
 		$html .= orbita_get_post_html( $post['id'] );
 	}
 
-	$html .= '</div>';
+	$html .= '</ol>';
 
 	wp_reset_query();
 
@@ -377,7 +373,7 @@ function orbita_posts_shortcode( $atts = array(), $content = null, $tag = '' ) {
 
 	$args = array(
 		'post_type'      => 'orbita_post',
-		'posts_per_page' => 30,
+		'posts_per_page' => 10,
 		'paged'          => $paged,
 	);
 
@@ -390,18 +386,22 @@ function orbita_posts_shortcode( $atts = array(), $content = null, $tag = '' ) {
 	$query = new WP_Query( $args );
 
 	if ( $query->have_posts() ) :
+		$html .= '<ul style="list-style: none; margin-left: 0">';
+
 		while ( $query->have_posts() ) :
 			$query->the_post();
 			$html .= orbita_get_post_html( get_the_id() );
 		endwhile;
 
+		$html .= '</ul>';
+
 		$paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
 
-		$html .= get_previous_posts_link( '&laquo; mais recentes' );
-		if ( $paged > 1 ) {
-			$html .= '&nbsp;&nbsp;';
-		}
-		$html .= get_next_posts_link( 'mais antigos &raquo;', $query->max_num_pages );
+		$html .= '<nav class="navigation posts-navigation orbita-navigation" aria-label="Posts"><div class="nav-links">';
+		$html .= '<h2 class="screen-reader-text">Navegação por posts</h2>';
+		$html .= '<div class="nav-previous">'. get_previous_posts_link( '&laquo; Tópicos mais recentes' ) .'</div>';
+		$html .= '<div class="nav-next">'. get_next_posts_link( 'Tópicos mais antigos &raquo;', $query->max_num_pages ) .'</div>';
+		$html .= '</div></nav>';
 	endif;
 
 	wp_reset_query();
