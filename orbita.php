@@ -215,9 +215,9 @@ function orbita_get_post_html( $post_id ) {
 
 	$votes_text = ( $count > 1 && 'nenhum' !== $count ) ? 'votos' : 'voto';
 
-	$author_id = get_the_author_meta( 'ID', $post->post_author );
+	$author_id = get_the_author_meta( 'ID', $orbita_post->post_author );
 
-	$author_name = $author_id ? get_the_author_meta( 'display_name', $post->post_author ) : '[Conta Apagada]';
+	$author_name = $author_id ? get_the_author_meta( 'display_name', $orbita_post->post_author ) : '[Conta Apagada]';
 
 	$html  = '<li class="orbita-post">';
 	$html .= orbita_get_vote_html( $post_id );
