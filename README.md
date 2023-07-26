@@ -1,4 +1,4 @@
-# 🪐 Órbita
+# 🔭 Órbita
 
 Plugin de WordPress para criar um painel de debates baseado em links, similar ao Hacker News, para o [Manual do Usuário](https://manualdousuario.net).
 
