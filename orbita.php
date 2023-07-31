@@ -11,7 +11,7 @@
  * Plugin Name:     Órbita
  * Plugin URI:      https://gnun.es
  * Description:     Órbita é o plugin para criar um sistema Hacker News-like para o Manual do Usuário
- * Version:         1.1.7
+ * Version:         1.1.9
  * Author:          Gabriel Nunes
  * Author URI:      https://gnun.es
  * License:         GPL v3
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define plugin version constant
  */
-define( 'ORBITA_VERSION', '1.1.7' );
+define( 'ORBITA_VERSION', '1.1.9' );
 
 /**
  * Enqueue style file
@@ -215,9 +215,9 @@ function orbita_get_post_html( $post_id ) {
 
 	$votes_text = ( $count > 1 && 'nenhum' !== $count ) ? 'votos' : 'voto';
 
-	$author_id = get_the_author_meta( 'ID', $orbita_post->post_author );
-
-	$author_name = $author_id ? get_the_author_meta( 'display_name', $orbita_post->post_author ) : '[Conta Apagada]';
+	if ( isset( $orbita_post->post_author ) ) {
+		return;
+	}
 
 	$html  = '<li class="orbita-post">';
 	$html .= orbita_get_vote_html( $post_id );
@@ -226,7 +226,7 @@ function orbita_get_post_html( $post_id ) {
 	$html .= '              <span class="orbita-post-domain">' . $only_domain . '</span>';
 	$html .= '          </span><br>';
 	$html .= '          <span class="orbita-post-date">';
-	$html .= '              <span data-votes-post-id="' . esc_attr( $post_id ) . '">' . $count . ' </span> ' . $votes_text . ' / por ' . $author_name . ' há ' . $human_date . ' / <a href=" ' . get_permalink() . '">' . get_comments_number_text( 'sem comentários', '1 comentário', '% comentários' ) . '</a>';
+	$html .= '              <span data-votes-post-id="' . esc_attr( $post_id ) . '">' . $count . ' </span> ' . $votes_text . ' / por ' . get_the_author_meta( 'display_name', $orbita_post->post_author ) . ' há ' . $human_date . ' / <a href=" ' . get_permalink() . '">' . get_comments_number_text( 'sem comentários', '1 comentário', '% comentários' ) . '</a>';
 	$html .= '</span>';
 	$html .= '</li>';
 
