@@ -48,7 +48,11 @@ get_header();
 				echo do_shortcode( '[orbita-header]' );
 
 				if ( $external_url ) :
-					the_title( '<h1 class="entry-title">🔗 <a href="' . esc_url( $external_url ) . '?utm_source=ManualdoUsuarioNet&utm_medium=Orbita" rel="ugc">', '</a> <span class="orbita-post-domain">' . $only_domain . '</span> </h1>' );
+					$separator = '?';
+					if(strpos($external_url, '?') !== FALSE) :
+						$separator = '&';
+					endif;
+					the_title( '<h1 class="entry-title">🔗 <a href="' . esc_url( $external_url ) . $separator . 'utm_source=ManualdoUsuarioNet&utm_medium=Orbita" rel="ugc">', '</a> <span class="orbita-post-domain">' . $only_domain . '</span> </h1>' );
 				else :
 					the_title( '<h1 class="entry-title">', '</h1>' );
 				endif;
