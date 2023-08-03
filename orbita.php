@@ -220,7 +220,7 @@ function orbita_get_post_html( $post_id ) {
 	}
 
 	$separator = '?';
-	if(strpos($external_url, '?') !== FALSE) {
+	if(strpos($external_url, '?') !== false) {
 		$separator = '&';
 	}
 	$html  = '<li class="orbita-post">';
