@@ -30,9 +30,11 @@ get_header();
 			if ( ! $external_url ) {
 				$get_post_id = get_the_ID();
 				$get_term    = get_term_by( 'name', 'conversas', 'orbita_category' );
-				$get_term_id = $get_term->term_id;
+				if(isset($get_term->term_id)) {
+					$get_term_id = $get_term->term_id;
 
-				wp_set_object_terms( $get_post_id, $get_term_id, 'orbita_category' );
+					wp_set_object_terms( $get_post_id, $get_term_id, 'orbita_category' );
+				}
 			}
 
 			?>
