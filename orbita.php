@@ -433,15 +433,18 @@ function orbita_form_shortcode() {
 		return $html;
 	}
 
-	if ( isset($_REQUEST['orbita_error']) ) {
-		if($_REQUEST['orbita_error'] == 'duplicated') {
-			if(isset($_REQUEST['orbita_post_id'])) {
-				$html = 'Parece que este post <a href="' . get_permalink($_REQUEST['orbita_post_id']) . '">já existe</a>.';
+	$orbita_error = $_REQUEST['orbita_error'];
+	if ( isset($orbita_error) ) {
+		if( $orbita_error == 'duplicated' ) {
+			$orbita_post_id = $_REQUEST['orbita_post_id'];
+
+			if( isset($orbita_post_id) ) {
+				$html = 'Parece que este post <a href="' . get_permalink($orbita_post_id) . '">já existe</a>.';
 			} else {
 				$html = 'Parece que este post já existe.';
 			}
 		}
-		if($_REQUEST['orbita_error'] == 'user_logged') {
+		if( $orbita_error == 'user_logged' ) {
 			$html = 'Para postar links ou iniciar conversas na Órbita, <a href="' . wp_login_url( home_url( '/orbita/postar' ) ) . '">faça login</a> ou <a href="' . wp_registration_url() . '">cadastre-se gratuitamente</a>.';
 		}
 		return $html;
