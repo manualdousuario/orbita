@@ -433,8 +433,9 @@ function orbita_form_shortcode() {
 		return $html;
 	}
 
-	$orbita_error = $_REQUEST['orbita_error'];
-	if ( isset($orbita_error) ) {
+	if ( isset($_REQUEST['orbita_error']) ) {
+		$orbita_error = $_REQUEST['orbita_error'];
+
 		if( $orbita_error == 'duplicated' ) {
 			$orbita_post_id = $_REQUEST['orbita_post_id'];
 
