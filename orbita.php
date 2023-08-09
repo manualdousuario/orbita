@@ -11,7 +11,7 @@
  * Plugin Name:     Órbita
  * Plugin URI:      https://gnun.es
  * Description:     Órbita é o plugin para criar um sistema Hacker News-like para o Manual do Usuário
- * Version:         1.1.11
+ * Version:         1.2
  * Author:          Gabriel Nunes
  * Author URI:      https://gnun.es
  * License:         GPL v3
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define plugin version constant
  */
-define( 'ORBITA_VERSION', '1.1.11' );
+define( 'ORBITA_VERSION', '1.2' );
 
 /**
  * Enqueue style file
@@ -433,49 +433,17 @@ function orbita_form_shortcode() {
 		return $html;
 	}
 
-	if ( $_POST && isset( $_POST['orbita_post_title'] ) ) {
-
-		$already_posted = get_page_by_title( wp_unslash( $_POST['orbita_post_title'] ), OBJECT, 'orbita_post' );
-
-		if ( get_current_user_id() === $already_posted->ID && $already_posted->post_author ) {
-			$html = 'Parece que este post <a href="' . home_url( '/?p=' . $already_posted->ID ) . '">já existe</a>.';
-			return $html;
+	if ( isset($_REQUEST['orbita_error']) ) {
+		if($_REQUEST['orbita_error'] == 'duplicated') {
+			if(isset($_REQUEST['orbita_post_id'])) {
+				$html = 'Parece que este post <a href="' . get_permalink($_REQUEST['orbita_post_id']) . '">já existe</a>.';
+			} else {
+				$html = 'Parece que este post já existe.';
+			}
 		}
-
-		$default_category = get_term_by( 'slug', 'link', 'orbita_category' );
-
-		if ( ! isset( $_POST['orbita_post_content'] ) ) {
-			$orbita_post_content = '';
-		} else {
-			$orbita_post_content = $_POST['orbita_post_content'];
+		if($_REQUEST['orbita_error'] == 'user_logged') {
+			$html = 'Para postar links ou iniciar conversas na Órbita, <a href="' . wp_login_url( home_url( '/orbita/postar' ) ) . '">faça login</a> ou <a href="' . wp_registration_url() . '">cadastre-se gratuitamente</a>.';
 		}
-
-		if ( ! isset( $_POST['orbita_post_url'] ) ) {
-			$orbita_post_url = '';
-		} else {
-			$orbita_post_url = sanitize_text_field( wp_unslash( $_POST['orbita_post_url'] ) );
-		}
-
-		$post    = array(
-			'post_title'   => wp_unslash( $_POST['orbita_post_title'] ),
-			'post_content' => $orbita_post_content,
-			'tax_input'    => array(
-				'orbita_category' => array( $default_category->term_id ),
-			),
-			'meta_input'   => array(
-				'external_url' => $orbita_post_url,
-			),
-			'post_status'  => 'publish',
-			'post_type'    => 'orbita_post',
-		);
-		$post_id = wp_insert_post( $post );
-
-		orbita_increase_post_like( $post_id );
-
-		$html = orbita_get_header_html();
-
-		$html .= 'Tudo certo! Agora você pode <a href="' . home_url( '/?p=' . $post_id ) . '">acessar seu post</a>.';
-
 		return $html;
 	}
 
@@ -524,6 +492,65 @@ function orbita_form_shortcode() {
 	$html .= '</div>';
 
 	return $html;
+}
+
+add_action('wp_loaded', 'orbita_form_post');
+function orbita_form_post() {
+	if ( $_POST && isset( $_POST['orbita_post_title'] ) ) {
+
+		$already_posted = new WP_Query(
+			[
+				'post_type'              => 'orbita_post',
+				'title'                  => $_POST['orbita_post_title'],
+				'post_status'            => 'publish',
+				'author__in'             => get_current_user_id(),
+				'posts_per_page'         => 1,
+				'no_found_rows'          => true,
+				'ignore_sticky_posts'    => true,
+				'update_post_term_cache' => false,
+				'update_post_meta_cache' => false
+			]
+		);
+		if( ! empty($already_posted->posts) ) {
+			wp_safe_redirect( add_query_arg( array( 'orbita_error' => 'duplicated', 'orbita_post_id' => $already_posted->posts[0]->ID ), '/orbita/postar' ) );
+			die;
+		}
+
+		if ( ! is_user_logged_in() ) {
+			wp_safe_redirect( add_query_arg( array( 'orbita_error' => 'user_logged' ), '/orbita/postar' ) );
+			die;
+		}
+
+		$default_category = get_term_by( 'slug', 'link', 'orbita_category' );
+
+		if ( ! isset( $_POST['orbita_post_content'] ) ) {
+			$orbita_post_content = '';
+		} else {
+			$orbita_post_content = $_POST['orbita_post_content'];
+		}
+
+		if ( ! isset( $_POST['orbita_post_url'] ) ) {
+			$orbita_post_url = '';
+		} else {
+			$orbita_post_url = sanitize_text_field( wp_unslash( $_POST['orbita_post_url'] ) );
+		}
+
+		$post    = array(
+			'post_title'   => wp_unslash( $_POST['orbita_post_title'] ),
+			'post_content' => $orbita_post_content,
+			'tax_input'    => array(
+				'orbita_category' => array( $default_category->term_id ),
+			),
+			'meta_input'   => array(
+				'external_url' => $orbita_post_url,
+			),
+			'post_status'  => 'publish',
+			'post_type'    => 'orbita_post',
+		);
+		$post_id = wp_insert_post( $post );
+		wp_redirect(get_permalink($post_id));
+		die;
+	}
 }
 
 /**
