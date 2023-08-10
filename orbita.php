@@ -11,7 +11,7 @@
  * Plugin Name:     Órbita
  * Plugin URI:      https://gnun.es
  * Description:     Órbita é o plugin para criar um sistema Hacker News-like para o Manual do Usuário
- * Version:         1.2
+ * Version:         1.2.1
  * Author:          Gabriel Nunes
  * Author URI:      https://gnun.es
  * License:         GPL v3
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define plugin version constant
  */
-define( 'ORBITA_VERSION', '1.2' );
+define( 'ORBITA_VERSION', '1.2.1' );
 
 /**
  * Enqueue style file
@@ -201,8 +201,9 @@ function orbita_get_post_html( $post_id ) {
 	if ( ! $external_url ) {
 		$external_url = get_permalink();
 	}
-	$regex       = '/manualdousuario.net\/orbita/i';
-	$only_domain = preg_match( $regex, $external_url ) ? '💬' : wp_parse_url( str_replace( 'www.', '', $external_url ), PHP_URL_HOST );
+	// https://stackoverflow.com/questions/6433492/preg-match-vs-strpos-for-match-finding
+	$only_domain = strpos($external_url, wp_parse_url( str_replace( 'www.', '', get_bloginfo('url') ), PHP_URL_HOST ) . '/orbita') !== false ? '💬' : null;
+	$comments    = ! comments_open() ? '🔒' : null;
 	$count_key   = 'post_like_count';
 	$count       = get_post_meta( $post_id, $count_key, true );
 
@@ -226,10 +227,14 @@ function orbita_get_post_html( $post_id ) {
 	}
 	$html  = '<li class="orbita-post">';
 	$html .= orbita_get_vote_html( $post_id );
+	$html .= '          <span class="orbita-post-info">';
+	$html .= '              <span class="orbita-post-comments">' . $comments . '</span>';
+	$html .= '              <span class="orbita-post-domain">' . $only_domain . '</span>';
+	$html .= '          </span>';
 	$html .= '          <a href="' . esc_url( $external_url ) . $separator . 'utm_source=ManualdoUsuarioNet&utm_medium=Orbita" rel="ugc" title="' . get_the_title() . '">' . get_the_title() . '</a>';
 	$html .= '          <span class="orbita-post-info">';
-	$html .= '              <span class="orbita-post-domain">' . $only_domain . '</span>';
-	$html .= '          </span><br>';
+	$html .= '              <span class="orbita-post-domain">' . ($only_domain ? '' : wp_parse_url( str_replace( 'www.', '', $external_url ), PHP_URL_HOST )) . '</span>';
+	$html .= '          </span><br/>';
 	$html .= '          <span class="orbita-post-date">';
 	$html .= '              <span data-votes-post-id="' . esc_attr( $post_id ) . '">' . $count . ' </span> ' . $votes_text . ' / por ' . get_the_author_meta( 'display_name', $post_author_id ) . ' há ' . $human_date . ' / <a href=" ' . get_permalink() . '">' . get_comments_number_text( 'sem comentários', '1 comentário', '% comentários' ) . '</a>';
 	$html .= '</span>';

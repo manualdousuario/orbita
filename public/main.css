@@ -13,7 +13,7 @@
   line-height: 1.2;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
-@media only screen and (min-width: 700px) {
+@media only screen and (min-width : 700px) {
   .orbita-post {
     padding-bottom: 0;
     border-bottom: 0;
@@ -22,7 +22,6 @@
 .orbita-post-info {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
 }
 .orbita-post-tag {
   font-size: 21px;
@@ -52,7 +51,7 @@
   line-height: 2;
 }
 .orbita-header div a {
-  margin: 0 .3rem;
+  margin: 0 0.3rem;
   display: inline;
 }
 .orbita-header div a:visited {
@@ -61,12 +60,12 @@
 .orbita-header div a:hover {
   color: var(--color-link-states);
 }
-@media only screen and (min-width: 700px) {
+@media only screen and (min-width : 700px) {
   .orbita-header div a {
     margin: 0 0 0 1rem;
   }
 }
-@media only screen and (min-width: 700px) {
+@media only screen and (min-width : 700px) {
   .orbita-header {
     flex-direction: row;
     max-width: 100%;
@@ -74,7 +73,7 @@
     padding: 0.5rem 1rem;
   }
 }
-@media only screen and (min-width: 700px) {
+@media only screen and (min-width : 700px) {
   .orbita-header .orbita-post-button {
     margin-right: auto;
   }
@@ -114,17 +113,17 @@
   display: block;
   cursor: pointer;
 }
-.orbita-form-control input[type="text"],
-.orbita-form-control input[type="url"] {
+.orbita-form-control input[type=text],
+.orbita-form-control input[type=url] {
   width: 100%;
 }
-@media only screen and (min-width: 700px) {
-  .orbita-form-control input[type="text"],
-  .orbita-form-control input[type="url"] {
+@media only screen and (min-width : 700px) {
+  .orbita-form-control input[type=text],
+  .orbita-form-control input[type=url] {
     width: 50%;
   }
 }
-.orbita-form-control input[type="url"] {
+.orbita-form-control input[type=url] {
   background-color: var(--light-bg);
   color: var(--txt-color);
   border: 1px solid var(--border-color);
@@ -151,7 +150,7 @@
   margin-top: 32px;
   display: none;
 }
-@media only screen and (min-width: 700px) {
+@media only screen and (min-width : 700px) {
   .orbita-bookmarklet {
     display: block;
   }
