@@ -201,7 +201,6 @@ function orbita_get_post_html( $post_id ) {
 	if ( ! $external_url ) {
 		$external_url = get_permalink();
 	}
-	// https://stackoverflow.com/questions/6433492/preg-match-vs-strpos-for-match-finding
 	$only_domain = strpos($external_url, wp_parse_url( str_replace( 'www.', '', get_bloginfo('url') ), PHP_URL_HOST ) . '/orbita') !== false ? '💬' : null;
 	$comments    = ! comments_open() ? '🔒' : null;
 	$count_key   = 'post_like_count';
