@@ -21,7 +21,7 @@
 }
 .orbita-post-info {
   display: inline-flex;
-  align-items: center;
+  align-items: baseline;
 }
 .orbita-post-tag {
   font-size: 21px;
