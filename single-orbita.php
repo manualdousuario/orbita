@@ -65,7 +65,22 @@ get_header();
 			</header>
 
 			<div class="entry-content">
-				<?php esc_textarea( the_content() ); ?>
+				<?php
+					if( $external_url ) {
+						$providers = ['youtube.com', 'youtu.be', 'vimeo.com', 'dailymotion.com', 'dai.ly'];
+						foreach($providers as $provider) {
+							if( strpos( $only_domain, $provider ) !== false ) {
+								?>
+									<div class="orbita-oembed orbita-oembed-16by9">
+										<?php echo wp_oembed_get( $external_url ); ?>
+									</div>
+								<?php
+								break;
+							}
+						}
+					} 
+					esc_textarea( the_content() );
+				?>
 			</div>
 
 			<footer class="entry-footer">
