@@ -11,7 +11,7 @@
  * Plugin Name:     Órbita
  * Plugin URI:      https://gnun.es
  * Description:     Órbita é o plugin para criar um sistema Hacker News-like para o Manual do Usuário
- * Version:         1.3
+ * Version:         1.4
  * Author:          Gabriel Nunes
  * Author URI:      https://gnun.es
  * License:         GPL v3
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define plugin version constant
  */
-define( 'ORBITA_VERSION', '1.3' );
+define( 'ORBITA_VERSION', '1.4' );
 
 /**
  * Enqueue style file
@@ -84,7 +84,18 @@ function orbita_setup_post_type() {
 			'hierarchical'        => true,
 			'has_archive'         => false,
 			'supports'            => array( 'title', 'custom-fields', 'author', 'comments', 'editor' ),
-			'capability_type'     => 'post',
+			'capability_type'     => 'orbita',
+			'capabilities' => [
+				'publish_posts'       => 'publish_orbitas',
+				'edit_posts'          => 'edit_orbitas',
+				'edit_others_posts'   => 'edit_others_orbitas',
+				'delete_posts'        => 'delete_orbitas',
+				'delete_others_posts' => 'delete_others_orbitas',
+				'read_private_posts'  => 'read_private_orbitas',
+				'edit_post'           => 'edit_orbita',
+				'delete_post'         => 'delete_orbita',
+				'read_post'           => 'read_orbita',
+			],
 			'exclude_from_search' => true,
 			'rewrite'             => array( 'slug' => 'orbita-post' ),
 			'menu_icon'           => 'dashicons-marker',
@@ -106,6 +117,29 @@ function orbita_setup_post_type() {
 	);
 }
 add_action( 'init', 'orbita_setup_post_type' );
+
+/**
+ * Setup capabilities for user groups
+ */
+function orbita_setup_administrator_capabilities() {
+	$role = get_role('administrator');
+	$role->add_cap('publish_orbitas');
+	$role->add_cap('edit_orbitas');
+	$role->add_cap('edit_others_orbitas');
+	$role->add_cap('delete_orbitas');
+	$role->add_cap('delete_others_orbitas');
+	$role->add_cap('read_private_orbitas');
+	$role->add_cap('edit_orbita');
+	$role->add_cap('delete_orbita');
+	$role->add_cap('read_orbita');
+}
+add_action('admin_init', 'orbita_setup_administrator_capabilities');
+
+function orbita_setup_subscriber_capabilities() {
+	$role = get_role('subscriber');
+	$role->add_cap('publish_orbitas');
+}
+add_action('admin_init', 'orbita_setup_subscriber_capabilities');
 
 /****************** Templates **********************/
 
