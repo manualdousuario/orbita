@@ -456,6 +456,54 @@ function orbita_posts_shortcode( $atts = array(), $content = null, $tag = '' ) {
 }
 
 /**
+ * My Posts
+ */
+function orbita_my_posts_shortcode() {
+	$user_id = get_current_user_id();
+	$html  = orbita_get_header_html();
+
+	if ($user_id) {
+		$paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
+		$html  = orbita_get_header_html();
+
+		$args = array(
+			'post_type'      => 'orbita_post',
+			'posts_per_page' => 10,
+			'paged'          => $paged,
+			'author'         => $user_id,
+			'post__not_in'   => get_option( 'sticky_posts' ),
+		);
+
+		$query = new WP_Query( $args );
+
+		if ( $query->have_posts() ) :
+			$html .= '<ul style="list-style: none; margin-left: 0">';
+
+			while ( $query->have_posts() ) :
+				$query->the_post();
+				$html .= orbita_get_post_html( get_the_id() );
+			endwhile;
+
+			$html .= '</ul>';
+
+			$paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
+
+			$html .= '<nav class="navigation posts-navigation orbita-navigation" aria-label="Posts"><div class="nav-links">';
+			$html .= '<h2 class="screen-reader-text">Navegação por posts</h2>';
+			$html .= '<div class="nav-previous">'. get_previous_posts_link( '&laquo; Tópicos mais recentes' ) .'</div>';
+			$html .= '<div class="nav-next">'. get_next_posts_link( 'Tópicos mais antigos &raquo;', $query->max_num_pages ) .'</div>';
+			$html .= '</div></nav>';
+		endif;
+
+		wp_reset_query();
+	} else {
+		$html .= 'Para visualizar seus tópicos, <a href="' . wp_login_url( home_url( '/orbita/postar' ) ) . '">faça login</a>.';
+	}
+
+	return $html;
+}
+
+/**
  * My Comments
  */
 function orbita_my_comments_shortcode() {
@@ -468,7 +516,7 @@ function orbita_my_comments_shortcode() {
 		$comment_args = array(
 			'user_id' => $user_id,
 			'fields'  => 'ids',
-			'paged'     => $paged,
+			'paged'   => $paged,
 		);
 		
 		$comment_query = new WP_Comment_Query($comment_args);
@@ -686,6 +734,7 @@ function orbita_shortcodes_init() {
 	add_shortcode( 'orbita-header', 'orbita_header_shortcode' );
 	add_shortcode( 'orbita-vote', 'orbita_vote_shortcode' );
 	add_shortcode( 'orbita-my-comments', 'orbita_my_comments_shortcode' );
+	add_shortcode( 'orbita-my-posts', 'orbita_my_posts_shortcode' );
 }
 
 add_action( 'init', 'orbita_shortcodes_init' );
