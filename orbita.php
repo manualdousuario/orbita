@@ -493,6 +493,8 @@ function orbita_my_posts_shortcode() {
 			$html .= '<div class="nav-previous">'. get_previous_posts_link( '&laquo; Tópicos mais recentes' ) .'</div>';
 			$html .= '<div class="nav-next">'. get_next_posts_link( 'Tópicos mais antigos &raquo;', $query->max_num_pages ) .'</div>';
 			$html .= '</div></nav>';
+		else :
+			$html .= 'Você ainda não abriu nenhum tópico.';
 		endif;
 
 		wp_reset_query();
@@ -511,50 +513,40 @@ function orbita_my_comments_shortcode() {
 	$html  = orbita_get_header_html();
 
 	if ($user_id) {
-
 		$paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
-		$comment_args = array(
-			'user_id' => $user_id,
-			'fields'  => 'ids',
-			'paged'   => $paged,
-		);
-		
-		$comment_query = new WP_Comment_Query($comment_args);
-		$comment_ids = $comment_query->get_comments();
-		
-		$post_ids = array();
-		foreach ($comment_ids as $comment_id) {
-			$comment = get_comment($comment_id);
-			$post_ids[] = $comment->comment_post_ID;
-		}
 
 		$args = array(
-			'post__in' => $post_ids,
-			'posts_per_page' => 10,
+			'user_id' => $user_id,
+			'number' => 10,
+			'paged' => $paged,
+			'no_found_rows' => false
 		);
-		
-		$query = new WP_Query($args);
+		$query = new WP_Comment_Query;
+		$comments = $query->query( $args );
 
-		if ( $query->have_posts() ) :
+		if (empty($comments)) {
+			$html .= 'Você ainda não fez nenhum comentário.';
+		} else {
+
 			$html .= '<ul style="list-style: none; margin-left: 0">';
 
-			while ( $query->have_posts() ) :
-				$query->the_post();
-				$html .= orbita_get_post_html( get_the_id() );
-			endwhile;
+			foreach ($comments as $comment) {
+				$post_id = $comment->comment_post_ID;
+
+				$html .= '<li class="orbita-comment">';
+				$html .= '          Em <a href="' . get_permalink($post_id) . '" rel="ugc" title="' . get_the_title($post_id) . '">' . get_the_title($post_id) . '</a> comentou:';
+				$html .= '          <div class="orbita-comment-content">' . nl2br(esc_html($comment->comment_content)) . '</div>';
+				$html .= '</li>';
+			}
 
 			$html .= '</ul>';
-
-			$paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
 
 			$html .= '<nav class="navigation posts-navigation orbita-navigation" aria-label="Posts"><div class="nav-links">';
 			$html .= '<h2 class="screen-reader-text">Navegação por posts</h2>';
 			$html .= '<div class="nav-previous">'. get_previous_posts_link( '&laquo; Tópicos mais recentes' ) .'</div>';
 			$html .= '<div class="nav-next">'. get_next_posts_link( 'Tópicos mais antigos &raquo;', $query->max_num_pages ) .'</div>';
 			$html .= '</div></nav>';
-		endif;
-
-		wp_reset_query();
+		}
 	} else {
 		$html .= 'Para visualizar seus comentários, <a href="' . wp_login_url( home_url( '/orbita/postar' ) ) . '">faça login</a>.';
 	}
