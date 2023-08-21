@@ -11,7 +11,7 @@
  * Plugin Name:     Órbita
  * Plugin URI:      https://gnun.es
  * Description:     Órbita é o plugin para criar um sistema Hacker News-like para o Manual do Usuário
- * Version:         1.4.1
+ * Version:         1.5
  * Author:          Gabriel Nunes
  * Author URI:      https://gnun.es
  * License:         GPL v3
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define plugin version constant
  */
-define( 'ORBITA_VERSION', '1.4.1' );
+define( 'ORBITA_VERSION', '1.5' );
 
 /**
  * Enqueue style file
@@ -456,6 +456,65 @@ function orbita_posts_shortcode( $atts = array(), $content = null, $tag = '' ) {
 }
 
 /**
+ * My Comments
+ */
+function orbita_my_comments_shortcode() {
+	$user_id = get_current_user_id();
+	$html  = orbita_get_header_html();
+
+	if ($user_id) {
+
+		$paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
+		$comment_args = array(
+			'user_id' => $user_id,
+			'fields'  => 'ids',
+			'paged'     => $paged,
+		);
+		
+		$comment_query = new WP_Comment_Query($comment_args);
+		$comment_ids = $comment_query->get_comments();
+		
+		$post_ids = array();
+		foreach ($comment_ids as $comment_id) {
+			$comment = get_comment($comment_id);
+			$post_ids[] = $comment->comment_post_ID;
+		}
+
+		$args = array(
+			'post__in' => $post_ids,
+			'posts_per_page' => 10,
+		);
+		
+		$query = new WP_Query($args);
+
+		if ( $query->have_posts() ) :
+			$html .= '<ul style="list-style: none; margin-left: 0">';
+
+			while ( $query->have_posts() ) :
+				$query->the_post();
+				$html .= orbita_get_post_html( get_the_id() );
+			endwhile;
+
+			$html .= '</ul>';
+
+			$paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
+
+			$html .= '<nav class="navigation posts-navigation orbita-navigation" aria-label="Posts"><div class="nav-links">';
+			$html .= '<h2 class="screen-reader-text">Navegação por posts</h2>';
+			$html .= '<div class="nav-previous">'. get_previous_posts_link( '&laquo; Tópicos mais recentes' ) .'</div>';
+			$html .= '<div class="nav-next">'. get_next_posts_link( 'Tópicos mais antigos &raquo;', $query->max_num_pages ) .'</div>';
+			$html .= '</div></nav>';
+		endif;
+
+		wp_reset_query();
+	} else {
+		$html .= 'Para visualizar seus comentários, <a href="' . wp_login_url( home_url( '/orbita/postar' ) ) . '">faça login</a>.';
+	}
+
+	return $html;
+}
+
+/**
  * Form
  */
 function orbita_form_shortcode() {
@@ -626,6 +685,7 @@ function orbita_shortcodes_init() {
 	add_shortcode( 'orbita-posts', 'orbita_posts_shortcode' );
 	add_shortcode( 'orbita-header', 'orbita_header_shortcode' );
 	add_shortcode( 'orbita-vote', 'orbita_vote_shortcode' );
+	add_shortcode( 'orbita-my-comments', 'orbita_my_comments_shortcode' );
 }
 
 add_action( 'init', 'orbita_shortcodes_init' );
