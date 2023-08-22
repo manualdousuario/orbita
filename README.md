@@ -18,6 +18,7 @@ Instale as dependências
 ```bash
 cd orbita
 npm install
+npm install --global grunt sass ruby
 ```
 
 Caso queira alterar o arquivo de estilo `main.scss`
