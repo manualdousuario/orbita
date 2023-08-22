@@ -534,7 +534,7 @@ function orbita_my_comments_shortcode() {
 				$post_id = $comment->comment_post_ID;
 
 				$html .= '<li class="orbita-comment">';
-				$html .= '          Em <a href="' . get_permalink($post_id) . '" rel="ugc" title="' . get_the_title($post_id) . '">' . get_the_title($post_id) . '</a> comentou:';
+				$html .= '          Em <a href="' . get_permalink($post_id) . '#comment-' . $comment->comment_ID . '" rel="ugc" title="' . get_the_title($post_id) . '">' . get_the_title($post_id) . '</a> comentou:';
 				$html .= '          <div class="orbita-comment-content">' . nl2br(strip_tags($comment->comment_content)) . '</div>';
 				$html .= '</li>';
 			}
