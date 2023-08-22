@@ -45,6 +45,10 @@ grunt compress
 
 `[orbita-vote]`: componente de votoção
 
+`[orbita-my-comments]`: listagem de todos os comentários do usuario
+
+`[orbita-my-posts]`: listagem de todos os tópicos do usuario
+
 ## Instalar o plugin
 
 1. Faça login no seu admin do WordPress
