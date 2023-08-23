@@ -38,6 +38,24 @@
   font-family: monospace;
 }
 
+.orbita-comment {
+  margin: 0 0 1.5rem;
+  line-height: 1.2;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+@media only screen and (min-width : 700px) {
+  .orbita-comment {
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+}
+.orbita-comment-content {
+  font-size: 95%;
+  font-family: monospace;
+  padding: 0 21px;
+  display: block;
+}
+
 .orbita-header {
   width: 100%;
   margin-bottom: 2rem;

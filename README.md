@@ -18,6 +18,7 @@ Instale as dependências
 ```bash
 cd orbita
 npm install
+npm install --global grunt sass ruby
 ```
 
 Caso queira alterar o arquivo de estilo `main.scss`
@@ -43,6 +44,10 @@ grunt compress
 `[orbita-header]`: menu
 
 `[orbita-vote]`: componente de votoção
+
+`[orbita-my-comments]`: listagem de todos os comentários do usuario
+
+`[orbita-my-posts]`: listagem de todos os tópicos do usuario
 
 ## Instalar o plugin
 
