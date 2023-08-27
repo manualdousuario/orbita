@@ -82,7 +82,7 @@ function orbita_setup_post_type() {
 			'public'              => true,
 			'show_ui'             => true,
 			'hierarchical'        => true,
-			'has_archive'         => false,
+			'has_archive'         => true,
 			'supports'            => array( 'title', 'custom-fields', 'author', 'comments', 'editor' ),
 			'capability_type'     => 'orbita',
 			'capabilities' => [
@@ -96,7 +96,7 @@ function orbita_setup_post_type() {
 				'delete_post'         => 'delete_orbita',
 				'read_post'           => 'read_orbita',
 			],
-			'exclude_from_search' => true,
+			'exclude_from_search' => false,
 			'rewrite'             => array( 'slug' => 'orbita-post' ),
 			'menu_icon'           => 'dashicons-marker',
 			'menu_position'       => 8,
@@ -111,7 +111,7 @@ function orbita_setup_post_type() {
 				'name'          => __( 'Categorias' ),
 				'singular_name' => __( 'Categoria' ),
 			),
-			'rewrite'      => array( 'slug' => 'category' ),
+			'rewrite'      => array( 'slug' => 'orbita' ),
 			'hierarchical' => true,
 		)
 	);
