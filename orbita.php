@@ -906,3 +906,57 @@ add_action(
 		);
 	}
 );
+
+/****************** WP_CLI *********************/
+
+if (defined('WP_CLI') && WP_CLI) {
+	class Orbita_WP_CLI extends WP_CLI_Command {
+
+		/**
+		 * Execute the "save_ogimage" command.
+		 *
+		 * ## OPTIONS
+		 *
+		 * [--limit=<limit>]
+		 * : Number of posts to process at a time. Default is 10.
+		 *
+		 * @param array $args Command arguments.
+		 * @param array $assoc_args Command options.
+		 */
+		public function save_ogimage($args, $assoc_args) {
+			$limit = isset($assoc_args['limit']) ? intval($assoc_args['limit']) : 10;
+
+			$query = new WP_Query(array(
+				'posts_per_page' => $limit,
+				'post_type' => 'orbita_post',
+				'post_status' => 'published',
+				'meta_query' => array(
+					'relation' => 'AND',
+					array(
+						'key' => 'external_url',
+						'value' => '',
+						'compare' => '!='
+					),
+					array(
+						'key' => 'external_url_ogimage_id',
+						'compare' => 'NOT EXISTS'
+					)
+				)
+			));
+
+			if ($query->have_posts()) {
+				while ($query->have_posts()) {
+					$query->the_post();
+					$post_id = get_the_ID();
+					orbita_save_ogimage( $post_id );
+				}
+				wp_reset_postdata();
+				WP_CLI::success('[' . $post_id . '] external_url_ogimage_id atualizado!');
+			} else {
+				WP_CLI::success('Não foi encontrado nenhum post com external_url e external_url_ogimage_id vazia.');
+			}
+		}
+	}
+
+    WP_CLI::add_command('orbita', 'Orbita_WP_CLI');
+}
