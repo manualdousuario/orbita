@@ -694,6 +694,7 @@ function orbita_form_post() {
 		$post_id = wp_insert_post( $post );
 
 		orbita_increase_post_like( $post_id );
+		orbita_save_ogimage( $post_id );
 		
 		wp_redirect(get_permalink($post_id));
 		die;
@@ -714,6 +715,67 @@ function orbita_header_shortcode() {
 function orbita_vote_shortcode() {
 	$html = orbita_get_vote_html( get_the_ID() );
 	return $html;
+}
+
+/**
+ * Save og:image if have external URL
+ *
+ * @param Post_ID $post_id Post ID to attachment media in post.
+ */
+function orbita_save_ogimage( $post_id ) {
+    $external_url = get_post_meta( $post_id, 'external_url', true );
+    if ( empty( $external_url ) ) {
+        return;
+    }
+
+	$remote_request = wp_safe_remote_request( $external_url );
+	if (is_wp_error($remote_request)) {
+		return;
+	} else {
+		$html = wp_remote_retrieve_body($remote_request);
+
+		$doc = new DOMDocument();
+		@$doc->loadHTML($html);
+		$xpath = new DOMXPath($doc);
+
+		$og_image_url = '';
+		$query_ogimages = $xpath->query("//meta[@property='og:image']//@content");
+		
+		foreach($query_ogimages as $query) {
+			$og_image_url = $query->nodeValue;
+		}
+
+		$og_image_alt = '';
+		$query_ogimages = $xpath->query("//meta[@property='og:image:alt']//@content");
+		foreach($query_ogimages as $query) {
+			$og_image_alt = $query->nodeValue;
+		}
+
+		if( empty($og_image_url) ) {
+			update_post_meta( $post_id, 'external_url_ogimage_id', 'false' );
+		} else {
+			$upload_dir = wp_upload_dir();
+			$image_data = file_get_contents($og_image_url);
+			$filename = basename($og_image_url);
+			$upload_file = $upload_dir['path'] . '/' . $filename;
+			file_put_contents( $upload_file, $image_data );
+
+			$file_extension = pathinfo( $upload_file, PATHINFO_EXTENSION );
+			$allowed_mime_types = wp_get_mime_types();
+			$post_mime_type = isset( $allowed_mime_types[$file_extension] ) ? $allowed_mime_types[$file_extension] : 'image/jpeg';
+
+			$attachment = array(
+				'post_mime_type' => $post_mime_type,
+				'post_title' => sanitize_file_name($filename),
+				'post_content' => $og_image_alt,
+				'post_status' => 'inherit',
+				'post_parent' => $post_id
+			);
+			$attachment_id = wp_insert_attachment( $attachment, $upload_file );
+			
+			update_post_meta( $post_id, 'external_url_ogimage_id', $attachment_id );
+		}
+	}
 }
 
 /**
