@@ -11,7 +11,7 @@
  * Plugin Name:     Órbita
  * Plugin URI:      https://gnun.es
  * Description:     Órbita é o plugin para criar um sistema Hacker News-like para o Manual do Usuário
- * Version:         1.6
+ * Version:         1.6.1
  * Author:          Gabriel Nunes
  * Author URI:      https://gnun.es
  * License:         GPL v3
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define plugin version constant
  */
-define( 'ORBITA_VERSION', '1.6' );
+define( 'ORBITA_VERSION', '1.6.1' );
 
 /**
  * Enqueue style file
@@ -728,9 +728,14 @@ function orbita_save_ogimage( $post_id ) {
         return;
     }
 
+	// e_001 = error downloading source code from external url
+	// e_002 = og:image not found after request
+	// e_003 = error downloading image received in og:image
+	// e_004 = did not recognize a mime type as an image extension
+
 	$remote_request = wp_safe_remote_request( $external_url );
-	if (is_wp_error($remote_request)) {
-		return;
+	if ( is_wp_error( $remote_request ) ) {
+		update_post_meta( $post_id, 'external_url_ogimage', 'e_001' );
 	} else {
 		$html = wp_remote_retrieve_body($remote_request);
 
@@ -752,28 +757,75 @@ function orbita_save_ogimage( $post_id ) {
 		}
 
 		if( empty($og_image_url) ) {
-			update_post_meta( $post_id, 'external_url_ogimage_id', 'false' );
+			update_post_meta( $post_id, 'external_url_ogimage', 'e_002' );
 		} else {
-			$upload_dir = wp_upload_dir();
-			$image_data = file_get_contents($og_image_url);
-			$filename = basename($og_image_url);
-			$upload_file = $upload_dir['path'] . '/' . $filename;
-			file_put_contents( $upload_file, $image_data );
+			$remote_request = wp_safe_remote_request( $og_image_url );
+			if ( is_wp_error( $remote_request ) ) {
+				update_post_meta( $post_id, 'external_url_ogimage', 'e_003' );
+			} else {
+				$image_body = wp_remote_retrieve_body( $remote_request );
+				$image_headers = wp_remote_retrieve_headers( $remote_request );
 
-			$file_extension = pathinfo( $upload_file, PATHINFO_EXTENSION );
-			$allowed_mime_types = wp_get_mime_types();
-			$post_mime_type = isset( $allowed_mime_types[$file_extension] ) ? $allowed_mime_types[$file_extension] : 'image/jpeg';
+				if( isset($image_headers['content-type']) ) {
+					$content_type = $image_headers['content-type'];
 
-			$attachment = array(
-				'post_mime_type' => $post_mime_type,
-				'post_title' => sanitize_file_name($filename),
-				'post_content' => $og_image_alt,
-				'post_status' => 'inherit',
-				'post_parent' => $post_id
-			);
-			$attachment_id = wp_insert_attachment( $attachment, $upload_file );
+					$extension = null;
+					switch ($content_type) {
+						case 'image/png':
+							$extension = 'png';
+							break;
+						case 'image/avif':
+							$extension = 'avif';
+							break;
+						case 'image/gif':
+							$extension = 'gif';
+							break;
+						case 'image/jpg':
+							$extension = 'jpg';
+							break;
+						case 'image/jpeg':
+							$extension = 'jpg';
+							break;
+						case 'image/svg+xml':
+							$extension = 'svg';
+							break;
+						case 'image/webp':
+							$extension = 'webp';
+							break;
+					}
+
+					if( $extension ) {
+						$wp_upload_dir = wp_upload_dir();
+						$upload_dir = $wp_upload_dir['basedir'] . '/orbita' . $wp_upload_dir['subdir'];
+						wp_mkdir_p( $upload_dir );
 			
-			update_post_meta( $post_id, 'external_url_ogimage_id', $attachment_id );
+						// Filename format: postid_timestamp.extension
+						$filename = $post_id . '_' . time() . '.' . $extension;
+						$upload_file = $upload_dir . '/' . $filename;
+						file_put_contents( $upload_file, $image_body );
+		
+						$post_mime_type = wp_check_filetype( basename( $upload_file ), null );
+		
+						$attachment = array(
+							'post_mime_type' => $post_mime_type['type'],
+							'post_title' => sanitize_file_name( $filename ),
+							'post_content' => $og_image_alt,
+							'post_status' => 'inherit'
+						);
+						$attachment_id = wp_insert_attachment( $attachment, $upload_file, $post_id );
+						
+						require_once( ABSPATH . 'wp-admin/includes/image.php' );
+		
+						$attach_data = wp_generate_attachment_metadata( $attachment_id, $upload_file );
+						wp_update_attachment_metadata( $attachment_id, $attach_data );
+		
+						update_post_meta( $post_id, 'external_url_ogimage', 'id_' . $attachment_id );
+					} else {
+						update_post_meta( $post_id, 'external_url_ogimage', 'e_004' );
+					}
+
+				}
+			}
 		}
 	}
 }
@@ -917,17 +969,17 @@ if (defined('WP_CLI') && WP_CLI) {
 		 *
 		 * ## OPTIONS
 		 *
-		 * [--limit=<limit>]
+		 * [--posts_per_page=<posts_per_page>]
 		 * : Number of posts to process at a time. Default is 10.
 		 *
 		 * @param array $args Command arguments.
 		 * @param array $assoc_args Command options.
 		 */
 		public function save_ogimage($args, $assoc_args) {
-			$limit = isset($assoc_args['limit']) ? intval($assoc_args['limit']) : 10;
+			$posts_per_page = isset($assoc_args['posts_per_page']) ? intval($assoc_args['posts_per_page']) : 10;
 
 			$query = new WP_Query(array(
-				'posts_per_page' => $limit,
+				'posts_per_page' => $posts_per_page,
 				'post_type' => 'orbita_post',
 				'post_status' => 'published',
 				'meta_query' => array(
@@ -938,7 +990,7 @@ if (defined('WP_CLI') && WP_CLI) {
 						'compare' => '!='
 					),
 					array(
-						'key' => 'external_url_ogimage_id',
+						'key' => 'external_url_ogimage',
 						'compare' => 'NOT EXISTS'
 					)
 				)
@@ -951,9 +1003,9 @@ if (defined('WP_CLI') && WP_CLI) {
 					orbita_save_ogimage( $post_id );
 				}
 				wp_reset_postdata();
-				WP_CLI::success('[' . $post_id . '] external_url_ogimage_id atualizado!');
+				WP_CLI::success('[' . $post_id . '] external_url_ogimage atualizado!');
 			} else {
-				WP_CLI::success('Não foi encontrado nenhum post com external_url e external_url_ogimage_id vazia.');
+				WP_CLI::success('Não foi encontrado nenhum post com external_url e external_url_ogimage vazia.');
 			}
 		}
 	}
