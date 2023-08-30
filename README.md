@@ -49,6 +49,27 @@ grunt compress
 
 `[orbita-my-posts]`: listagem de todos os tópicos do usuario
 
+## WP Cli
+
+`wp orbita ogimage update [--posts_per_page=<posts_per_page>]`: busca pelas ogimage em posts com url externas sem thumbnail
+```
+[--posts_per_page=<posts_per_page>]
+	quantidade de posts a serem verificados, se não preencher o valor padrão é 10
+```
+
+`wp orbita ogimage search [--posts_per_page=<posts_per_page>] [--external_url_ogimage=<external_url_ogimage>]`: busca por valores no campo external_url_ogimage
+```
+[--posts_per_page=<posts_per_page>]
+	quantidade de posts a serem verificados, se não preencher o valor padrão é -1
+
+[--external_url_ogimage=<external_url_ogimage>]
+	filtrar informações no campo external_url_ogimage, guia de parametros de erros:
+	// e_001 = error downloading source code from external url
+	// e_002 = og:image not found after request
+	// e_003 = error downloading image received in og:image
+	// e_004 = did not recognize a mime type as an image extension
+```
+
 ## Instalar o plugin
 
 1. Faça login no seu admin do WordPress
