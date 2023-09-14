@@ -29,6 +29,11 @@
   padding: 0 21px;
   border-radius: var(--borda-curva);
 }
+.orbita-post-paywall {
+  font-size: 80%;
+  color: #a6a6a6;
+  margin-right: 6px;
+}
 .orbita-post-domain {
   font-size: 95%;
   color: #a6a6a6;

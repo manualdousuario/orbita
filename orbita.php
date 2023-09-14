@@ -11,7 +11,7 @@
  * Plugin Name:     Órbita
  * Plugin URI:      https://gnun.es
  * Description:     Órbita é o plugin para criar um sistema Hacker News-like para o Manual do Usuário
- * Version:         1.6.3
+ * Version:         1.6.5
  * Author:          Gabriel Nunes
  * Author URI:      https://gnun.es
  * License:         GPL v3
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define plugin version constant
  */
-define( 'ORBITA_VERSION', '1.6.3' );
+define( 'ORBITA_VERSION', '1.6.5' );
 
 /**
  * Enqueue style file
@@ -266,7 +266,7 @@ function orbita_get_post_html( $post_id ) {
 	$html .= '          </span>';
 	$html .= '          <a href="' . esc_url( $external_url ) . $separator . 'utm_source=ManualdoUsuarioNet&utm_medium=Orbita" rel="ugc" title="' . get_the_title() . '">' . get_the_title() . '</a>';
 	$html .= '          <span class="orbita-post-info">';
-	$html .= '              <span class="orbita-post-domain">' . ($only_domain ? '' : wp_parse_url( str_replace( 'www.', '', $external_url ), PHP_URL_HOST )) . '</span>';
+	$html .=                orbita_paywall( $external_url ) . ' <span class="orbita-post-domain">' . ($only_domain ? '' : wp_parse_url( str_replace( 'www.', '', $external_url ), PHP_URL_HOST )) . '</span> ';
 	$html .= '          </span><br/>';
 	$html .= '          <span class="orbita-post-date">';
 	$html .= '              <span data-votes-post-id="' . esc_attr( $post_id ) . '">' . $count . ' </span> ' . $votes_text . ' / por ' . get_the_author_meta( 'display_name', $post_author_id ) . ' há ' . $human_date . ' / <a href=" ' . get_permalink() . '">' . get_comments_number_text( 'sem comentários', '1 comentário', '% comentários' ) . '</a>';
@@ -451,6 +451,45 @@ function orbita_posts_shortcode( $atts = array(), $content = null, $tag = '' ) {
 	endif;
 
 	wp_reset_query();
+
+	return $html;
+}
+
+/**
+ * Paywall
+ *
+ * @param URL    $url Content.
+ */
+function orbita_paywall( $url ) {
+	$url = esc_url( $url );
+	$html = null;
+
+	$publishers = [
+		"ft.com/",
+		"bloomberg.com/",
+		"folha.uol.com.br/",
+		"uol.com.br/",
+		"oglobo.globo.com/",
+		"estadao.com.br/",
+		"nytimes.com/",
+		"washingtonpost.com/",
+		"wsj.com/",
+		"medium.com/",
+		"veja.abril.com.br/",
+		"exame.com/",
+		"super.abril.com.br/",
+		"valor.globo.com/",
+		"newyorker.com/",
+		"theatlantic.com/",
+		"technologyreview.com/",
+		"wired.com/"
+	];
+
+    foreach ( $publishers as $publisher ) {
+        if ( preg_match("~" . preg_quote( $publisher, "~" ) . "~i", $url ) ) {
+            $html = '<small class="orbita-post-paywall">[ <a href="https://leiaisso.net/' . $url . '">Paywall</a> ]</small>';
+        }
+    }
 
 	return $html;
 }

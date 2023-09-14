@@ -36,6 +36,12 @@ $desktop: "only screen and (min-width : 700px)";
     border-radius: var(--borda-curva);
   }
 
+  &-paywall {
+    font-size: 80%;
+    color: #a6a6a6;
+    margin-right: 6px;
+  }
+
   &-domain {
     font-size: 95%;
     color: #a6a6a6;
