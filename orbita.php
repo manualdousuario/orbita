@@ -11,7 +11,7 @@
  * Plugin Name:     Órbita
  * Plugin URI:      https://gnun.es
  * Description:     Órbita é o plugin para criar um sistema Hacker News-like para o Manual do Usuário
- * Version:         1.6.5
+ * Version:         1.6.6
  * Author:          Gabriel Nunes
  * Author URI:      https://gnun.es
  * License:         GPL v3
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define plugin version constant
  */
-define( 'ORBITA_VERSION', '1.6.5' );
+define( 'ORBITA_VERSION', '1.6.6' );
 
 /**
  * Enqueue style file
@@ -225,14 +225,14 @@ function orbita_get_vote_html( $post_id ) {
 		$already_voted = true;
 	}
 	if ( is_user_logged_in() && ! $already_voted ) {
-		$additional_class = 'orbita-vote-can-vote';
+		$additional_class = 'can-vote';
 	}
 	if ( $already_voted ) {
-		$additional_class = 'orbita-vote-already-voted';
+		$additional_class = 'already-voted';
 		$title            = 'Você já votou!';
 	}
 
-	$html  = '<button title="' . $title . '" class="orbita-vote ' . $additional_class . '" data-post-id="' . $post_id . '">⬆️';
+	$html  = '<button title="' . $title . '" class="orbita-vote-button orbita-vote-' . $additional_class . '" data-post-id="' . $post_id . '">⬆️';
 	$html .= '</button>';
 
 	return $html;
@@ -273,18 +273,13 @@ function orbita_get_post_html( $post_id ) {
 		$external_url = get_permalink();
 	}
 	$only_domain = strpos($external_url, wp_parse_url( str_replace( 'www.', '', get_bloginfo('url') ), PHP_URL_HOST ) . '/orbita') !== false ? '💬' : null;
-	$comments    = ! comments_open() ? '🔒' : null;
-	$count_key   = 'post_like_count';
-	$count       = get_post_meta( $post_id, $count_key, true );
-
+	$count       = get_post_meta( $post_id, 'post_like_count', true );
 	if ( ! $count ) {
-		$count = 'nenhum';
+		$count = '0';
 	}
 
 	wp_timezone_string( 'America/Sao_Paulo' );
 	$human_date = human_time_diff( get_the_time( 'U' ), current_time( 'timestamp' ) );
-
-	$votes_text = ( $count > 1 && 'nenhum' !== $count ) ? 'votos' : 'voto';
 
 	$post_author_id = get_post_field( 'post_author', $post_id );
 	if ( get_userdata( $post_author_id ) == false ) {
@@ -295,19 +290,25 @@ function orbita_get_post_html( $post_id ) {
 	if(strpos($external_url, '?') !== false) {
 		$separator = '&';
 	}
-	$html  = '<li class="orbita-post">';
-	$html .= orbita_get_vote_html( $post_id );
-	$html .= '          <span class="orbita-post-info">';
-	$html .= '              <span class="orbita-post-comments">' . $comments . '</span>';
-	$html .= '              <span class="orbita-post-domain">' . $only_domain . '</span>';
-	$html .= '          </span>';
-	$html .= '          <a href="' . esc_url( $external_url ) . $separator . 'utm_source=ManualdoUsuarioNet&utm_medium=Orbita" rel="ugc" title="' . get_the_title() . '">' . get_the_title() . '</a>';
-	$html .= '          <span class="orbita-post-info">';
-	$html .=                orbita_paywall( $external_url ) . ' <span class="orbita-post-domain">' . ($only_domain ? '' : wp_parse_url( str_replace( 'www.', '', $external_url ), PHP_URL_HOST )) . '</span> ';
-	$html .= '          </span><br/>';
-	$html .= '          <span class="orbita-post-date">';
-	$html .= '              <span data-votes-post-id="' . esc_attr( $post_id ) . '">' . $count . ' </span> ' . $votes_text . ' / por ' . get_the_author_meta( 'display_name', $post_author_id ) . ' há ' . $human_date . ' / <a href=" ' . get_permalink() . '">' . get_comments_number_text( 'sem comentários', '1 comentário', '% comentários' ) . '</a>';
-	$html .= '</span>';
+	$html  = '<li>';
+	$html .= '    <div class="vote">';
+	$html .=          orbita_get_vote_html( $post_id );
+	$html .= '        <div class="count" data-votes-post-id="' . esc_attr( $post_id ) . '">' . $count . ' </div>';
+	$html .= '    </div>';
+	$html .= '    <div class="meta">';
+	$html .= '        <div class="title">';
+	$html .= '            <div class="link">';
+	$html .=                  ( $only_domain ? '<span class="debate">' . $only_domain . '</span>' : '' );
+	$html .= '                <a href="' . esc_url( $external_url ) . $separator . 'utm_source=ManualdoUsuarioNet&utm_medium=Orbita" rel="ugc" title="' . get_the_title() . '">' . get_the_title() . '</a>';
+	$html .= '            </div>';
+	$html .=              orbita_paywall( $external_url );
+	$html .=              ( $only_domain ? '' : '<span class="domain">' . wp_parse_url( str_replace( 'www.', '', $external_url ), PHP_URL_HOST ) ) . '</span>';
+	$html .= '        </div>';
+	$html .= '        <div class="data">';
+	$html .= '            por ' . get_the_author_meta( 'display_name', $post_author_id ) . ' há ' . $human_date;
+	$html .= '            <span class="comments">/ ' . ( comments_open() ? '💬 ' : '🔒 ' ) . ' <a href=" ' . get_permalink() . '"> ' . get_comments_number_text( 'sem comentários', '1 comentário', '% comentários' ) . '</a></span>';
+	$html .= '        </div>';
+	$html .= '    </div>';
 	$html .= '</li>';
 
 	return $html;
@@ -420,7 +421,7 @@ function orbita_ranking_shortcode( $atts = array(), $content = null, $tag = '' )
 
 	$html = '<div class="orbita-ranking">';
 	$html .= orbita_get_header_html();
-	$html .= '<ol>';
+	$html .= '<ol class="orbita-list">';
 
 	foreach ( $posts_array as $post ) {
 		$html .= orbita_get_post_html( $post['id'] );
@@ -469,7 +470,7 @@ function orbita_posts_shortcode( $atts = array(), $content = null, $tag = '' ) {
 	$query = new WP_Query( $args );
 
 	if ( $query->have_posts() ) :
-		$html .= '<ul style="list-style: none; margin-left: 0">';
+		$html .= '<ul class="orbita-list">';
 
 		while ( $query->have_posts() ) :
 			$query->the_post();
@@ -524,7 +525,7 @@ function orbita_paywall( $url ) {
 
     foreach ( $publishers as $publisher ) {
         if ( preg_match("~" . preg_quote( $publisher, "~" ) . "~i", $url ) ) {
-            $html = '<small class="orbita-post-paywall">[ <a href="https://leiaisso.net/' . $url . '">Paywall</a> ]</small>';
+            $html = '<span class="paywall">[ <a href="https://leiaisso.net/' . $url . '">sem paywall</a> ]</span>';
         }
     }
 
@@ -553,7 +554,7 @@ function orbita_my_posts_shortcode() {
 		$query = new WP_Query( $args );
 
 		if ( $query->have_posts() ) :
-			$html .= '<ul style="list-style: none; margin-left: 0">';
+			$html .= '<ul class="orbita-list">';
 
 			while ( $query->have_posts() ) :
 				$query->the_post();

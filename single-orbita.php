@@ -54,11 +54,21 @@ get_header();
 					if(strpos($external_url, '?') !== false) :
 						$separator = '&';
 					endif;
-					the_title( '<h1 class="entry-title">🔗 <a href="' . esc_url( $external_url ) . $separator . 'utm_source=ManualdoUsuarioNet&utm_medium=Orbita" rel="ugc">', '</a>' . orbita_paywall( $external_url ) . '<span class="orbita-post-domain">' . $only_domain . '</span></h1>' );
+					the_title( '<h1 class="entry-title orbita-post-title">🔗 <a href="' . esc_url( $external_url ) . $separator . 'utm_source=ManualdoUsuarioNet&utm_medium=Orbita" rel="ugc">', '</a></h1>' );
 				else :
-					the_title( '<h1 class="entry-title">', '</h1>' );
+					the_title( '<h1 class="entry-title orbita-post-title">', '</h1>' );
 				endif;
+
+				if( $only_domain ) {
+					?>
+						<div class="orbita-post-link">
+							<?php echo orbita_paywall( $external_url ); ?>
+							<span class="domain"><?php echo $only_domain; ?></span>
+						</div>
+					<?php
+				}
 				?>
+
 				<div class="entry-meta orbita-meta">
 					<?php echo do_shortcode( '[orbita-vote]' ); ?><span data-votes-post-id="<?php the_ID(); ?>"><?php echo esc_html( $count ); ?></span> <?php echo esc_html( $votes_text ); ?> | <?php echo esc_html( get_the_author_meta( 'display_name', $post->post_author ) ); ?> em <?php echo esc_html( $date ); ?>
 				</div>

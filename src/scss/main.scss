@@ -14,42 +14,102 @@ $desktop: "only screen and (min-width : 700px)";
   }
 }
 
-.orbita-post {
-  margin: 0 0 1.5rem;
-  line-height: 1.2;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+.orbita-list {
+  width: 100%;
+  margin: 0;
 
-  @media #{$desktop} {
-    padding-bottom: 0;
-    border-bottom: 0;
+  li {
+    width: 100%;
+    max-width: inherit;
+    list-style: none;
+    margin: 0 0 1.5rem;
+    line-height: 1.2;
+    display: grid; 
+    grid-template-columns: auto 1fr; 
+    gap: 0px 12px; 
+    grid-template-areas: 
+      "vote meta"; 
+      
   }
 
-  &-info {
-    display: inline-flex;
-    align-items: baseline;
+  .vote {
+    grid-area: vote;
+    text-align: center;
+
+    .count {
+      font-size: var(--small);
+      color: #a6a6a6;
+    }
   }
 
-  &-tag {
-    font-size: 21px;
-    display: inline-block;
-    padding: 0 21px;
-    border-radius: var(--borda-curva);
-  }
+  .meta {
+    width: 100%;
+    grid-area: meta;
+    .title {
+      .link {
+        display: block;
+        margin-right: 6px;
+        margin-bottom: 3px;
+        @media #{$desktop} {
+          display: inline;
+          margin-bottom: 0;
+        }
+        .debate {
 
-  &-paywall {
-    font-size: 80%;
+        }
+      }
+      .paywall {
+        filter: grayscale(1);
+        font-size: 85%;
+        color: #a6a6a6;
+        margin-right: 6px;
+      }
+      .domain {
+        font-size: 90%;
+        color: #a6a6a6;
+      }
+    }
+    .data {
+      margin-top: 6px;
+      font-family: monospace;
+      font-size: var(--small);
+      .comments {
+        filter: grayscale(1);
+        font-size: 100%;
+      }
+    }
+  }
+}
+
+.orbita-vote-button {
+  border: 0;
+  padding: 0;
+  cursor: default;
+  background: transparent !important;
+  filter: grayscale(1);
+}
+.orbita-vote-can-vote {
+  cursor: pointer;
+  &:hover {
+    filter: grayscale(0);
+  }
+}
+.orbita-vote-already-voted {
+  cursor: default !important;
+  opacity: 0.5;
+}
+
+.orbita-post-title {
+  margin-bottom: 0 !important;
+}
+.orbita-post-link {
+  .paywall {
+    filter: grayscale(1);
     color: #a6a6a6;
     margin-right: 6px;
   }
-
-  &-domain {
-    font-size: 95%;
+  .domain {
     color: #a6a6a6;
-  }
-
-  &-date {
-    font-size: 95%;
-    font-family: monospace;
   }
 }
 
@@ -117,26 +177,6 @@ $desktop: "only screen and (min-width : 700px)";
 .orbita-ranking ol {
   list-style: none;
   margin-left: 0;
-}
-
-.orbita-vote {
-  border: 0;
-  padding: 0;
-  position: relative;
-  cursor: default;
-  background: transparent !important;
-  font-size: 90%;
-  filter: grayscale(1);
-  left: -2px;
-
-  &-can-vote {
-    cursor: pointer;
-  }
-
-  &-already-voted {
-    cursor: default !important;
-    opacity: 0.5;
-  }
 }
 
 .orbita-form {

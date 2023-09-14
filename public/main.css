@@ -8,39 +8,95 @@
   gap: 8px;
 }
 
-.orbita-post {
+.orbita-list {
+  width: 100%;
+  margin: 0;
+}
+.orbita-list li {
+  width: 100%;
+  max-width: inherit;
+  list-style: none;
   margin: 0 0 1.5rem;
   line-height: 1.2;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0px 12px;
+  grid-template-areas: "vote meta";
+}
+.orbita-list .vote {
+  grid-area: vote;
+  text-align: center;
+}
+.orbita-list .vote .count {
+  font-size: var(--small);
+  color: #a6a6a6;
+}
+.orbita-list .meta {
+  width: 100%;
+  grid-area: meta;
+}
+.orbita-list .meta .title .link {
+  display: block;
+  margin-right: 6px;
+  margin-bottom: 3px;
 }
 @media only screen and (min-width : 700px) {
-  .orbita-post {
-    padding-bottom: 0;
-    border-bottom: 0;
+  .orbita-list .meta .title .link {
+    display: inline;
+    margin-bottom: 0;
   }
 }
-.orbita-post-info {
-  display: inline-flex;
-  align-items: baseline;
-}
-.orbita-post-tag {
-  font-size: 21px;
-  display: inline-block;
-  padding: 0 21px;
-  border-radius: var(--borda-curva);
-}
-.orbita-post-paywall {
-  font-size: 80%;
+.orbita-list .meta .title .paywall {
+  filter: grayscale(1);
+  font-size: 85%;
   color: #a6a6a6;
   margin-right: 6px;
 }
-.orbita-post-domain {
-  font-size: 95%;
+.orbita-list .meta .title .domain {
+  font-size: 90%;
   color: #a6a6a6;
 }
-.orbita-post-date {
-  font-size: 95%;
+.orbita-list .meta .data {
+  margin-top: 6px;
   font-family: monospace;
+  font-size: var(--small);
+}
+.orbita-list .meta .data .comments {
+  filter: grayscale(1);
+  font-size: 100%;
+}
+
+.orbita-vote-button {
+  border: 0;
+  padding: 0;
+  cursor: default;
+  background: transparent !important;
+  filter: grayscale(1);
+}
+
+.orbita-vote-can-vote {
+  cursor: pointer;
+}
+.orbita-vote-can-vote:hover {
+  filter: grayscale(0);
+}
+
+.orbita-vote-already-voted {
+  cursor: default !important;
+  opacity: 0.5;
+}
+
+.orbita-post-title {
+  margin-bottom: 0 !important;
+}
+
+.orbita-post-link .paywall {
+  filter: grayscale(1);
+  color: #a6a6a6;
+  margin-right: 6px;
+}
+.orbita-post-link .domain {
+  color: #a6a6a6;
 }
 
 .orbita-comment {
@@ -105,24 +161,6 @@
 .orbita-ranking ol {
   list-style: none;
   margin-left: 0;
-}
-
-.orbita-vote {
-  border: 0;
-  padding: 0;
-  position: relative;
-  cursor: default;
-  background: transparent !important;
-  font-size: 90%;
-  filter: grayscale(1);
-  left: -2px;
-}
-.orbita-vote-can-vote {
-  cursor: pointer;
-}
-.orbita-vote-already-voted {
-  cursor: default !important;
-  opacity: 0.5;
 }
 
 .orbita-form {
