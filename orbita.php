@@ -141,6 +141,43 @@ function orbita_setup_subscriber_capabilities() {
 }
 add_action('admin_init', 'orbita_setup_subscriber_capabilities');
 
+/****************** Third Party Support *********************/
+
+/**
+ * The SEO Framework
+ */
+include_once ABSPATH . 'wp-admin/includes/plugin.php';
+if( is_plugin_active( 'autodescription/autodescription.php' ) ) {
+
+	function orbita_tsf_default_ogimage( $details )
+	{
+		global $post;
+
+		if( is_single() ) {
+			$post_type = get_post_type();
+
+			if( $post_type == 'orbita_post' ) {
+				$image_id  = get_post_thumbnail_id( $post->ID );
+				if ( empty( $image_id ) ) {
+					if( file_exists( plugin_dir_path(__FILE__) . 'assets/ogimage.png' ) ) {
+						$width = 1280;
+						$height = 720;
+					
+						foreach($details as &$detail) {
+							$detail['url'] = plugin_dir_url(__FILE__) . 'assets/ogimage.png';
+							$detail['width'] = $width;
+							$detail['height'] = $height;
+						}
+					}
+				}
+			}
+		}
+		
+		return $details;
+	}
+	add_filter('the_seo_framework_image_details', 'orbita_tsf_default_ogimage', 10, 2);
+}
+
 /****************** Templates **********************/
 
 /**
