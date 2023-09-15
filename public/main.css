@@ -58,6 +58,7 @@
   font-size: 85%;
   color: #a6a6a6;
   margin-right: 6px;
+  display: inline-block;
 }
 .orbita-list .meta .title .domain {
   font-size: 90%;
