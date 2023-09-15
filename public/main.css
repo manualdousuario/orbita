@@ -27,9 +27,16 @@
   grid-area: vote;
   text-align: center;
 }
+.orbita-list .vote button {
+  z-index: 2;
+  position: relative;
+}
 .orbita-list .vote .count {
+  z-index: 1;
   font-size: var(--small);
   color: #a6a6a6;
+  margin-top: -8px;
+  position: relative;
 }
 .orbita-list .meta {
   width: 100%;
@@ -71,14 +78,20 @@
   padding: 0;
   cursor: default;
   background: transparent !important;
-  filter: grayscale(1);
+  width: 32px;
+  height: 32px;
+  overflow: hidden;
+}
+.orbita-vote-button img {
+  width: 100%;
+  height: auto;
 }
 
 .orbita-vote-can-vote {
   cursor: pointer;
 }
 .orbita-vote-can-vote:hover {
-  filter: grayscale(0);
+  filter: invert(40%) sepia(58%) saturate(3819%) hue-rotate(214deg) brightness(91%) contrast(94%);
 }
 
 .orbita-vote-already-voted {
@@ -89,14 +102,18 @@
 .orbita-post-title {
   margin-bottom: 0 !important;
 }
-
-.orbita-post-link .paywall {
+.orbita-post-title .paywall {
+  font-size: 80%;
   filter: grayscale(1);
   color: #a6a6a6;
-  margin-right: 6px;
+  margin-left: 6px;
+  display: inline-block;
 }
-.orbita-post-link .domain {
+.orbita-post-title .domain {
+  font-size: 80%;
+  margin-left: 6px;
   color: #a6a6a6;
+  display: inline-block;
 }
 
 .orbita-comment {

@@ -225,14 +225,15 @@ function orbita_get_vote_html( $post_id ) {
 		$already_voted = true;
 	}
 	if ( is_user_logged_in() && ! $already_voted ) {
-		$additional_class = 'can-vote';
+		$additional_class = 'orbita-vote-can-vote';
 	}
 	if ( $already_voted ) {
-		$additional_class = 'already-voted';
+		$additional_class = 'orbita-vote-already-voted';
 		$title            = 'Você já votou!';
 	}
 
-	$html  = '<button title="' . $title . '" class="orbita-vote-button orbita-vote-' . $additional_class . '" data-post-id="' . $post_id . '">⬆️';
+	$html  = '<button title="' . $title . '" class="orbita-vote-button ' . $additional_class . '" data-post-id="' . $post_id . '">';
+	$html .= '    <img src="' . plugin_dir_url(__FILE__) . 'assets/vote.svg" width="32" height="32" />';
 	$html .= '</button>';
 
 	return $html;
@@ -305,8 +306,8 @@ function orbita_get_post_html( $post_id ) {
 	$html .=              ( $only_domain ? '' : '<span class="domain">' . wp_parse_url( str_replace( 'www.', '', $external_url ), PHP_URL_HOST ) ) . '</span>';
 	$html .= '        </div>';
 	$html .= '        <div class="data">';
-	$html .= '            por ' . get_the_author_meta( 'nickname', $post_author_id ) . ' há ' . $human_date;
-	$html .= '            <span class="comments">/ ' . ( comments_open() ? '💬 ' : '🔒 ' ) . ' <a href=" ' . get_permalink() . '"> ' . get_comments_number_text( 'sem comentários', '1 comentário', '% comentários' ) . '</a></span>';
+	$html .=              get_the_author_meta( 'nickname', $post_author_id ) . ' ● ' . $human_date;
+	$html .= '            <span class="comments">● <a href=" ' . get_permalink() . '"> ' . get_comments_number_text( 'sem comentários', '1 comentário', '% comentários' ) . '</a></span>';
 	$html .= '        </div>';
 	$html .= '    </div>';
 	$html .= '</li>';
