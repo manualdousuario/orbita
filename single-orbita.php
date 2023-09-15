@@ -61,7 +61,7 @@ get_header();
 				?>
 
 				<div class="entry-meta orbita-meta">
-					<?php echo do_shortcode( '[orbita-vote]' ); ?><span data-votes-post-id="<?php the_ID(); ?>"><?php echo esc_html( $count ); ?></span> <?php echo esc_html( $votes_text ); ?> ● <?php echo esc_html( get_the_author_meta( 'nickname', $post->post_author ) ); ?> em <?php echo esc_html( $date ); ?>
+					<?php echo do_shortcode( '[orbita-vote]' ); ?><span data-votes-post-id="<?php the_ID(); ?>"><?php echo esc_html( $count ); ?></span> <?php echo esc_html( $votes_text ); ?> · <?php echo esc_html( get_the_author_meta( 'nickname', $post->post_author ) ); ?> em <?php echo esc_html( $date ); ?>
 				</div>
 			</header>
 

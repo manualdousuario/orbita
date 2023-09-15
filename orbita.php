@@ -306,8 +306,8 @@ function orbita_get_post_html( $post_id ) {
 	$html .=              ( $only_domain ? '' : '<span class="domain">' . wp_parse_url( str_replace( 'www.', '', $external_url ), PHP_URL_HOST ) ) . '</span>';
 	$html .= '        </div>';
 	$html .= '        <div class="data">';
-	$html .=              get_the_author_meta( 'nickname', $post_author_id ) . ' ● ' . $human_date;
-	$html .= '            <span class="comments">● <a href=" ' . get_permalink() . '"> ' . get_comments_number_text( 'sem comentários', '1 comentário', '% comentários' ) . '</a></span>';
+	$html .=              get_the_author_meta( 'nickname', $post_author_id ) . ' · ' . $human_date;
+	$html .= '            <span class="comments">· <a href=" ' . get_permalink() . '"> ' . get_comments_number_text( 'sem comentários', '1 comentário', '% comentários' ) . '</a></span>';
 	$html .= '        </div>';
 	$html .= '    </div>';
 	$html .= '</li>';
@@ -504,29 +504,83 @@ function orbita_paywall( $url ) {
 	$html = null;
 
 	$publishers = [
-		"ft.com/",
-		"bloomberg.com/",
-		"folha.uol.com.br/",
-		"uol.com.br/",
-		"oglobo.globo.com/",
-		"estadao.com.br/",
-		"nytimes.com/",
-		"washingtonpost.com/",
-		"wsj.com/",
-		"medium.com/",
-		"veja.abril.com.br/",
-		"exame.com/",
-		"super.abril.com.br/",
-		"valor.globo.com/",
-		"newyorker.com/",
-		"theatlantic.com/",
-		"technologyreview.com/",
-		"wired.com/"
-	];
+		[
+			"url" => "ft.com/",
+			"paywall" => "https://leiaisso.net/"
+		], 
+		[
+			"url" => "bloomberg.com/",
+			"paywall" => "https://leiaisso.net/"
+		], 
+		[
+			"url" => "folha.uol.com.br/",
+			"paywall" => "https://leiaisso.net/"
+		], 
+		[
+			"url" => "uol.com.br/",
+			"paywall" => "https://leiaisso.net/"
+		], 
+		[
+			"url" => "oglobo.globo.com/",
+			"paywall" => "https://leiaisso.net/"
+		], 
+		[
+			"url" => "estadao.com.br/",
+			"paywall" => "https://leiaisso.net/"
+		], 
+		[
+			"url" => "nytimes.com/",
+			"paywall" => "https://leiaisso.net/"
+		], 
+		[
+			"url" => "washingtonpost.com/",
+			"paywall" => "https://leiaisso.net/"
+		], 
+		[
+			"url" => "wsj.com/",
+			"paywall" => "https://archive.ph/submit/?url="
+		], 
+		[
+			"url" => "medium.com/",
+			"paywall" => "https://leiaisso.net/"
+		], 
+		[
+			"url" => "veja.abril.com.br/",
+			"paywall" => "https://leiaisso.net/"
+		], 
+		[
+			"url" => "exame.com/",
+			"paywall" => "https://leiaisso.net/"
+		], 
+		[
+			"url" => "super.abril.com.br/",
+			"paywall" => "https://leiaisso.net/"
+		], 
+		[
+			"url" => "valor.globo.com/",
+			"paywall" => "https://leiaisso.net/"
+		], 
+		[
+			"url" => "newyorker.com/",
+			"paywall" => "https://leiaisso.net/"
+		], 
+		[
+			"url" => "theatlantic.com/",
+			"paywall" => "https://leiaisso.net/"
+		], 
+		[
+			"url" => "technologyreview.com/",
+			"paywall" => "https://leiaisso.net/"
+		], 
+		[
+			"url" => "wired.com/",
+			"paywall" => "https://leiaisso.net/"
+		] 
+	]; 
 
     foreach ( $publishers as $publisher ) {
-        if ( preg_match("~" . preg_quote( $publisher, "~" ) . "~i", $url ) ) {
-            $html = '<span class="paywall">[ <a href="https://leiaisso.net/' . $url . '">sem paywall</a> ]</span>';
+        if ( preg_match("~" . preg_quote( $publisher['url'], "~" ) . "~i", $url ) ) {
+            $html = '<span class="paywall">[ <a href="' . $publisher['paywall'] . $url . '">sem paywall</a> ]</span>';
         }
     }
 
@@ -707,7 +761,6 @@ function orbita_form_shortcode() {
 	$html .= '      <input type="submit" value="Publicar">';
 	$html .= '  </form>';
 	$html .= '</div>';
-
 	$html .= '<div class="orbita-bookmarklet ctx-atencao">';
 	$html .= '  <p>Se preferir, pode usar nosso bookmarklet! Arraste o botão abaixo para a sua barra de favoritos e clique nele quando quiser compartilhar um link.</p>';
 	$html .= '  <p><a onclick="return false" href="javascript:window.location=%22https://manualdousuario.net/orbita/postar?u=%22+encodeURIComponent(document.location)+%22&t=%22+encodeURIComponent(document.title)">Postar no Órbita</a></p>';
