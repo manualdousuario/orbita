@@ -305,7 +305,7 @@ function orbita_get_post_html( $post_id ) {
 	$html .=              ( $only_domain ? '' : '<span class="domain">' . wp_parse_url( str_replace( 'www.', '', $external_url ), PHP_URL_HOST ) ) . '</span>';
 	$html .= '        </div>';
 	$html .= '        <div class="data">';
-	$html .= '            por ' . get_the_author_meta( 'display_name', $post_author_id ) . ' há ' . $human_date;
+	$html .= '            por ' . get_the_author_meta( 'nickname', $post_author_id ) . ' há ' . $human_date;
 	$html .= '            <span class="comments">/ ' . ( comments_open() ? '💬 ' : '🔒 ' ) . ' <a href=" ' . get_permalink() . '"> ' . get_comments_number_text( 'sem comentários', '1 comentário', '% comentários' ) . '</a></span>';
 	$html .= '        </div>';
 	$html .= '    </div>';
