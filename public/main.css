@@ -87,6 +87,11 @@
   width: 100%;
   height: auto;
 }
+@media (prefers-color-scheme: dark) {
+  .orbita-vote-button img {
+    filter: invert(100%);
+  }
+}
 
 .orbita-vote-can-vote {
   cursor: pointer;
