@@ -544,7 +544,7 @@ function orbita_link_options( $url = '', $title = '' ) {
 			], 
 			[
 				"url" => "medium.com/",
-				"paywall" => "https://leiaisso.net/"
+				"paywall" => "https://scribe.rip/"
 			], 
 			[
 				"url" => "veja.abril.com.br/",
