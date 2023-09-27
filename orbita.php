@@ -250,9 +250,9 @@ function orbita_get_header_html() {
 	$html .= '  <a href="/orbita/postar/" class="orbita-post-button">Postar</a>';
 	$html .= '  <div>';
 	$html .= '      <a href="/orbita">Populares</a>';
-	$html .= '      <a href="/orbita/tudo">Links novos</a>';
+	$html .= '      <a href="/orbita/tudo">Tudo</a>';
 	$html .= '      <a href="/orbita/guia-de-uso">Guia de uso</a>';
-	$html .= '      <a href="/feed/?post_type=orbita_post">RSS</a>';
+	$html .= '      <a href="/feed/?post_type=orbita_post" class="rss">RSS</a>';
 	$html .= '  </div>';
 	$html .= '</div>';
 
@@ -273,7 +273,7 @@ function orbita_get_post_html( $post_id ) {
 	if ( ! $external_url ) {
 		$external_url = get_permalink();
 	}
-	$only_domain = strpos($external_url, wp_parse_url( str_replace( 'www.', '', get_bloginfo('url') ), PHP_URL_HOST ) . '/orbita') !== false ? '💬' : null;
+	$only_domain = strpos($external_url, wp_parse_url( str_replace( 'www.', '', get_bloginfo('url') ), PHP_URL_HOST ) . '/orbita') !== false ? '' : '<span class="domain">' . wp_parse_url( str_replace( 'www.', '', $external_url ), PHP_URL_HOST ) . '</span>';
 	$count       = get_post_meta( $post_id, 'post_like_count', true );
 	if ( ! $count ) {
 		$count = '0';
@@ -299,11 +299,10 @@ function orbita_get_post_html( $post_id ) {
 	$html .= '    <div class="meta">';
 	$html .= '        <div class="title">';
 	$html .= '            <div class="link">';
-	$html .=                  ( $only_domain ? '<span class="debate">' . $only_domain . '</span>' : '' );
 	$html .= '                <a href="' . esc_url( $external_url ) . $separator . 'utm_source=ManualdoUsuarioNet&utm_medium=Orbita" rel="ugc" title="' . get_the_title() . '">' . get_the_title() . '</a>';
 	$html .= '            </div>';
-	$html .=              orbita_paywall( $external_url );
-	$html .=              ( $only_domain ? '' : '<span class="domain">' . wp_parse_url( str_replace( 'www.', '', $external_url ), PHP_URL_HOST ) ) . '</span>';
+	$html .=              orbita_link_options( $external_url, get_the_title() );
+	$html .=              $only_domain;
 	$html .= '        </div>';
 	$html .= '        <div class="data">';
 	$html .=              get_the_author_meta( 'nickname', $post_author_id ) . ' · ' . $human_date;
@@ -495,94 +494,118 @@ function orbita_posts_shortcode( $atts = array(), $content = null, $tag = '' ) {
 }
 
 /**
- * Paywall
+ * Link options
  *
  * @param URL    $url Content.
+ * @param Title    $title Content.
  */
-function orbita_paywall( $url ) {
-	$url = esc_url( $url );
+function orbita_link_options( $url = '', $title = '' ) {
 	$html = null;
+	$options = [];
 
-	$publishers = [
-		[
-			"url" => "ft.com/",
-			"paywall" => "https://leiaisso.net/"
-		], 
-		[
-			"url" => "bloomberg.com/",
-			"paywall" => "https://leiaisso.net/"
-		], 
-		[
-			"url" => "folha.uol.com.br/",
-			"paywall" => "https://leiaisso.net/"
-		], 
-		[
-			"url" => "uol.com.br/",
-			"paywall" => "https://leiaisso.net/"
-		], 
-		[
-			"url" => "oglobo.globo.com/",
-			"paywall" => "https://leiaisso.net/"
-		], 
-		[
-			"url" => "estadao.com.br/",
-			"paywall" => "https://leiaisso.net/"
-		], 
-		[
-			"url" => "nytimes.com/",
-			"paywall" => "https://leiaisso.net/"
-		], 
-		[
-			"url" => "washingtonpost.com/",
-			"paywall" => "https://leiaisso.net/"
-		], 
-		[
-			"url" => "wsj.com/",
-			"paywall" => "https://archive.ph/submit/?url="
-		], 
-		[
-			"url" => "medium.com/",
-			"paywall" => "https://leiaisso.net/"
-		], 
-		[
-			"url" => "veja.abril.com.br/",
-			"paywall" => "https://leiaisso.net/"
-		], 
-		[
-			"url" => "exame.com/",
-			"paywall" => "https://leiaisso.net/"
-		], 
-		[
-			"url" => "super.abril.com.br/",
-			"paywall" => "https://leiaisso.net/"
-		], 
-		[
-			"url" => "valor.globo.com/",
-			"paywall" => "https://leiaisso.net/"
-		], 
-		[
-			"url" => "newyorker.com/",
-			"paywall" => "https://leiaisso.net/"
-		], 
-		[
-			"url" => "theatlantic.com/",
-			"paywall" => "https://leiaisso.net/"
-		], 
-		[
-			"url" => "technologyreview.com/",
-			"paywall" => "https://leiaisso.net/"
-		], 
-		[
-			"url" => "wired.com/",
-			"paywall" => "https://leiaisso.net/"
-		] 
-	]; 
+	if( $url ) {
+		$url = esc_url( $url );
+		$publishers = [
+			[
+				"url" => "ft.com/",
+				"paywall" => "https://leiaisso.net/"
+			], 
+			[
+				"url" => "bloomberg.com/",
+				"paywall" => "https://leiaisso.net/"
+			], 
+			[
+				"url" => "folha.uol.com.br/",
+				"paywall" => "https://leiaisso.net/"
+			], 
+			[
+				"url" => "uol.com.br/",
+				"paywall" => "https://leiaisso.net/"
+			], 
+			[
+				"url" => "oglobo.globo.com/",
+				"paywall" => "https://leiaisso.net/"
+			], 
+			[
+				"url" => "estadao.com.br/",
+				"paywall" => "https://leiaisso.net/"
+			], 
+			[
+				"url" => "nytimes.com/",
+				"paywall" => "https://leiaisso.net/"
+			], 
+			[
+				"url" => "washingtonpost.com/",
+				"paywall" => "https://leiaisso.net/"
+			], 
+			[
+				"url" => "wsj.com/",
+				"paywall" => "https://archive.ph/submit/?url="
+			], 
+			[
+				"url" => "medium.com/",
+				"paywall" => "https://leiaisso.net/"
+			], 
+			[
+				"url" => "veja.abril.com.br/",
+				"paywall" => "https://leiaisso.net/"
+			], 
+			[
+				"url" => "exame.com/",
+				"paywall" => "https://leiaisso.net/"
+			], 
+			[
+				"url" => "super.abril.com.br/",
+				"paywall" => "https://leiaisso.net/"
+			], 
+			[
+				"url" => "valor.globo.com/",
+				"paywall" => "https://leiaisso.net/"
+			], 
+			[
+				"url" => "newyorker.com/",
+				"paywall" => "https://leiaisso.net/"
+			], 
+			[
+				"url" => "theatlantic.com/",
+				"paywall" => "https://leiaisso.net/"
+			], 
+			[
+				"url" => "technologyreview.com/",
+				"paywall" => "https://leiaisso.net/"
+			], 
+			[
+				"url" => "wired.com/",
+				"paywall" => "https://leiaisso.net/"
+			] 
+		]; 
 
-    foreach ( $publishers as $publisher ) {
-        if ( preg_match("~" . preg_quote( $publisher['url'], "~" ) . "~i", $url ) ) {
-            $html = '<span class="paywall">[<a href="' . $publisher['paywall'] . $url . '">sem paywall</a>]</span>';
-        }
-    }
+		foreach ( $publishers as $publisher ) {
+			if ( preg_match("~" . preg_quote( $publisher['url'], "~" ) . "~i", $url ) ) {
+				$options['paywall'] = $publisher['paywall'] . $url;
+			}
+		}
+	}
+
+	if( $title && isset( $options['paywall'] ) ) {
+		$tags = [ 'es','en' ];
+		foreach ( $tags as $tag ){
+		   if ( str_contains( $title, $tag )){
+				$options['translate'] = 'https://translate.google.com/translate?sl=' . $tag . '&tl=pt&hl=pt-BR&u=' . $options['paywall'];
+		   }
+		}
+	}
+
+	if ( $options ) {
+		$html = '<span class="options">[';
+		if( isset( $options['paywall'] ) ) {
+			$html .= '<a href="' . $options['paywall'] . '">sem paywall</a>';
+		}
+		if( isset( $options['translate'] ) ) {
+			$html .= ', <a href="' . $options['translate'] . '">traduzir</a>';
+		}
+		$html .= ']</span>';
+	}
 
 	return $html;
 }
@@ -811,14 +834,14 @@ function orbita_form_post() {
 		}
 
 		$post_title = wp_unslash( $_POST['orbita_post_title'] );
-		$post_title = preg_replace_callback( '/(\[EN\]|\[en\]\[ES\]|\[es\])(\w+)/i', function( $match ) {
+		$post_title = preg_replace_callback('/(\[EN\]|\[en\]|\[ES\]|\[es\])\s*(\w+)(.*)/i', function($match) {
 			$tag = strtolower($match[1]);
-			$title = $match[2];
+			$title = $match[2]; 
 			return $tag . ' ' . $title;
 		}, $post_title);
-		$post_title = rtrim( $post_title, '!@#$%^&*()_+-={}[]|\:;<>,./~' );
+		$post_title = preg_replace('/[!@#$%^&*()_+\-=\[\]{}|\\\:;<>,.?\/~]+$/', '', $post_title);
 
-		$post    = array(
+		$post = array(
 			'post_title'   => $post_title,
 			'post_content' => $orbita_post_content,
 			'tax_input'    => array(

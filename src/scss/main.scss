@@ -65,12 +65,14 @@ $desktop: "only screen and (min-width : 700px)";
 
         }
       }
-      .paywall {
+      .options {
         filter: grayscale(1);
         font-size: 85%;
         color: #a6a6a6;
         margin-right: 6px;
-        display: inline-block;
+        a {
+          display: inline-block;
+        }
       }
       .domain {
         font-size: 90%;
@@ -118,12 +120,14 @@ $desktop: "only screen and (min-width : 700px)";
 
 .orbita-post-title {
   margin-bottom: 0 !important;
-  .paywall {
+  .options {
     font-size: 80%;
     filter: grayscale(1);
     color: #a6a6a6;
     margin-left: 6px;
-    display: inline-block;
+    a {
+      display: inline-block;
+    }
   }
   .domain {
     font-size: 80%;
@@ -178,6 +182,12 @@ $desktop: "only screen and (min-width : 700px)";
     @media #{$desktop} {
       margin: 0 0 0 1rem;
     }
+  }
+
+  .rss {
+    padding-left: 1.75rem;
+    background: url(/wp-content/plugins/orbita/assets/rss.webp) left center no-repeat;
+    background-size: 20px auto;
   }
 
   @media #{$desktop} {

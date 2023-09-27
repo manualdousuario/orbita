@@ -53,11 +53,13 @@
     margin-bottom: 0;
   }
 }
-.orbita-list .meta .title .paywall {
+.orbita-list .meta .title .options {
   filter: grayscale(1);
   font-size: 85%;
   color: #a6a6a6;
   margin-right: 6px;
+}
+.orbita-list .meta .title .options a {
   display: inline-block;
 }
 .orbita-list .meta .title .domain {
@@ -108,11 +110,13 @@
 .orbita-post-title {
   margin-bottom: 0 !important;
 }
-.orbita-post-title .paywall {
+.orbita-post-title .options {
   font-size: 80%;
   filter: grayscale(1);
   color: #a6a6a6;
   margin-left: 6px;
+}
+.orbita-post-title .options a {
   display: inline-block;
 }
 .orbita-post-title .domain {
@@ -166,6 +170,11 @@
   .orbita-header div a {
     margin: 0 0 0 1rem;
   }
+}
+.orbita-header .rss {
+  padding-left: 1.75rem;
+  background: url(/wp-content/plugins/orbita/assets/rss.webp) left center no-repeat;
+  background-size: 20px auto;
 }
 @media only screen and (min-width : 700px) {
   .orbita-header {
