@@ -588,7 +588,7 @@ function orbita_link_options( $url = '', $title = '' ) {
 	}
 
 	if( $title && isset( $options['paywall'] ) ) {
-		$tags = [ 'es','en' ];
+		$tags = [ '[es]', '[en]' ];
 		foreach ( $tags as $tag ){
 		   if ( str_contains( $title, $tag )){
 				$options['translate'] = 'https://translate.google.com/translate?sl=' . $tag . '&tl=pt&hl=pt-BR&u=' . $options['paywall'];
