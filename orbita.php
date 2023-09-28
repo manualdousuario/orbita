@@ -252,7 +252,7 @@ function orbita_get_header_html() {
 	$html .= '      <a href="/orbita">Populares</a>';
 	$html .= '      <a href="/orbita/tudo">Tudo</a>';
 	$html .= '      <a href="/orbita/guia-de-uso">Guia de uso</a>';
-	$html .= '      <a href="/feed/?post_type=orbita_post" class="rss">RSS</a>';
+	$html .= '      <a href="/feed/?post_type=orbita_post" class="rss" alt="RSS"><img src="' . plugin_dir_url(__FILE__) . 'assets/rss.svg" width="32" height="32" /></a>';
 	$html .= '  </div>';
 	$html .= '</div>';
 

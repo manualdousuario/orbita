@@ -156,9 +156,12 @@
   font-family: -apple-system, sans-serif;
   line-height: 2;
 }
+.orbita-header div {
+  display: flex;
+  align-items: center;
+}
 .orbita-header div a {
   margin: 0 0.3rem;
-  display: inline;
 }
 .orbita-header div a:visited {
   color: var(--color-link);
@@ -171,10 +174,10 @@
     margin: 0 0 0 1rem;
   }
 }
-.orbita-header .rss {
-  padding-left: 1.75rem;
-  background: url(/wp-content/plugins/orbita/assets/rss.webp) left center no-repeat;
-  background-size: 20px auto;
+.orbita-header .rss img {
+  height: 21px;
+  width: auto;
+  display: block;
 }
 @media only screen and (min-width : 700px) {
   .orbita-header {

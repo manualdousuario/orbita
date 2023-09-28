@@ -167,27 +167,32 @@ $desktop: "only screen and (min-width : 700px)";
   font-family: -apple-system, sans-serif;
   line-height: 2;
 
-  div a {
-    margin: 0 .3rem;
-    display: inline;
-
-    &:visited {
-      color: var(--color-link);
-    }
-
-    &:hover {
-      color: var(--color-link-states);
-    }
-
-    @media #{$desktop} {
-      margin: 0 0 0 1rem;
+  div {
+    display: flex;
+    align-items: center;
+    a {
+      margin: 0 .3rem;
+      
+      &:visited {
+        color: var(--color-link);
+      }
+  
+      &:hover {
+        color: var(--color-link-states);
+      }
+  
+      @media #{$desktop} {
+        margin: 0 0 0 1rem;
+      }
     }
   }
 
   .rss {
-    padding-left: 1.75rem;
-    background: url(/wp-content/plugins/orbita/assets/rss.webp) left center no-repeat;
-    background-size: 20px auto;
+    img {
+      height: 21px;
+      width: auto;
+      display: block;
+    }
   }
 
   @media #{$desktop} {
