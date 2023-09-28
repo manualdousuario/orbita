@@ -512,7 +512,7 @@ function orbita_link_options( $url = '', $title = '' ) {
 			], 
 			[
 				"url" => "bloomberg.com/",
-				"paywall" => "https://leiaisso.net/"
+				"paywall" => "https://archive.ph/submit/?url="
 			], 
 			[
 				"url" => "folha.uol.com.br/",
@@ -528,11 +528,11 @@ function orbita_link_options( $url = '', $title = '' ) {
 			], 
 			[
 				"url" => "estadao.com.br/",
-				"paywall" => "https://leiaisso.net/"
+				"paywall" => "https://archive.ph/submit/?url="
 			], 
 			[
 				"url" => "nytimes.com/",
-				"paywall" => "https://leiaisso.net/"
+				"paywall" => "https://archive.ph/submit/?url="
 			], 
 			[
 				"url" => "washingtonpost.com/",
@@ -564,15 +564,15 @@ function orbita_link_options( $url = '', $title = '' ) {
 			], 
 			[
 				"url" => "newyorker.com/",
-				"paywall" => "https://leiaisso.net/"
+				"paywall" => "https://archive.ph/submit/?url="
 			], 
 			[
 				"url" => "theatlantic.com/",
-				"paywall" => "https://leiaisso.net/"
+				"paywall" => "https://archive.ph/submit/?url="
 			], 
 			[
 				"url" => "technologyreview.com/",
-				"paywall" => "https://leiaisso.net/"
+				"paywall" => "https://archive.ph/submit/?url="
 			], 
 			[
 				"url" => "wired.com/",
