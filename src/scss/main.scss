@@ -65,12 +65,14 @@ $desktop: "only screen and (min-width : 700px)";
 
         }
       }
-      .paywall {
+      .options {
         filter: grayscale(1);
         font-size: 85%;
         color: #a6a6a6;
         margin-right: 6px;
-        display: inline-block;
+        a {
+          display: inline-block;
+        }
       }
       .domain {
         font-size: 90%;
@@ -118,12 +120,14 @@ $desktop: "only screen and (min-width : 700px)";
 
 .orbita-post-title {
   margin-bottom: 0 !important;
-  .paywall {
+  .options {
     font-size: 80%;
     filter: grayscale(1);
     color: #a6a6a6;
     margin-left: 6px;
-    display: inline-block;
+    a {
+      display: inline-block;
+    }
   }
   .domain {
     font-size: 80%;
@@ -163,20 +167,31 @@ $desktop: "only screen and (min-width : 700px)";
   font-family: -apple-system, sans-serif;
   line-height: 2;
 
-  div a {
-    margin: 0 .3rem;
-    display: inline;
-
-    &:visited {
-      color: var(--color-link);
+  div {
+    display: flex;
+    align-items: center;
+    a {
+      margin: 0 .3rem;
+      
+      &:visited {
+        color: var(--color-link);
+      }
+  
+      &:hover {
+        color: var(--color-link-states);
+      }
+  
+      @media #{$desktop} {
+        margin: 0 0 0 1rem;
+      }
     }
+  }
 
-    &:hover {
-      color: var(--color-link-states);
-    }
-
-    @media #{$desktop} {
-      margin: 0 0 0 1rem;
+  .rss {
+    img {
+      height: 21px;
+      width: auto;
+      display: block;
     }
   }
 
