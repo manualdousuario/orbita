@@ -98,6 +98,7 @@ $desktop: "only screen and (min-width : 700px)";
   width: 32px;
   height: 32px;
   overflow: hidden;
+  transition: none;
   img {
     width: 100%;
     height: auto;
