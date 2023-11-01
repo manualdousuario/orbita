@@ -178,11 +178,20 @@ $desktop: "only screen and (min-width : 700px)";
     }
   }
 
+  .telegram,
   .rss {
     img {
       height: 21px;
       width: auto;
       display: block;
+    }
+  }
+
+  .telegram {
+    img {
+      @media (prefers-color-scheme: dark) {
+        filter: invert(100%);
+      }
     }
   }
 

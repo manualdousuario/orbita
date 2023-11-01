@@ -174,10 +174,16 @@
     margin: 0 0 0 1rem;
   }
 }
+.orbita-header .telegram img,
 .orbita-header .rss img {
   height: 21px;
   width: auto;
   display: block;
+}
+@media (prefers-color-scheme: dark) {
+  .orbita-header .telegram img {
+    filter: invert(100%);
+  }
 }
 @media only screen and (min-width : 700px) {
   .orbita-header {

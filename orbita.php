@@ -249,10 +249,15 @@ function orbita_get_header_html() {
 	$html  = '<div class="orbita-header">';
 	$html .= '  <a href="/orbita/postar/" class="orbita-post-button">Postar</a>';
 	$html .= '  <div>';
-	$html .= '      <a href="/orbita">Populares</a>';
-	$html .= '      <a href="/orbita/tudo">Tudo</a>';
-	$html .= '      <a href="/orbita/guia-de-uso">Guia de uso</a>';
-	$html .= '      <a href="/feed/?post_type=orbita_post" class="rss" alt="RSS"><img src="' . plugin_dir_url(__FILE__) . 'assets/rss.svg" width="32" height="32" /></a>';
+	$html .= '      <select onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">';
+	$html .= '          <option value="/orbita">Populares</option>';
+	$html .= '          <option value="/orbita/tudo">Tudo</option>';
+	$html .= '          <option value="/guia-de-uso">Guia de Uso</option>';
+	$html .= '      </select>';
+	$html .= '  </div>';
+	$html .= '  <div>';
+	$html .= '      <a href="https://t.me/orbitafeed" class="telegram" alt="Canal no Telegram"><img src="' . plugin_dir_url(__FILE__) . 'assets/telegram.svg" width="32" height="32" /></a>';
+	$html .= '      <a href="/feed/?post_type=orbita_post" class="rss" alt="Feed RSS"><img src="' . plugin_dir_url(__FILE__) . 'assets/rss.svg" width="32" height="32" /></a>';
 	$html .= '  </div>';
 	$html .= '</div>';
 
