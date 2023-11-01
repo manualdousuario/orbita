@@ -256,8 +256,8 @@ function orbita_get_header_html() {
 	$html .= '      </select>';
 	$html .= '  </div>';
 	$html .= '  <div>';
-	$html .= '      <a href="https://t.me/orbitafeed" target="_blank" class="telegram" alt="Telegram"><img src="' . plugin_dir_url(__FILE__) . 'assets/telegram.svg" width="32" height="32" /></a>';
-	$html .= '      <a href="/feed/?post_type=orbita_post" class="rss" alt="RSS"><img src="' . plugin_dir_url(__FILE__) . 'assets/rss.svg" width="32" height="32" /></a>';
+	$html .= '      <a href="https://t.me/orbitafeed" class="telegram" alt="Canal no Telegram"><img src="' . plugin_dir_url(__FILE__) . 'assets/telegram.svg" width="32" height="32" /></a>';
+	$html .= '      <a href="/feed/?post_type=orbita_post" class="rss" alt="Feed RSS"><img src="' . plugin_dir_url(__FILE__) . 'assets/rss.svg" width="32" height="32" /></a>';
 	$html .= '  </div>';
 	$html .= '</div>';
 
