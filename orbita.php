@@ -250,6 +250,7 @@ function orbita_get_header_html() {
 	$html .= '  <a href="/orbita/postar/" class="orbita-post-button">Postar</a>';
 	$html .= '  <div>';
 	$html .= '      <select onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">';
+	$html .= '					<option disabled selected>Menu</option>';
 	$html .= '          <option value="/orbita">Populares</option>';
 	$html .= '          <option value="/orbita/tudo">Tudo</option>';
 	$html .= '          <option value="/guia-de-uso">Guia de Uso</option>';
