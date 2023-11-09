@@ -11,7 +11,7 @@
  * Plugin Name:     Órbita
  * Plugin URI:      https://gnun.es
  * Description:     Órbita é o plugin para criar um sistema Hacker News-like para o Manual do Usuário
- * Version:         1.8.7
+ * Version:         1.8.8
  * Author:          Gabriel Nunes
  * Author URI:      https://gnun.es
  * License:         GPL v3
@@ -250,10 +250,9 @@ function orbita_get_header_html() {
 	$html .= '  <a href="/orbita/postar/" class="orbita-post-button">Postar</a>';
 	$html .= '  <div>';
 	$html .= '      <select onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">';
-	$html .= '			<option disabled ' . ( is_page('postar') ? 'selected' : '' ) . '>Filtros</option>';
+	$html .= '			<option disabled ' . ( ( is_page('postar') || is_singular('orbita_post') ) ? 'selected' : '' ) . '>Filtros</option>';
 	$html .= '          <option value="/orbita" '. ( is_page('orbita') ? 'selected' : '' ) . '>Populares</option>';
 	$html .= '          <option value="/orbita/tudo" ' . ( is_page('tudo') ? 'selected' : '' ) . '>Últimas</option>';
-	$html .= '          <option value="/guia-de-uso" ' . ( is_page('guia-de-uso') ? 'selected' : '' ) . '>Guia de Uso</option>';
 	$html .= '      </select>';
 	$html .= '  </div>';
 	$html .= '  <div>';
