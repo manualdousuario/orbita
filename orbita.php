@@ -11,7 +11,7 @@
  * Plugin Name:     Órbita
  * Plugin URI:      https://gnun.es
  * Description:     Órbita é o plugin para criar um sistema Hacker News-like para o Manual do Usuário
- * Version:         1.8.6
+ * Version:         1.8.8
  * Author:          Gabriel Nunes
  * Author URI:      https://gnun.es
  * License:         GPL v3
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define plugin version constant
  */
-define( 'ORBITA_VERSION', '1.8.6' );
+define( 'ORBITA_VERSION', '1.8.7' );
 
 /**
  * Enqueue style file
@@ -250,10 +250,9 @@ function orbita_get_header_html() {
 	$html .= '  <a href="/orbita/postar/" class="orbita-post-button">Postar</a>';
 	$html .= '  <div>';
 	$html .= '      <select onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">';
-	$html .= '					<option disabled selected>Menu</option>';
-	$html .= '          <option value="/orbita">Populares</option>';
-	$html .= '          <option value="/orbita/tudo">Tudo</option>';
-	$html .= '          <option value="/guia-de-uso">Guia de Uso</option>';
+	$html .= '			<option disabled ' . ( ( is_page('postar') || is_singular('orbita_post') ) ? 'selected' : '' ) . '>Filtros</option>';
+	$html .= '          <option value="/orbita" '. ( is_page('orbita') ? 'selected' : '' ) . '>Populares</option>';
+	$html .= '          <option value="/orbita/tudo" ' . ( is_page('tudo') ? 'selected' : '' ) . '>Últimas</option>';
 	$html .= '      </select>';
 	$html .= '  </div>';
 	$html .= '  <div>';
