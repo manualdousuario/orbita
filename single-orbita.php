@@ -91,7 +91,9 @@ get_header();
 		</article>
 			<?php
 			// If comments are open or we have at least one comment, load up the comment template.
-			if ( comments_open() || get_comments_number() ) :
+			if ( comments_open() || get_comments_number() ) : ?>
+				<p class="ctx-atencao">Por favor, leia o <a href="https://manualdousuario.net/orbita/guia-de-uso/">guia de uso do Órbita</a> e as <a href="https://manualdousuario.net/doc-comentarios/">regras de convivência</a>. É possível formatar o comentário com HTML ou <a href="https://pt.wikipedia.org/wiki/Markdown#Exemplos_de_sintaxe">Markdown</a></p>
+			<?php
 				comments_template();
 			endif;
 
