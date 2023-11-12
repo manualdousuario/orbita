@@ -233,7 +233,7 @@ function orbita_get_vote_html( $post_id ) {
 	}
 
 	$html  = '<button title="' . $title . '" class="orbita-vote-button ' . $additional_class . '" data-post-id="' . $post_id . '">';
-	$html .= '    <img src="' . plugin_dir_url(__FILE__) . 'assets/vote.svg" alt="Votar" width="32" height="32" />';
+	$html .= '    <img loading="lazy" src="' . plugin_dir_url(__FILE__) . 'assets/vote.svg" alt="Votar" width="32" height="32" />';
 	$html .= '</button>';
 
 	return $html;
