@@ -67,7 +67,7 @@ $desktop: "only screen and (min-width : 700px)";
       .options {
         filter: grayscale(1);
         font-size: 85%;
-        color: #a6a6a6;
+        color: #535353;
         margin-right: 6px;
         a {
           display: inline-block;
@@ -75,7 +75,7 @@ $desktop: "only screen and (min-width : 700px)";
       }
       .domain {
         font-size: 90%;
-        color: #a6a6a6;
+        color: #535353;
       }
     }
     .data {
@@ -119,7 +119,6 @@ $desktop: "only screen and (min-width : 700px)";
 }
 
 .orbita-post-title {
-  margin-bottom: 0 !important;
   .options {
     font-size: 80%;
     filter: grayscale(1);
