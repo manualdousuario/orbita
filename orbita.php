@@ -62,6 +62,7 @@ function orbita_enqueue_scripts() {
 		array(
 			'restURL'   => rest_url(),
 			'restNonce' => wp_create_nonce( 'wp_rest' ),
+			'strategy'  => 'async',
 		)
 	);
 }
