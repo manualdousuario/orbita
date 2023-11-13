@@ -200,10 +200,9 @@ $desktop: "only screen and (min-width : 700px)";
   }
 
   .orbita-post-button {
-    padding: .75rem;
-    margin: -1rem auto -1rem 0;
-    border-radius: var(--borda-curva);
-    text-transform: uppercase;
+    padding: .43rem 1rem;
+    margin: -1rem auto -1rem -1rem;
+    border-radius: var(--borda-curva) 0 0 var(--borda-curva);
     background-color: var(--cor-botao);
     color: var(--cor-chapada);
     transition: background .3s, box-shadow .3s;
