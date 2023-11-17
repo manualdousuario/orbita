@@ -182,6 +182,10 @@ $desktop: "only screen and (min-width : 700px)";
     }
   }
 
+  label {
+    display: none;
+  }
+
   .telegram,
   .rss {
     img {

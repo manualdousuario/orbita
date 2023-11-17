@@ -250,7 +250,7 @@ function orbita_get_header_html() {
 	$html  = '<div class="orbita-header">';
 	$html .= '  <a href="/orbita/postar/" class="orbita-post-button">Postar</a>';
 	$html .= '  <div>';
-	$html .= '      <select onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">';
+	$html .= '      <label for="orbita-filtros">Filtros</label> <select name="orbita-filtros" onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">';
 	$html .= '			<option disabled ' . ( ( is_page('postar') || is_singular('orbita_post') ) ? 'selected' : '' ) . '>Filtros</option>';
 	$html .= '          <option value="/orbita" '. ( is_page('orbita') ? 'selected' : '' ) . '>Populares</option>';
 	$html .= '          <option value="/orbita/tudo" ' . ( is_page('tudo') ? 'selected' : '' ) . '>Últimas</option>';
