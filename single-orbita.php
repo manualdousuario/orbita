@@ -3,7 +3,7 @@
  * Órbita
  *
  * @package           orbita
- * @author            Gabriel Nunes, Clarissa R. Mendes
+ * @author            Gabriel Nunes, Rodrigo Ghedin, Clarissa R Mendes, Renan Altendorf
  * @copyright         2022 Manual do Usuário
  * @license           GPL-3.0
  **/
@@ -47,6 +47,9 @@ get_header();
 				wp_timezone_string( 'America/Sao_Paulo' );
 				$date = get_the_date( 'd/m/Y H:i' );
 
+				$author_display_name = esc_html( get_the_author_meta( 'display_name', $post->post_author ) );
+				$author_nickname = esc_html( get_the_author_meta( 'nickname', $post->post_author ) );
+
 				echo do_shortcode( '[orbita-header]' );
 
 				if ( $external_url ) :
@@ -61,7 +64,7 @@ get_header();
 				?>
 
 				<div class="entry-meta orbita-meta">
-					<?php echo do_shortcode( '[orbita-vote]' ); ?><span data-votes-post-id="<?php the_ID(); ?>"><?php echo esc_html( $count ); ?></span> <?php echo esc_html( $votes_text ); ?> · <?php echo esc_html( get_the_author_meta( 'nickname', $post->post_author ) ); ?> em <?php echo esc_html( $date ); ?>
+					<?php echo do_shortcode( '[orbita-vote]' ); ?><span data-votes-post-id="<?php the_ID(); ?>"><?php echo esc_html( $count ); ?></span> <?php echo esc_html( $votes_text ); ?> · <?php echo $author_display_name . ' (' . $author_nickname . ')'; ?> em <?php echo esc_html( $date ); ?>
 				</div>
 			</header>
 

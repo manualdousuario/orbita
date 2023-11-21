@@ -319,7 +319,7 @@ function orbita_get_post_html( $post_id ) {
 	$html .=              $only_domain;
 	$html .= '        </div>';
 	$html .= '        <div class="data">';
-	$html .= 	          get_the_author_meta( 'nickname', $post_author_id ) . ' · ' . $human_date;
+	$html .= 	          get_the_author_meta( 'display_name', $post_author_id ) . ' · ' . $human_date;
 	$html .= '            · <span class="comments"><a href=" ' . get_permalink() . '">';
 	$html .= '    		  <img loading="lazy" src="' . plugin_dir_url(__FILE__) . 'assets/' . $svg_file_name . '" alt="Comentar" width="16" height="16" />';
 	$html .= '			  <span>' . ( $comments_total > 0 ? $comments_total : '' ) . '</span></a></span>';
