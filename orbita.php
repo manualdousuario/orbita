@@ -3,7 +3,7 @@
  * Órbita
  *
  * @package           orbita
- * @author            Gabriel Nunes, Clarissa R. Mendes
+ * @author            Gabriel Nunes, Rodrigo Ghedin, Clarissa R Mendes, Renan Altendorf
  * @copyright         2022 Manual do Usuário
  * @license           GPL-3.0
  *
@@ -11,7 +11,7 @@
  * Plugin Name:     Órbita
  * Plugin URI:      https://gnun.es
  * Description:     Órbita é o plugin para criar um sistema Hacker News-like para o Manual do Usuário
- * Version:         1.8.9
+ * Version:         1.9
  * Author:          Gabriel Nunes
  * Author URI:      https://gnun.es
  * License:         GPL v3
@@ -234,7 +234,7 @@ function orbita_get_vote_html( $post_id ) {
 	}
 
 	$html  = '<button title="' . $title . '" class="orbita-vote-button ' . $additional_class . '" data-post-id="' . $post_id . '">';
-	$html .= '    <img loading="lazy" src="' . plugin_dir_url(__FILE__) . 'assets/vote.svg" alt="Votar" width="32" height="32" />';
+	$html .= '    <img loading="lazy" src="' . plugin_dir_url(__FILE__) . 'assets/vote.svg" alt="Votar" width="17" height="17" />';
 	$html .= '</button>';
 
 	return $html;
@@ -293,6 +293,14 @@ function orbita_get_post_html( $post_id ) {
 		return;
 	}
 
+	$comments_total = get_comments_number();
+	
+	if ( $comments_total > 0 ) {
+		$svg_file_name = 'speech.svg';
+	} else {
+		$svg_file_name = 'speech_stroke.svg';
+	}
+
 	$separator = '?';
 	if(strpos($external_url, '?') !== false) {
 		$separator = '&';
@@ -300,7 +308,7 @@ function orbita_get_post_html( $post_id ) {
 	$html  = '<li>';
 	$html .= '    <div class="vote">';
 	$html .=          orbita_get_vote_html( $post_id );
-	$html .= '        <div class="count" data-votes-post-id="' . esc_attr( $post_id ) . '">' . $count . ' </div>';
+	$html .=          '<div class="count" data-votes-post-id="' . esc_attr( $post_id ) . '">' . $count . ' </div>';
 	$html .= '    </div>';
 	$html .= '    <div class="meta">';
 	$html .= '        <div class="title">';
@@ -311,8 +319,10 @@ function orbita_get_post_html( $post_id ) {
 	$html .=              $only_domain;
 	$html .= '        </div>';
 	$html .= '        <div class="data">';
-	$html .=              get_the_author_meta( 'nickname', $post_author_id ) . ' · ' . $human_date;
-	$html .= '            <span class="comments">· <a href=" ' . get_permalink() . '"> ' . get_comments_number_text( 'sem comentários', '1 comentário', '% comentários' ) . '</a></span>';
+	$html .= 	          get_the_author_meta( 'nickname', $post_author_id ) . ' · ' . $human_date;
+	$html .= '            · <span class="comments"><a href=" ' . get_permalink() . '">';
+	$html .= '    		  <img loading="lazy" src="' . plugin_dir_url(__FILE__) . 'assets/' . $svg_file_name . '" alt="Comentar" width="16" height="16" />';
+	$html .= '			  <span>' . ( $comments_total > 0 ? $comments_total : '' ) . '</span></a></span>';
 	$html .= '        </div>';
 	$html .= '    </div>';
 	$html .= '</li>';
