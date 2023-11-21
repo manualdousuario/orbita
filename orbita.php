@@ -142,6 +142,18 @@ function orbita_setup_subscriber_capabilities() {
 }
 add_action('admin_init', 'orbita_setup_subscriber_capabilities');
 
+/****************** Utils *********************/
+
+/**
+ * Abbreviated Human Date
+ */
+function abbreviate_time( $human_date ) {
+	$search = array( 'anos', 'ano', 'meses', 'mês', 'dias', 'dia', 'horas', 'hora', 'minutos', 'minuto', 'segundos', 'segundo' );
+	$replace = array( 'a', 'a', 'm', 'm', 'd', 'd', 'h', 'h', 'min', 'min', 'seg', 'seg' );
+	
+	return str_replace( $search, $replace, $human_date );
+}
+
 /****************** Third Party Support *********************/
 
 /**
@@ -286,7 +298,8 @@ function orbita_get_post_html( $post_id ) {
 	}
 
 	wp_timezone_string( 'America/Sao_Paulo' );
-	$human_date = human_time_diff( get_the_time( 'U' ), current_time( 'timestamp' ) );
+	$human_date = human_time_diff(get_the_time( 'U' ), current_time( 'timestamp' ) );
+	$abbreviated_human_date = str_replace( ' ', '', abbreviate_time( $human_date ) );
 
 	$post_author_id = get_post_field( 'post_author', $post_id );
 	if ( get_userdata( $post_author_id ) == false ) {
@@ -319,7 +332,7 @@ function orbita_get_post_html( $post_id ) {
 	$html .=              $only_domain;
 	$html .= '        </div>';
 	$html .= '        <div class="data">';
-	$html .= 	          get_the_author_meta( 'display_name', $post_author_id ) . ' · ' . $human_date;
+	$html .= 	          get_the_author_meta( 'display_name', $post_author_id ) . ' · ' . $abbreviated_human_date;
 	$html .= '            · <span class="comments"><a href=" ' . get_permalink() . '">';
 	$html .= '    		  <img loading="lazy" src="' . plugin_dir_url(__FILE__) . 'assets/' . $svg_file_name . '" alt="Comentar" width="16" height="16" />';
 	$html .= '			  <span>' . ( $comments_total > 0 ? $comments_total : '' ) . '</span></a></span>';
