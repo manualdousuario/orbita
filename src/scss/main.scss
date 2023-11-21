@@ -182,8 +182,8 @@ $desktop: "only screen and (min-width : 700px)";
     }
   }
 
-  label {
-    display: none;
+  .orbita-header label {
+    margin: 0;
   }
 
   .telegram,
