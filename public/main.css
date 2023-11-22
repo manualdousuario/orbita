@@ -55,7 +55,7 @@
 .orbita-list .meta .title .options {
   filter: grayscale(1);
   font-size: 85%;
-  color: #a6a6a6;
+  color: #535353;
   margin-right: 6px;
 }
 .orbita-list .meta .title .options a {
@@ -63,7 +63,7 @@
 }
 .orbita-list .meta .title .domain {
   font-size: 90%;
-  color: #a6a6a6;
+  color: #535353;
 }
 .orbita-list .meta .data {
   margin-top: 6px;
@@ -107,9 +107,6 @@
   opacity: 0.5;
 }
 
-.orbita-post-title {
-  margin-bottom: 0 !important;
-}
 .orbita-post-title .options {
   font-size: 80%;
   filter: grayscale(1);
@@ -168,6 +165,9 @@
 .orbita-header div a:hover {
   color: var(--color-link-states);
 }
+.orbita-header .orbita-header label {
+  margin: 0;
+}
 .orbita-header .telegram img,
 .orbita-header .rss img {
   height: 1.75rem;
@@ -180,10 +180,9 @@
   }
 }
 .orbita-header .orbita-post-button {
-  padding: 0.75rem;
-  margin: -1rem auto -1rem 0;
-  border-radius: var(--borda-curva);
-  text-transform: uppercase;
+  padding: 0.43rem 1rem;
+  margin: -1rem auto -1rem -1rem;
+  border-radius: var(--borda-curva) 0 0 var(--borda-curva);
   background-color: var(--cor-botao);
   color: var(--cor-chapada);
   transition: background 0.3s, box-shadow 0.3s;
