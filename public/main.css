@@ -165,7 +165,7 @@
 .orbita-header div a:hover {
   color: var(--color-link-states);
 }
-.orbita-header .orbita-header label {
+.orbita-header label {
   margin: 0;
 }
 .orbita-header .telegram img,
