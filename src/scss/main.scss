@@ -8,9 +8,11 @@ $desktop: "only screen and (min-width : 700px)";
 
 .orbita_post {
   .orbita-meta {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    img {
+      vertical-align: baseline;
+      margin-right: 8px;
+      margin-bottom: -2px;
+    }
   }
 }
 
@@ -108,12 +110,10 @@ $desktop: "only screen and (min-width : 700px)";
   padding: 0;
   cursor: default;
   background: transparent !important;
-  width: 17px;
-  height: 18px;
   overflow: hidden;
   transition: none;
   img {
-    width: 100%;
+    width: 17px;
     height: auto;
     vertical-align: top;
     @media (prefers-color-scheme: dark) {
