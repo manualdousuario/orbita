@@ -3,7 +3,7 @@
  * Órbita
  *
  * @package           orbita
- * @author            Gabriel Nunes, Rodrigo Ghedin, Clarissa R Mendes, Renan Altendorf
+ * @author            Gabriel Nunes, Rodrigo Ghedin, Clarissa Mendes, Renan Altendorf
  * @copyright         2022 Manual do Usuário
  * @license           GPL-3.0
  **/
