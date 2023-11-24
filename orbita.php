@@ -40,6 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define plugin version constant
  */
+
 define( 'ORBITA_VERSION', '1.9' );
 
 /**
