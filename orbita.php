@@ -322,7 +322,7 @@ function orbita_get_post_html( $post_id ) {
 	$html  = '<li>';
 	$html .= '    <div class="vote">';
 	$html .=          orbita_get_vote_html( $post_id );
-	$html .=          '<div class="count" data-votes-post-id="' . esc_attr( $post_id ) . '">' . $count . ' </div>';
+	$html .= '        <div class="count" data-votes-post-id="' . esc_attr( $post_id ) . '">' . $count . ' </div>';
 	$html .= '    </div>';
 	$html .= '    <div class="meta">';
 	$html .= '        <div class="title">';
