@@ -10,7 +10,7 @@ Requisitos
 Clone o repositório
 
 ```bash
-git clone git@github.com:gabrnunes/orbita.git
+git clone git@github.com:manualdousuario/orbita.git
 ```
 
 Instale as dependências
@@ -49,7 +49,7 @@ grunt compress
 
 `[orbita-my-posts]`: listagem de todos os tópicos do usuario
 
-## WP Cli
+## WP-CLI
 
 `wp orbita ogimage update [--posts_per_page=<posts_per_page>]`: busca pelas ogimage em posts com url externas sem thumbnail
 ```

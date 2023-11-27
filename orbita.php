@@ -3,7 +3,7 @@
  * Órbita
  *
  * @package           orbita
- * @author            Gabriel Nunes, Clarissa R. Mendes
+ * @author            Gabriel Nunes, Rodrigo Ghedin, Clarissa Mendes, Renan Altendorf
  * @copyright         2022 Manual do Usuário
  * @license           GPL-3.0
  *
@@ -141,6 +141,18 @@ function orbita_setup_subscriber_capabilities() {
 }
 add_action('admin_init', 'orbita_setup_subscriber_capabilities');
 
+/****************** Utils *********************/
+
+/**
+ * Abbreviated Human Date
+ */
+function abbreviate_time( $human_date ) {
+	$search = array( 'anos', 'ano', 'meses', 'mês', 'dias', 'dia', 'horas', 'hora', 'minutos', 'minuto', 'segundos', 'segundo' );
+	$replace = array( 'a', 'a', 'm', 'm', 'd', 'd', 'h', 'h', 'min', 'min', 'seg', 'seg' );
+	
+	return str_replace( $search, $replace, $human_date );
+}
+
 /****************** Third Party Support *********************/
 
 /**
@@ -233,7 +245,7 @@ function orbita_get_vote_html( $post_id ) {
 	}
 
 	$html  = '<button title="' . $title . '" class="orbita-vote-button ' . $additional_class . '" data-post-id="' . $post_id . '">';
-	$html .= '    <img loading="lazy" src="' . plugin_dir_url(__FILE__) . 'assets/vote.svg" alt="Votar" width="32" height="32" />';
+	$html .= '    <img loading="lazy" src="' . plugin_dir_url(__FILE__) . 'assets/vote.svg" alt="Votar" width="17" height="17" />';
 	$html .= '</button>';
 
 	return $html;
@@ -285,11 +297,20 @@ function orbita_get_post_html( $post_id ) {
 	}
 
 	wp_timezone_string( 'America/Sao_Paulo' );
-	$human_date = human_time_diff( get_the_time( 'U' ), current_time( 'timestamp' ) );
+	$human_date = human_time_diff(get_the_time( 'U' ), current_time( 'timestamp' ) );
+	$abbreviated_human_date = str_replace( ' ', '', abbreviate_time( $human_date ) );
 
 	$post_author_id = get_post_field( 'post_author', $post_id );
 	if ( get_userdata( $post_author_id ) == false ) {
 		return;
+	}
+
+	$comments_total = get_comments_number();
+	
+	if ( $comments_total > 0 ) {
+		$svg_file_name = 'speech.svg';
+	} else {
+		$svg_file_name = 'speech_stroke.svg';
 	}
 
 	$separator = '?';
@@ -310,8 +331,10 @@ function orbita_get_post_html( $post_id ) {
 	$html .=              $only_domain;
 	$html .= '        </div>';
 	$html .= '        <div class="data">';
-	$html .=              get_the_author_meta( 'nickname', $post_author_id ) . ' · ' . $human_date;
-	$html .= '            <span class="comments">· <a href=" ' . get_permalink() . '"> ' . get_comments_number_text( 'sem comentários', '1 comentário', '% comentários' ) . '</a></span>';
+	$html .= 	          get_the_author_meta( 'display_name', $post_author_id ) . ' · ' . $abbreviated_human_date;
+	$html .= '            · <span class="comments"><a href=" ' . get_permalink() . '">';
+	$html .= '    		  <img loading="lazy" src="' . plugin_dir_url(__FILE__) . 'assets/' . $svg_file_name . '" alt="Comentar" width="16" height="16" />';
+	$html .= '			  <span>' . ( $comments_total > 0 ? $comments_total : '' ) . '</span></a></span>';
 	$html .= '        </div>';
 	$html .= '    </div>';
 	$html .= '</li>';
