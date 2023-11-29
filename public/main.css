@@ -26,6 +26,7 @@
 .orbita-list .vote {
   grid-area: vote;
   text-align: center;
+  align-self: center;
 }
 .orbita-list .vote button {
   z-index: 2;
@@ -190,7 +191,7 @@
   }
 }
 .orbita-header .orbita-post-button {
-  padding: 0.43rem 1rem;
+  padding: .43rem 1rem;
   margin: -1rem auto -1rem -1rem;
   border-radius: var(--borda-curva) 0 0 var(--borda-curva);
   background-color: var(--cor-botao);

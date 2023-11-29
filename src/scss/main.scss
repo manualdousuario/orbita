@@ -37,6 +37,7 @@ $desktop: "only screen and (min-width : 700px)";
   .vote {
     grid-area: vote;
     text-align: center;
+    align-self: center;
 
     button {
       z-index: 2;
