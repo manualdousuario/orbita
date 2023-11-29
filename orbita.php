@@ -147,8 +147,8 @@ add_action('admin_init', 'orbita_setup_subscriber_capabilities');
  * Abbreviated Human Date
  */
 function abbreviate_time( $human_date ) {
-	$search = array( 'anos', 'ano', 'meses', 'mês', 'dias', 'dia', 'horas', 'hora', 'minutos', 'minuto', 'segundos', 'segundo' );
-	$replace = array( 'a', 'a', 'm', 'm', 'd', 'd', 'h', 'h', 'min', 'min', 'seg', 'seg' );
+	$search = array( 'anos', 'ano', 'meses', 'mês', 'semanas', 'semana', 'dias', 'dia', 'horas', 'hora', 'minutos', 'minuto', 'segundos', 'segundo' );
+	$replace = array( 'a', 'a', 'm', 'm', 's', 's', 'd', 'd', 'h', 'h', 'min', 'min', 'seg', 'seg' );
 	
 	return str_replace( $search, $replace, $human_date );
 }
