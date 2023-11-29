@@ -290,7 +290,7 @@ function orbita_get_post_html( $post_id ) {
 	if ( ! $external_url ) {
 		$external_url = get_permalink();
 	}
-	$only_domain = strpos($external_url, wp_parse_url( str_replace( 'www.', '', get_bloginfo('url') ), PHP_URL_HOST ) . '/orbita') !== false ? '' : '<span class="domain">' . wp_parse_url( str_replace( 'www.', '', $external_url ), PHP_URL_HOST ) . '</span>';
+	$only_domain = strpos($external_url, wp_parse_url( str_replace( 'www.', '', get_bloginfo('url') ), PHP_URL_HOST ) . '/orbita') !== false ? '' : '<span class="domain"> ' . wp_parse_url( str_replace( 'www.', '', $external_url ), PHP_URL_HOST ) . '</span>';
 	$count       = get_post_meta( $post_id, 'post_like_count', true );
 	if ( ! $count ) {
 		$count = '0';
@@ -626,14 +626,14 @@ function orbita_link_options( $url = '', $title = '' ) {
 	}
 
 	if ( $options ) {
-		$html = '<span class="options">[';
+		$html = '<span class="options">';
 		if( isset( $options['paywall'] ) ) {
-			$html .= '<a href="' . $options['paywall'] . '">sem paywall</a>';
+			$html .= '<a href="' . $options['paywall'] . '">[sem paywall]</a>';
 		}
 		if( isset( $options['translate'] ) ) {
-			$html .= ', <a href="' . $options['translate'] . '">traduzir</a>';
+			$html .= ', <a href="' . $options['translate'] . '">[traduzir]</a>';
 		}
-		$html .= ']</span>';
+		$html .= '</span>';
 	}
 
 	return $html;

@@ -55,33 +55,22 @@ $desktop: "only screen and (min-width : 700px)";
     grid-area: meta;
     .title {
       .link {
-        display: block;
-        margin-right: 6px;
-        margin-bottom: 3px;
-        @media #{$desktop} {
           display: inline;
           margin-bottom: 0;
-        }
         .debate {
 
         }
       }
       .options {
         filter: grayscale(1);
-        font-size: 85%;
         color: #535353;
-        margin-right: 6px;
-        a {
-          display: inline-block;
-        }
       }
       .domain {
-        font-size: 90%;
         color: #535353;
       }
     }
     .data {
-      margin-top: 6px;
+      margin-top: .5rem;
       font-family: monospace;
       font-size: var(--fs-0);
       .comments {
@@ -95,6 +84,8 @@ $desktop: "only screen and (min-width : 700px)";
             filter: invert(100%);
           }
           vertical-align: middle;
+          position: relative;
+          top: -.1rem;
         }
         a {
           text-decoration: none;
