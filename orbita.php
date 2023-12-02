@@ -11,7 +11,7 @@
  * Plugin Name:     Órbita
  * Plugin URI:      https://gnun.es
  * Description:     Órbita é o plugin para criar um sistema Hacker News-like para o Manual do Usuário
- * Version:         1.9.1
+ * Version:         1.9.2
  * Author:          Gabriel Nunes
  * Author URI:      https://gnun.es
  * License:         GPL v3
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define plugin version constant
  */
-define( 'ORBITA_VERSION', '1.9.1' );
+define( 'ORBITA_VERSION', '1.9.2' );
 
 /**
  * Enqueue style file
@@ -305,14 +305,6 @@ function orbita_get_post_html( $post_id ) {
 		return;
 	}
 
-	$comments_total = get_comments_number();
-	
-	if ( $comments_total > 0 ) {
-		$svg_file_name = 'speech.svg';
-	} else {
-		$svg_file_name = 'speech_stroke.svg';
-	}
-
 	$separator = '?';
 	if(strpos($external_url, '?') !== false) {
 		$separator = '&';
@@ -332,9 +324,8 @@ function orbita_get_post_html( $post_id ) {
 	$html .= '        </div>';
 	$html .= '        <div class="data">';
 	$html .= 	          get_the_author_meta( 'display_name', $post_author_id ) . ' · ' . $abbreviated_human_date;
-	$html .= '            · <span class="comments"><a href=" ' . get_permalink() . '">';
-	$html .= '    		  <img loading="lazy" src="' . plugin_dir_url(__FILE__) . 'assets/' . $svg_file_name . '" alt="Comentar" width="16" height="16" />';
-	$html .= '			  <span>' . ( $comments_total > 0 ? $comments_total : '' ) . '</span></a></span>';
+	$html .= '            · <a href=" ' . get_permalink() . '" class="comment-link">';
+	$html .= '			  <span>' . get_comments_number() . '</span></a>';
 	$html .= '        </div>';
 	$html .= '    </div>';
 	$html .= '</li>';

@@ -73,25 +73,7 @@ $desktop: "only screen and (min-width : 700px)";
       margin-top: .5rem;
       font-family: monospace;
       font-size: var(--fs-0);
-      .comments {
-        span {
-          color: var(--color-primary);
-          font-size: 100%;
-        }
-        img {
-          width: 16px;
-          @media (prefers-color-scheme: dark) {
-            filter: invert(100%);
-          }
-          vertical-align: middle;
-          position: relative;
-          top: -.1rem;
-        }
-        a {
-          text-decoration: none;
-        }
-      } 
-    }
+    } 
   }
 }
 
@@ -169,6 +151,7 @@ $desktop: "only screen and (min-width : 700px)";
   margin-bottom: 2rem;
   background-color: var(--cor-caixas);
   border-radius: var(--borda-curva);
+  font-size: var(--fs-0);
 
   div {
     display: flex;
@@ -193,7 +176,7 @@ $desktop: "only screen and (min-width : 700px)";
   .telegram,
   .rss {
     img {
-      height: 1.75rem;
+      height: 1.5rem;
       width: auto;
       display: block;
     }
