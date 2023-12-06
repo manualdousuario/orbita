@@ -57,7 +57,7 @@ get_header();
 					if(strpos($external_url, '?') !== false) :
 						$separator = '&';
 					endif;
-					the_title( '<h1 class="entry-title orbita-post-title"><a href="' . esc_url( $external_url ) . $separator . 'utm_source=ManualdoUsuarioNet&utm_medium=Orbita" rel="ugc">', '</a>' . orbita_link_options( $external_url, get_the_title() ) . '<span class="domain">' .  $only_domain . '</span></h1>' );
+					the_title( '<h1 class="entry-title orbita-post-title"><a href="' . esc_url( $external_url ) . $separator . 'utm_source=ManualdoUsuarioNet&utm_medium=Orbita" rel="ugc">', '</a>&nbsp;' . orbita_link_options( $external_url, get_the_title() ) . '<span class="domain">' .  $only_domain . '</span></h1>' );
 				else :
 					the_title( '<h1 class="entry-title orbita-post-title">', '</h1>' );
 				endif;
@@ -94,9 +94,7 @@ get_header();
 		</article>
 			<?php
 			// If comments are open or we have at least one comment, load up the comment template.
-			if ( comments_open() || get_comments_number() ) : ?>
-				<p class="ctx-atencao">Por favor, leia o <a href="https://manualdousuario.net/orbita/guia-de-uso/">guia de uso do Órbita</a> e as <a href="https://manualdousuario.net/doc-comentarios/">regras de convivência</a>. É possível formatar o comentário com HTML ou <a href="https://pt.wikipedia.org/wiki/Markdown#Exemplos_de_sintaxe">Markdown</a></p>
-			<?php
+			if ( comments_open() || get_comments_number() ) : ?
 				comments_template();
 			endif;
 
