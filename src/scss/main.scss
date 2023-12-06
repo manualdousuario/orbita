@@ -71,7 +71,7 @@ $desktop: "only screen and (min-width : 700px)";
     }
     .data {
       margin-top: .5rem;
-      font-family: monospace;
+      font-family: var(--ff-monospace);
       font-size: var(--fs-0);
     } 
   }
@@ -106,17 +106,13 @@ $desktop: "only screen and (min-width : 700px)";
 
 .orbita-post-title {
   .options {
-    font-size: 80%;
     filter: grayscale(1);
     color: #535353;
-    margin-left: 6px;
     a {
       display: inline-block;
     }
   }
   .domain {
-    font-size: 80%;
-    margin-left: 6px;
     color: #535353;
     display: inline-block;
   }
@@ -134,7 +130,7 @@ $desktop: "only screen and (min-width : 700px)";
   
 	&-content {
 	  font-size: 95%;
-	  font-family: monospace;
+	  font-family: var(--ff-monospace);
 	  padding: 0 21px;
 	  display: block;
 	}
@@ -236,7 +232,7 @@ $desktop: "only screen and (min-width : 700px)";
   }
 
   .orbita-help-block {
-    font-family: monospace;
+    font-family: var(--ff-monospace);
     display: block;
     font-size: var(--fs-0);
   }
