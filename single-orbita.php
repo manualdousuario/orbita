@@ -57,7 +57,7 @@ get_header();
 					if(strpos($external_url, '?') !== false) :
 						$separator = '&';
 					endif;
-					the_title( '<h1 class="entry-title orbita-post-title"><a href="' . esc_url( $external_url ) . $separator . 'utm_source=ManualdoUsuarioNet&utm_medium=Orbita" rel="ugc">', '</a>' . orbita_link_options( $external_url, get_the_title() ) . '<span class="domain">' .  $only_domain . '</span></h1>' );
+					the_title( '<h1 class="entry-title orbita-post-title"><a href="' . esc_url( $external_url ) . $separator . 'utm_source=ManualdoUsuarioNet&utm_medium=Orbita" rel="ugc">', '</a>&nbsp;' . orbita_link_options( $external_url, get_the_title() ) . '&nbsp;<span class="domain">' .  $only_domain . '</span></h1>' );
 				else :
 					the_title( '<h1 class="entry-title orbita-post-title">', '</h1>' );
 				endif;
