@@ -11,7 +11,7 @@
  * Plugin Name:     Órbita
  * Plugin URI:      https://gnun.es
  * Description:     Órbita é o plugin para criar um sistema Hacker News-like para o Manual do Usuário
- * Version:         1.9.4
+ * Version:         1.10
  * Author:          Gabriel Nunes
  * Author URI:      https://gnun.es
  * License:         GPL v3
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define plugin version constant
  */
-define( 'ORBITA_VERSION', '1.9.4' );
+define( 'ORBITA_VERSION', '1.10' );
 
 /**
  * Enqueue style file
@@ -774,6 +774,9 @@ function orbita_form_shortcode() {
 		if( $orbita_error == 'user_logged' ) {
 			$html = 'Para postar links ou iniciar conversas na Órbita, <a href="' . wp_login_url( home_url( '/orbita/postar' ) ) . '">faça login</a> ou <a href="' . wp_registration_url() . '">cadastre-se gratuitamente</a>.';
 		}
+		if( $orbita_error == 'invalid_format' ) {
+			$html = 'O formato da imagem enviada é invalido.';
+		}
 		return $html;
 	}
 
@@ -804,6 +807,13 @@ function orbita_form_shortcode() {
 	$html .= '      <div class="orbita-form-control">';
 	$html .= '          <label for="orbita_post_url">Link</label>';
 	$html .= '          <input type="url" id="orbita_post_url" name="orbita_post_url" placeholder="https://" value="' . $get_u . '">';
+	$html .= '      </div>';
+	$html .= '      <div class="orbita-form-control">';
+	$html .= '          <label for="orbita_post_attach">Imagem</label>';
+	$html .= '          <input type="file" id="orbita_post_attach" name="orbita_post_attach" accept=".jpg, .jpeg, .png, .gif">';
+	$html .= '      </div>';
+	$html .= '      <div class="orbita-form-control">';
+	$html .= '          <p>Formatos aceitos: JPG, JPEG, PNG e GIF<br/>Tamanho máximo: '.size_format(wp_max_upload_size()).'</p>';
 	$html .= '      </div>';
 	$html .= '      <div class="orbita-form-control">';
 	$html .= '          <label for="orbita_post_content">Comentário</label>';
@@ -885,8 +895,64 @@ function orbita_form_post() {
 		$post_id = wp_insert_post( $post );
 
 		orbita_increase_post_like( $post_id );
-		orbita_save_ogimage( $post_id );
-		
+
+		$post_attach = $_FILES['orbita_post_attach'];
+		if( isset($post_attach) && isset($post_attach['type']) ) {
+			$content_type = $post_attach['type'];
+			$post_body = file_get_contents($post_attach['tmp_name']);
+
+			$extension = null;
+			switch ( $content_type ) {
+				case 'image/png':
+					$extension = 'png';
+					break;
+				case 'image/gif':
+					$extension = 'gif';
+					break;
+				case 'image/jpg':
+					$extension = 'jpg';
+					break;
+				case 'image/jpeg':
+					$extension = 'jpg';
+					break;
+			}
+
+			if( $extension ) {
+				$wp_upload_dir = wp_upload_dir();
+				$upload_dir = $wp_upload_dir['basedir'] . '/orbita' . $wp_upload_dir['subdir'];
+				wp_mkdir_p( $upload_dir );
+	
+				// Filename format: postid_timestamp.extension
+				$filename = wp_unique_filename($upload_dir, $post_id . '_' . time() . '.' . $extension);
+				$upload_file = $upload_dir . '/' . $filename;
+				file_put_contents( $upload_file, $post_body );
+
+				$post_mime_type = wp_check_filetype( basename( $upload_file ), null );
+
+				$attachment = array(
+					'guid'           => $upload_file,
+					'post_mime_type' => $post_mime_type['type'],
+					'post_title'     => sanitize_file_name( $filename ),
+					'post_content'   => $post_title,
+					'post_status'    => 'inherit'
+				);
+				$attachment_id = wp_insert_attachment( $attachment, $upload_file, $post_id );
+
+				require_once( ABSPATH . 'wp-admin/includes/image.php' );
+
+				$attach_data = wp_generate_attachment_metadata( $attachment_id, $upload_file );
+				wp_update_attachment_metadata( $attachment_id, $attach_data );
+
+				set_post_thumbnail( $post_id, $attachment_id );
+
+				update_post_meta( $post_id, 'attach_file', 1 );
+			} else {
+				wp_redirect('/orbita/postar/?orbita_error=invalid_format');
+			}
+		} else {
+			orbita_save_ogimage( $post_id );
+		}
+
 		wp_redirect(get_permalink($post_id));
 		die;
 	}
