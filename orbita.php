@@ -833,6 +833,38 @@ function orbita_form_shortcode() {
 	return $html;
 }
 
+function orbita_convert_image( $image ) {
+    if ( !extension_loaded('gd') ) {
+        die( 'No GD extension' );
+    }
+
+    $image_data = file_get_contents( $image );
+    $image_original = imagecreatefromstring( $image_data );
+    $image_width = imagesx( $image_original );
+    $image_height = imagesy( $image_original );
+    $max_size = 1200;
+
+    if ( $image_width > $image_height ) {
+        $new_width = min( $max_size, $image_width );
+        $new_height = ( $image_height / $image_width ) * $new_width;
+    } else {
+        $new_height = min( $max_size, $image_height );
+        $new_width = ( $image_width / $image_height ) * $new_height;
+    }
+
+    $new_image = imagecreatetruecolor( $new_width, $new_height );
+    imagecopyresampled( $new_image, $image_original, 0, 0, 0, 0, $max_size, $new_height, $image_width, $image_height );
+
+    $result = tempnam( sys_get_temp_dir(), 'orbita_temp_' ) . '.jpg';
+
+    imagejpeg( $new_image, $result, 90 );
+
+    imagedestroy( $image_original );
+    imagedestroy( $new_image );
+
+    return $result;
+}
+
 add_action('wp_loaded', 'orbita_form_post');
 function orbita_form_post() {
 	if ( $_POST && isset( $_POST['orbita_post_title'] ) ) {
@@ -899,7 +931,6 @@ function orbita_form_post() {
 		$post_attach = $_FILES['orbita_post_attach'];
 		if( isset($post_attach) && isset($post_attach['type']) ) {
 			$content_type = $post_attach['type'];
-			$post_body = file_get_contents($post_attach['tmp_name']);
 
 			$extension = null;
 			switch ( $content_type ) {
@@ -918,14 +949,16 @@ function orbita_form_post() {
 			}
 
 			if( $extension ) {
+				$image_body = file_get_contents( orbita_convert_image( $post_attach['tmp_name'] ) );
+
 				$wp_upload_dir = wp_upload_dir();
 				$upload_dir = $wp_upload_dir['basedir'] . '/orbita' . $wp_upload_dir['subdir'];
 				wp_mkdir_p( $upload_dir );
 	
 				// Filename format: postid_timestamp.extension
-				$filename = wp_unique_filename($upload_dir, $post_id . '_' . time() . '.' . $extension);
+				$filename = wp_unique_filename( $upload_dir, $post_id . '_' . time() . '.' . $extension );
 				$upload_file = $upload_dir . '/' . $filename;
-				file_put_contents( $upload_file, $post_body );
+				file_put_contents( $upload_file, $image_body );
 
 				$post_mime_type = wp_check_filetype( basename( $upload_file ), null );
 
