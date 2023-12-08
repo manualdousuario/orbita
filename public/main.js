@@ -15,27 +15,7 @@ document.addEventListener(
     voteButtons.forEach(function (button) {
       button.addEventListener("click", function (event) {
         upVote(button.dataset.postId, button);
-
-        event.preventDefault;
-        return false;
-      });
-    });
-
-    const reportButtons = document.querySelectorAll(".orbita-report-link");
-
-    reportButtons.forEach(function (button) {
-      button.addEventListener("click", function (event) {
-        report(
-          button.dataset.commentId,
-          button.dataset.postId,
-          button
-        );
-
-        button.classList.add("orbita-report-link-already-reported");
-        button.innerHTML = "Ok! Obrigado.";
-        button.disabled = true;
-
-        event.preventDefault;
+        event.preventDefault();
         return false;
       });
     });
@@ -58,7 +38,7 @@ function upVote(postId, object) {
   // Cria um evento para receber o retorno.
   ajax.onreadystatechange = function () {
     // Caso o state seja 4 e o http.status for 200, é porque a requisiçõe deu certo.
-    if (ajax.readyState == 4 && ajax.status == 200) {
+    if (ajax.readyState === 4 && ajax.status === 200) {
       const data = ajax.responseText;
 
       const jsonData = JSON.parse(data);
@@ -73,19 +53,4 @@ function upVote(postId, object) {
       }
     }
   };
-}
-
-function report(commentId, postId, object) {
-  // Exemplo de requisição POST
-  const ajax = new XMLHttpRequest();
-
-  // Seta tipo de requisição: Post e a URL da API
-  ajax.open("POST", orbitaApi.restURL + 'orbitaApi/v1/report', true);
-  ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-  ajax.setRequestHeader("X-WP-Nonce", orbitaApi.restNonce);
-
-  // Seta paramêtros da requisição e envia a requisição
-  ajax.send(
-    "comment_id=" + commentId + "&post_id=" + postId
-  );
 }
