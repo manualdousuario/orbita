@@ -775,7 +775,7 @@ function orbita_form_shortcode() {
 			$html = 'Para postar links ou iniciar conversas na Órbita, <a href="' . wp_login_url( home_url( '/orbita/postar' ) ) . '">faça login</a> ou <a href="' . wp_registration_url() . '">cadastre-se gratuitamente</a>.';
 		}
 		if( $orbita_error == 'invalid_format' ) {
-			$html = 'O formato da imagem enviada é invalido.';
+			$html = 'O formato da imagem enviada é inválido.';
 		}
 		return $html;
 	}
