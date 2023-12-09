@@ -1064,20 +1064,11 @@ function orbita_save_ogimage( $post_id ) {
 						case 'image/png':
 							$extension = 'png';
 							break;
-						case 'image/avif':
-							$extension = 'avif';
-							break;
-						case 'image/gif':
-							$extension = 'gif';
-							break;
 						case 'image/jpg':
 							$extension = 'jpg';
 							break;
 						case 'image/jpeg':
 							$extension = 'jpg';
-							break;
-						case 'image/svg+xml':
-							$extension = 'svg';
 							break;
 						case 'image/webp':
 							$extension = 'webp';
