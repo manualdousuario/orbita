@@ -52,16 +52,16 @@ function orbita_enqueue_styles() {
 add_action( 'wp_enqueue_scripts', 'orbita_enqueue_styles' );
 
 function orbita_preload_style ($preload_resources) {
-     $preload_resources[] = array(
-     		'href' => plugins_url() . '/orbita-'. ORBITA_VERSION .'/public/main.css?ver=' . ORBITA_VERSION,
-        'as' => 'style',
-        'type' => 'text/css',
-        'media' => 'all',
-    );
-    return $preload_resources;
- }
- add_filter('wp_preload_resources', 'orbita_preload_style');
- 
+	$preload_resources[] = array(
+		'href' => plugins_url() . '/orbita-'. ORBITA_VERSION .'/public/main.css?ver=' . ORBITA_VERSION,
+		'as' => 'style',
+		'type' => 'text/css',
+		'media' => 'all',
+	);
+	return $preload_resources;
+}
+add_filter('wp_preload_resources', 'orbita_preload_style');
+
 /**
  * Enqueue script file
  */
@@ -621,9 +621,9 @@ function orbita_link_options( $url = '', $title = '' ) {
 	if( $title && isset( $options['paywall'] ) ) {
 		$tags = [ 'es', 'en' ];
 		foreach ( $tags as $tag ){
-		   if ( str_contains( $title, '[' . $tag . ']' )){
+			if ( str_contains( $title, '[' . $tag . ']' )){
 				$options['translate'] = 'https://translate.google.com/translate?sl=' . $tag . '&tl=pt&hl=pt-BR&u=' . $options['paywall'];
-		   }
+			}
 		}
 	}
 
@@ -810,10 +810,10 @@ function orbita_form_shortcode() {
 	$html .= '      </div>';
 	$html .= '      <div class="orbita-form-control">';
 	$html .= '          <label for="orbita_post_attach">Imagem</label>';
-	$html .= '          <input type="file" id="orbita_post_attach" name="orbita_post_attach" accept=".jpg, .jpeg, .png, .gif">';
+	$html .= '          <input type="file" id="orbita_post_attach" name="orbita_post_attach" accept=".jpg, .jpeg, .png, .webp">';
 	$html .= '      </div>';
 	$html .= '      <div class="orbita-form-control">';
-	$html .= '          <p>Formatos aceitos: JPG, JPEG, PNG e GIF<br/>Tamanho máximo: '.size_format(wp_max_upload_size()).'</p>';
+	$html .= '          <p>Formatos aceitos: JPEG, PNG ou WEBP<br/>Tamanho máximo: '.size_format(wp_max_upload_size()).'</p>';
 	$html .= '      </div>';
 	$html .= '      <div class="orbita-form-control">';
 	$html .= '          <label for="orbita_post_content">Comentário</label>';
