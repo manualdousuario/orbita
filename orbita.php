@@ -52,16 +52,16 @@ function orbita_enqueue_styles() {
 add_action( 'wp_enqueue_scripts', 'orbita_enqueue_styles' );
 
 function orbita_preload_style ($preload_resources) {
-     $preload_resources[] = array(
-     		'href' => plugins_url() . '/orbita-'. ORBITA_VERSION .'/public/main.css?ver=' . ORBITA_VERSION,
-        'as' => 'style',
-        'type' => 'text/css',
-        'media' => 'all',
-    );
-    return $preload_resources;
- }
- add_filter('wp_preload_resources', 'orbita_preload_style');
- 
+	$preload_resources[] = array(
+		'href' => plugins_url() . '/orbita-'. ORBITA_VERSION .'/public/main.css?ver=' . ORBITA_VERSION,
+		'as' => 'style',
+		'type' => 'text/css',
+		'media' => 'all',
+	);
+	return $preload_resources;
+}
+add_filter('wp_preload_resources', 'orbita_preload_style');
+
 /**
  * Enqueue script file
  */
@@ -617,9 +617,9 @@ function orbita_link_options( $url = '', $title = '' ) {
 	if( $title && isset( $options['paywall'] ) ) {
 		$tags = [ 'es', 'en' ];
 		foreach ( $tags as $tag ){
-		   if ( str_contains( $title, '[' . $tag . ']' )){
+			if ( str_contains( $title, '[' . $tag . ']' )){
 				$options['translate'] = 'https://translate.google.com/translate?sl=' . $tag . '&tl=pt&hl=pt-BR&u=' . $options['paywall'];
-		   }
+			}
 		}
 	}
 
@@ -770,6 +770,9 @@ function orbita_form_shortcode() {
 		if( $orbita_error == 'user_logged' ) {
 			$html = 'Para postar links ou iniciar conversas na Órbita, <a href="' . wp_login_url( home_url( '/orbita/postar' ) ) . '">faça login</a> ou <a href="' . wp_registration_url() . '">cadastre-se gratuitamente</a>.';
 		}
+		if( $orbita_error == 'invalid_format' ) {
+			$html = 'O formato da imagem enviada é inválido.';
+		}
 		return $html;
 	}
 
@@ -802,6 +805,13 @@ function orbita_form_shortcode() {
 	$html .= '          <input type="url" id="orbita_post_url" name="orbita_post_url" placeholder="https://" value="' . $get_u . '">';
 	$html .= '      </div>';
 	$html .= '      <div class="orbita-form-control">';
+	$html .= '          <label for="orbita_post_attach">Imagem</label>';
+	$html .= '          <input type="file" id="orbita_post_attach" name="orbita_post_attach" accept=".jpg, .jpeg, .png, .webp">';
+	$html .= '      </div>';
+	$html .= '      <div class="orbita-form-control">';
+	$html .= '          <p>Formatos aceitos: JPEG, PNG ou WEBP<br/>Tamanho máximo: '.size_format(wp_max_upload_size()).'</p>';
+	$html .= '      </div>';
+	$html .= '      <div class="orbita-form-control">';
 	$html .= '          <label for="orbita_post_content">Comentário</label>';
 	$html .= '          <textarea rows="5" id="orbita_post_content" name="orbita_post_content"></textarea>';
 	$html .= '      </div>';
@@ -817,6 +827,38 @@ function orbita_form_shortcode() {
 	$html .= '</div>';
 
 	return $html;
+}
+
+function orbita_convert_image( $image ) {
+    if ( !extension_loaded('gd') ) {
+        die( 'No GD extension' );
+    }
+
+    $image_data = file_get_contents( $image );
+    $image_original = imagecreatefromstring( $image_data );
+    $image_width = imagesx( $image_original );
+    $image_height = imagesy( $image_original );
+    $max_size = 1200;
+
+    if ( $image_width > $image_height ) {
+        $new_width = min( $max_size, $image_width );
+        $new_height = ( $image_height / $image_width ) * $new_width;
+    } else {
+        $new_height = min( $max_size, $image_height );
+        $new_width = ( $image_width / $image_height ) * $new_height;
+    }
+
+    $new_image = imagecreatetruecolor( $new_width, $new_height );
+    imagecopyresampled( $new_image, $image_original, 0, 0, 0, 0, $max_size, $new_height, $image_width, $image_height );
+
+    $result = tempnam( sys_get_temp_dir(), 'orbita_temp_' ) . '.jpg';
+
+    imagejpeg( $new_image, $result, 90 );
+
+    imagedestroy( $image_original );
+    imagedestroy( $new_image );
+
+    return $result;
 }
 
 add_action('wp_loaded', 'orbita_form_post');
@@ -881,8 +923,65 @@ function orbita_form_post() {
 		$post_id = wp_insert_post( $post );
 
 		orbita_increase_post_like( $post_id );
-		orbita_save_ogimage( $post_id );
-		
+
+		$post_attach = $_FILES['orbita_post_attach'];
+		if( isset($post_attach) && isset($post_attach['type']) ) {
+			$content_type = $post_attach['type'];
+
+			$extension = null;
+			switch ( $content_type ) {
+				case 'image/png':
+					$extension = 'png';
+					break;
+				case 'image/gif':
+					$extension = 'gif';
+					break;
+				case 'image/jpg':
+					$extension = 'jpg';
+					break;
+				case 'image/jpeg':
+					$extension = 'jpg';
+					break;
+			}
+
+			if( $extension ) {
+				$image_body = file_get_contents( orbita_convert_image( $post_attach['tmp_name'] ) );
+
+				$wp_upload_dir = wp_upload_dir();
+				$upload_dir = $wp_upload_dir['basedir'] . '/orbita' . $wp_upload_dir['subdir'];
+				wp_mkdir_p( $upload_dir );
+	
+				// Filename format: postid_timestamp.extension
+				$filename = wp_unique_filename( $upload_dir, $post_id . '_' . time() . '.' . $extension );
+				$upload_file = $upload_dir . '/' . $filename;
+				file_put_contents( $upload_file, $image_body );
+
+				$post_mime_type = wp_check_filetype( basename( $upload_file ), null );
+
+				$attachment = array(
+					'guid'           => $upload_file,
+					'post_mime_type' => $post_mime_type['type'],
+					'post_title'     => sanitize_file_name( $filename ),
+					'post_content'   => $post_title,
+					'post_status'    => 'inherit'
+				);
+				$attachment_id = wp_insert_attachment( $attachment, $upload_file, $post_id );
+
+				require_once( ABSPATH . 'wp-admin/includes/image.php' );
+
+				$attach_data = wp_generate_attachment_metadata( $attachment_id, $upload_file );
+				wp_update_attachment_metadata( $attachment_id, $attach_data );
+
+				set_post_thumbnail( $post_id, $attachment_id );
+
+				update_post_meta( $post_id, 'attach_file', 1 );
+			} else {
+				wp_redirect('/orbita/postar/?orbita_error=invalid_format');
+			}
+		} else {
+			orbita_save_ogimage( $post_id );
+		}
+
 		wp_redirect(get_permalink($post_id));
 		die;
 	}
@@ -961,20 +1060,11 @@ function orbita_save_ogimage( $post_id ) {
 						case 'image/png':
 							$extension = 'png';
 							break;
-						case 'image/avif':
-							$extension = 'avif';
-							break;
-						case 'image/gif':
-							$extension = 'gif';
-							break;
 						case 'image/jpg':
 							$extension = 'jpg';
 							break;
 						case 'image/jpeg':
 							$extension = 'jpg';
-							break;
-						case 'image/svg+xml':
-							$extension = 'svg';
 							break;
 						case 'image/webp':
 							$extension = 'webp';

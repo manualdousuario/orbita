@@ -19,6 +19,7 @@ get_header();
 			the_post();
 
 			$external_url = get_post_meta( get_the_id(), 'external_url', true );
+			$attach_file = get_post_meta( get_the_id(), 'attach_file', true );
 			$only_domain  = wp_parse_url( str_replace( 'www.', '', $external_url ), PHP_URL_HOST );
 			$count        = get_post_meta( get_the_id(), 'post_like_count', true );
 
@@ -82,7 +83,19 @@ get_header();
 								break;
 							}
 						}
-					} 
+					} else if( $attach_file == 1 ) {
+						if ( has_post_thumbnail() ) {
+							$large_image_url = wp_get_attachment_image_src( get_post_thumbnail_id(), 'large' );
+							$full_image_url = wp_get_attachment_image_src( get_post_thumbnail_id(), 'full' );
+							if ( ! empty( $large_image_url[0] ) ) {
+								printf( '<a target="_blank" href="%1$s" alt="%2$s">%3$s</a>',
+									esc_url( $full_image_url[0] ),
+									esc_attr( get_the_title() ),
+									get_the_post_thumbnail()
+								);
+							}
+						}	
+					}
 					esc_textarea( the_content() );
 				?>
 			</div>
