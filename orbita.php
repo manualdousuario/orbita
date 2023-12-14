@@ -11,7 +11,7 @@
  * Plugin Name:     Órbita
  * Plugin URI:      https://gnun.es
  * Description:     Órbita é o plugin para criar um sistema Hacker News-like para o Manual do Usuário
- * Version:         1.10.1
+ * Version:         1.10.2
  * Author:          Gabriel Nunes
  * Author URI:      https://gnun.es
  * License:         GPL v3
@@ -41,6 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Define plugin version constant
  */
 define( 'ORBITA_VERSION', '1.10.1' );
+define( 'ORBITA_IMAGE_MAX_SIZE', '10' ); // MB
 
 /**
  * Enqueue style file
@@ -773,6 +774,9 @@ function orbita_form_shortcode() {
 		if( $orbita_error == 'invalid_format' ) {
 			$html = 'O formato da imagem enviada é inválido.';
 		}
+		if( $orbita_error == 'invalid_image_size' ) {
+			$html = 'O tamanho máximo da imagem enviada deve ser de ' . ORBITA_IMAGE_MAX_SIZE . ' MB.';
+		}
 		return $html;
 	}
 
@@ -805,7 +809,7 @@ function orbita_form_shortcode() {
 	$html .= '      <div class="orbita-form-control">';
 	$html .= '          <label for="orbita_post_attach">Imagem</label>';
 	$html .= '          <input type="file" id="orbita_post_attach" name="orbita_post_attach" accept=".jpg, .jpeg, .png, .webp">';
-	$html .= '          <pre>Formatos aceitos: JPG/JPEG, PNG e WEBP.<br />Tamanho máximo: 10 MB.</pre>';
+	$html .= '          <pre>Formatos aceitos: JPG/JPEG, PNG e WEBP.<br />Tamanho máximo: ' . ORBITA_IMAGE_MAX_SIZE . ' MB.</pre>';
 	$html .= '      </div>';
 	$html .= '      <div class="orbita-form-control">';
 	$html .= '          <label for="orbita_post_content">Comentário</label>';
@@ -923,6 +927,13 @@ function orbita_form_post() {
 		$post_attach = $_FILES['orbita_post_attach'];
 		if( isset($post_attach) && isset($post_attach['type']) ) {
 			$content_type = $post_attach['type'];
+			$size = $post_attach['size'];
+
+			$image_max_size = ORBITA_IMAGE_MAX_SIZE * 1000;
+			if( $size > $image_max_size ) {
+				wp_redirect('/orbita/postar/?orbita_error=invalid_image_size');
+				die();
+			}
 
 			$extension = null;
 			switch ( $content_type ) {
