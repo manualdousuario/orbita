@@ -181,21 +181,25 @@
 }
 
 .orbita-form-control {
-  margin-bottom: 0.5rem;
+  margin-bottom: 2rem;
 }
 .orbita-form-control label {
   display: block;
   cursor: pointer;
+  margin-bottom: 1rem;
+  line-height: 1;
+  font-weight: 500;
+}
+.orbita-form-control pre {
+  max-width: var(--line-length);
+  font-size: 1rem;
+  white-space: pre-wrap;
 }
 .orbita-form-control input[type=text],
-.orbita-form-control input[type=url] {
-  width: 100%;
-}
-@media only screen and (min-width : 700px) {
-  .orbita-form-control input[type=text],
-  .orbita-form-control input[type=url] {
-    width: 50%;
-  }
+.orbita-form-control input[type=url],
+.orbita-form-control input[type=file] {
+  width: var(--line-length);
+  margin-bottom: 1rem;
 }
 .orbita-form-control textarea {
   max-width: var(--line-length);
@@ -211,6 +215,12 @@
 .orbita-form-control .orbita-post-title-textarea {
   resize: none;
   width: 100%;
+  padding-bottom: 0;
+  font-size: var(--fs-1);
+}
+
+.orbita-form-control:last-child {
+  margin-bottom: 2rem;
 }
 
 .orbita-bookmarklet {

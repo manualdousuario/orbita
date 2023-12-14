@@ -211,20 +211,27 @@ $desktop: "only screen and (min-width : 700px)";
 }
 
 .orbita-form-control {
-  margin-bottom: 0.5rem;
+  margin-bottom: 2rem;
 
   label {
     display: block;
     cursor: pointer;
+    margin-bottom: 1rem;
+    line-height: 1;
+    font-weight: 500;
+  }
+
+  pre {
+    max-width: var(--line-length);
+    font-size: 1rem;
+    white-space: pre-wrap;
   }
 
   input[type="text"],
-  input[type="url"] {
-    width: 100%;
-
-    @media #{$desktop} {
-      width: 50%;
-    }
+  input[type="url"],
+  input[type="file"] {
+    width: var(--line-length);
+    margin-bottom: 1rem;
   }
 
   textarea {
@@ -244,7 +251,13 @@ $desktop: "only screen and (min-width : 700px)";
   .orbita-post-title-textarea {
     resize: none;
     width: 100%;
+    padding-bottom: 0;
+    font-size: var(--fs-1);
   }
+}
+
+.orbita-form-control:last-child {
+  margin-bottom: 2rem;
 }
 
 .orbita-bookmarklet {

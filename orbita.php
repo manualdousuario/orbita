@@ -11,7 +11,7 @@
  * Plugin Name:     Órbita
  * Plugin URI:      https://gnun.es
  * Description:     Órbita é o plugin para criar um sistema Hacker News-like para o Manual do Usuário
- * Version:         1.10
+ * Version:         1.10.1
  * Author:          Gabriel Nunes
  * Author URI:      https://gnun.es
  * License:         GPL v3
@@ -40,7 +40,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define plugin version constant
  */
-define( 'ORBITA_VERSION', '1.10' );
+define( 'ORBITA_VERSION', '1.10.1' );
+define( 'ORBITA_IMAGE_MAX_SIZE', '10' ); // MB
 
 /**
  * Enqueue style file
@@ -773,6 +774,9 @@ function orbita_form_shortcode() {
 		if( $orbita_error == 'invalid_format' ) {
 			$html = 'O formato da imagem enviada é inválido.';
 		}
+		if( $orbita_error == 'invalid_image_size' ) {
+			$html = 'O tamanho máximo da imagem enviada deve ser de ' . ORBITA_IMAGE_MAX_SIZE . ' MB.';
+		}
 		return $html;
 	}
 
@@ -798,31 +802,27 @@ function orbita_form_shortcode() {
 	$html .= '          <textarea required type="text" class="orbita-post-title-textarea" id="orbita_post_title" name="orbita_post_title" value="' . $get_t . '" rows="1" placeholder="Prefira títulos em português"></textarea>';
 	$html .= '      </div>';
 	$html .= '      <div class="orbita-form-control">';
-	$html .= '          <p>Deixe o link vazio para iniciar uma discussão (que pode ser uma dúvida, por exemplo). Se você enviar um comentário ele irá aparecer no topo.</p>';
-	$html .= '      </div>';
-	$html .= '      <div class="orbita-form-control">';
 	$html .= '          <label for="orbita_post_url">Link</label>';
 	$html .= '          <input type="url" id="orbita_post_url" name="orbita_post_url" placeholder="https://" value="' . $get_u . '">';
+	$html .= '          <pre>Deixe o link vazio para iniciar uma discussão (que pode ser uma dúvida, por exemplo). Se você enviar um comentário ele irá aparecer no topo.</pre>';
 	$html .= '      </div>';
 	$html .= '      <div class="orbita-form-control">';
 	$html .= '          <label for="orbita_post_attach">Imagem</label>';
 	$html .= '          <input type="file" id="orbita_post_attach" name="orbita_post_attach" accept=".jpg, .jpeg, .png, .webp">';
-	$html .= '      </div>';
-	$html .= '      <div class="orbita-form-control">';
-	$html .= '          <p>Formatos aceitos: JPEG, PNG ou WEBP<br/>Tamanho máximo: '.size_format(wp_max_upload_size()).'</p>';
+	$html .= '          <pre>Formatos aceitos: JPG/JPEG, PNG e WEBP.<br />Tamanho máximo: ' . ORBITA_IMAGE_MAX_SIZE . ' MB.</pre>';
 	$html .= '      </div>';
 	$html .= '      <div class="orbita-form-control">';
 	$html .= '          <label for="orbita_post_content">Comentário</label>';
 	$html .= '          <textarea rows="5" id="orbita_post_content" name="orbita_post_content"></textarea>';
 	$html .= '      </div>';
 	$html .= '      <div class="orbita-form-control">';
-	$html .= '          <p>Antes de postar, leia nossas <a href="https://manualdousuario.net/doc-comentarios/">dicas e orientações para comentários</a>.</p>';
+	$html .= '          <pre>Antes de postar, leia nossas <a href="https://manualdousuario.net/doc-comentarios/">dicas e orientações para comentários</a>.</pre>';
 	$html .= '      </div>';
 	$html .= '      <input type="submit" value="Publicar">';
 	$html .= '  </form>';
 	$html .= '</div>';
 	$html .= '<div class="orbita-bookmarklet ctx-atencao">';
-	$html .= '  <p>Se preferir, pode usar nosso bookmarklet! Arraste o botão abaixo para a sua barra de favoritos e clique nele quando quiser compartilhar um link.</p>';
+	$html .= '<p>Se preferir, pode usar nosso bookmarklet! Arraste o botão abaixo para a sua barra de favoritos e clique nele quando quiser compartilhar um link.</p>';
 	$html .= '  <p><a onclick="return false" href="javascript:window.location=%22https://manualdousuario.net/orbita/postar?u=%22+encodeURIComponent(document.location)+%22&t=%22+encodeURIComponent(document.title)">Postar no Órbita</a></p>';
 	$html .= '</div>';
 
@@ -927,6 +927,13 @@ function orbita_form_post() {
 		$post_attach = $_FILES['orbita_post_attach'];
 		if( isset($post_attach) && isset($post_attach['type']) ) {
 			$content_type = $post_attach['type'];
+			$size = $post_attach['size'];
+
+			$image_max_size = ORBITA_IMAGE_MAX_SIZE * 1000;
+			if( $size > $image_max_size ) {
+				wp_redirect('/orbita/postar/?orbita_error=invalid_image_size');
+				die();
+			}
 
 			$extension = null;
 			switch ( $content_type ) {
