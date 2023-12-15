@@ -11,7 +11,7 @@
  * Plugin Name:     Órbita
  * Plugin URI:      https://gnun.es
  * Description:     Órbita é o plugin para criar um sistema Hacker News-like para o Manual do Usuário
- * Version:         1.10.1
+ * Version:         1.10.3
  * Author:          Gabriel Nunes
  * Author URI:      https://gnun.es
  * License:         GPL v3
@@ -888,6 +888,42 @@ function orbita_form_post() {
 			die;
 		}
 
+		$valid_attach = null;
+		$post_attach = $_FILES['orbita_post_attach'];
+		if( isset($post_attach) && isset($post_attach['type']) ) {
+			$content_type = $post_attach['type'];
+			$size = $post_attach['size'];
+
+			$image_max_size = ORBITA_IMAGE_MAX_SIZE * 1024 * 1024;
+			if( $size > $image_max_size ) {
+				wp_redirect('/orbita/postar/?orbita_error=invalid_image_size');
+				die;
+			}
+
+			$extension = null;
+			switch ( $content_type ) {
+				case 'image/png':
+					$extension = 'png';
+					break;
+				case 'image/gif':
+					$extension = 'gif';
+					break;
+				case 'image/jpg':
+					$extension = 'jpg';
+					break;
+				case 'image/jpeg':
+					$extension = 'jpg';
+					break;
+			}
+
+			if( $extension == null ) {
+				wp_redirect('/orbita/postar/?orbita_error=invalid_format');
+				die;
+			}
+
+			$valid_attach = true;
+		}
+
 		$default_category = get_term_by( 'slug', 'link', 'orbita_category' );
 
 		if ( ! isset( $_POST['orbita_post_content'] ) ) {
@@ -922,72 +958,42 @@ function orbita_form_post() {
 		);
 		$post_id = wp_insert_post( $post );
 
-		orbita_increase_post_like( $post_id );
+		if( $valid_attach == true ) {
+			$image_body = file_get_contents( orbita_convert_image( $post_attach['tmp_name'] ) );
 
-		$post_attach = $_FILES['orbita_post_attach'];
-		if( isset($post_attach) && isset($post_attach['type']) ) {
-			$content_type = $post_attach['type'];
-			$size = $post_attach['size'];
+			$wp_upload_dir = wp_upload_dir();
+			$upload_dir = $wp_upload_dir['basedir'] . '/orbita' . $wp_upload_dir['subdir'];
+			wp_mkdir_p( $upload_dir );
 
-			$image_max_size = ORBITA_IMAGE_MAX_SIZE * 1000;
-			if( $size > $image_max_size ) {
-				wp_redirect('/orbita/postar/?orbita_error=invalid_image_size');
-				die();
-			}
+			// Filename format: postid_timestamp.extension
+			$filename = wp_unique_filename( $upload_dir, $post_id . '_' . time() . '.jpg' );
+			$upload_file = $upload_dir . '/' . $filename;
+			file_put_contents( $upload_file, $image_body );
 
-			$extension = null;
-			switch ( $content_type ) {
-				case 'image/png':
-					$extension = 'png';
-					break;
-				case 'image/gif':
-					$extension = 'gif';
-					break;
-				case 'image/jpg':
-					$extension = 'jpg';
-					break;
-				case 'image/jpeg':
-					$extension = 'jpg';
-					break;
-			}
+			$post_mime_type = wp_check_filetype( basename( $upload_file ), null );
 
-			if( $extension ) {
-				$image_body = file_get_contents( orbita_convert_image( $post_attach['tmp_name'] ) );
+			$attachment = array(
+				'guid'           => $upload_file,
+				'post_mime_type' => $post_mime_type['type'],
+				'post_title'     => sanitize_file_name( $filename ),
+				'post_content'   => $post_title,
+				'post_status'    => 'inherit'
+			);
+			$attachment_id = wp_insert_attachment( $attachment, $upload_file, $post_id );
 
-				$wp_upload_dir = wp_upload_dir();
-				$upload_dir = $wp_upload_dir['basedir'] . '/orbita' . $wp_upload_dir['subdir'];
-				wp_mkdir_p( $upload_dir );
-	
-				// Filename format: postid_timestamp.extension
-				$filename = wp_unique_filename( $upload_dir, $post_id . '_' . time() . '.' . $extension );
-				$upload_file = $upload_dir . '/' . $filename;
-				file_put_contents( $upload_file, $image_body );
+			require_once( ABSPATH . 'wp-admin/includes/image.php' );
 
-				$post_mime_type = wp_check_filetype( basename( $upload_file ), null );
+			$attach_data = wp_generate_attachment_metadata( $attachment_id, $upload_file );
+			wp_update_attachment_metadata( $attachment_id, $attach_data );
 
-				$attachment = array(
-					'guid'           => $upload_file,
-					'post_mime_type' => $post_mime_type['type'],
-					'post_title'     => sanitize_file_name( $filename ),
-					'post_content'   => $post_title,
-					'post_status'    => 'inherit'
-				);
-				$attachment_id = wp_insert_attachment( $attachment, $upload_file, $post_id );
+			set_post_thumbnail( $post_id, $attachment_id );
 
-				require_once( ABSPATH . 'wp-admin/includes/image.php' );
-
-				$attach_data = wp_generate_attachment_metadata( $attachment_id, $upload_file );
-				wp_update_attachment_metadata( $attachment_id, $attach_data );
-
-				set_post_thumbnail( $post_id, $attachment_id );
-
-				update_post_meta( $post_id, 'attach_file', 1 );
-			} else {
-				wp_redirect('/orbita/postar/?orbita_error=invalid_format');
-			}
+			update_post_meta( $post_id, 'attach_file', 1 );
 		} else {
 			orbita_save_ogimage( $post_id );
 		}
+
+		orbita_increase_post_like( $post_id );
 
 		wp_redirect(get_permalink($post_id));
 		die;
