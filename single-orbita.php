@@ -91,7 +91,7 @@ get_header();
 								printf( '<a target="_blank" href="%1$s" alt="%2$s">%3$s</a>',
 									esc_url( $full_image_url[0] ),
 									esc_attr( get_the_title() ),
-									get_the_post_thumbnail()
+									dez_post_thumbnail()
 								);
 							}
 						}	

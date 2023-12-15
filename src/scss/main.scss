@@ -84,7 +84,6 @@ $desktop: "only screen and (min-width : 700px)";
   cursor: default;
   background: transparent !important;
   overflow: hidden;
-  transition: none;
   img {
     width: 17px;
     height: auto;
@@ -192,12 +191,10 @@ $desktop: "only screen and (min-width : 700px)";
     border-radius: var(--borda-curva) 0 0 var(--borda-curva);
     background-color: var(--cor-botao);
     color: var(--cor-chapada);
-    transition: background .3s, box-shadow .3s;
   }
 
   .orbita-post-button:hover {
     background-color: var(--cor-botao-hov);
-    transition: background .3s, box-shadow .3s;
   }
 }
 
