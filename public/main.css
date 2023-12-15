@@ -65,7 +65,6 @@
   cursor: default;
   background: transparent !important;
   overflow: hidden;
-  transition: none;
 }
 .orbita-vote-button img {
   width: 17px;
@@ -164,11 +163,9 @@
   border-radius: var(--borda-curva) 0 0 var(--borda-curva);
   background-color: var(--cor-botao);
   color: var(--cor-chapada);
-  transition: background 0.3s, box-shadow 0.3s;
 }
 .orbita-header .orbita-post-button:hover {
   background-color: var(--cor-botao-hov);
-  transition: background 0.3s, box-shadow 0.3s;
 }
 
 .orbita-ranking ol {
