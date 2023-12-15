@@ -890,7 +890,7 @@ function orbita_form_post() {
 
 		$valid_attach = null;
 		$post_attach = $_FILES['orbita_post_attach'];
-		if( isset($post_attach) && isset($post_attach['type'] && (count($post_attach) > 0)) ) {
+		if( isset($post_attach) && isset($post_attach['type']) && (count($post_attach) > 0) ) {
 			$content_type = $post_attach['type'];
 			$size = $post_attach['size'];
 
