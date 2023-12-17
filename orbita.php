@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define plugin version constant
  */
-define( 'ORBITA_VERSION', '1.10.4.3' );
+define( 'ORBITA_VERSION', '1.10.5' );
 define( 'ORBITA_IMAGE_MAX_SIZE', '10' ); // MB
 
 /**
