@@ -19,7 +19,7 @@ get_header();
 			the_post();
 
 			$external_url = get_post_meta( get_the_id(), 'external_url', true );
-			$attach_file = get_post_meta( get_the_id(), 'attach_file', true );
+			$attach_file  = get_post_meta( get_the_id(), 'attach_file', true );
 			$only_domain  = wp_parse_url( str_replace( 'www.', '', $external_url ), PHP_URL_HOST );
 			$count        = get_post_meta( get_the_id(), 'post_like_count', true );
 
@@ -71,10 +71,12 @@ get_header();
 
 			<div class="entry-content">
 				<?php
+					$oembed = false;
 					if( $external_url ) {
 						$providers = ['youtube.com', 'youtu.be', 'vimeo.com', 'dailymotion.com', 'dai.ly'];
 						foreach($providers as $provider) {
 							if( strpos( $only_domain, $provider ) !== false ) {
+								$oembed = true;
 								?>
 									<div class="orbita-oembed orbita-oembed-16by9">
 										<?php echo wp_oembed_get( $external_url ); ?>
@@ -83,7 +85,8 @@ get_header();
 								break;
 							}
 						}
-					} else if( $attach_file == 1 ) {
+					}
+					if( $attach_file == 1 && $oembed == false ) {
 						if ( has_post_thumbnail() ) {
 							$large_image_url = wp_get_attachment_image_src( get_post_thumbnail_id(), 'large' );
 							$full_image_url = wp_get_attachment_image_src( get_post_thumbnail_id(), 'full' );
