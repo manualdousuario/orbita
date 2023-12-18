@@ -54,3 +54,45 @@ function upVote(postId, object) {
     }
   };
 }
+
+// Verifica o tamanho da imagem anexada ao post antes de enviar
+function verifyPostAttachFilesize() {
+  const input = document.getElementById('orbita_post_attach');
+
+  if (input.files.length > 0) {
+    const file = input.files[0];
+    const fileBytes = file.size;
+    const fileMb = fileBytes / (1024 * 1024);
+
+    if (fileMb > 10) {
+      input.value = '';
+      alert('O arquivo é maior que 10 MB');
+    }
+  }
+}
+
+// Some com o campo de link ou de imagem, depdende de qual for preenchido
+let postUrlInput = document.getElementById('orbita_post_url');
+let postAttachInput = document.getElementById('orbita_post_attach');
+const postUrlDiv = document.getElementById('orbita-form-post_url');
+const postAttachDiv = document.getElementById('orbita-form-post_attach');
+
+postUrlInput.addEventListener('input', toggleAttachUrl);
+postAttachInput.addEventListener('input', toggleAttachUrl);
+
+function toggleAttachUrl() {
+  verifyPostAttachFilesize();
+
+  if (postUrlInput.value !== '') {
+    postAttachDiv.style.display = 'none';
+    postUrlDiv.style.display = 'block';
+  }
+  if (postAttachInput.value !== '') {
+    postUrlDiv.style.display = 'none';
+    postAttachDiv.style.display = 'block';
+  }
+  if(postAttachInput.value == '' && postUrlInput.value == ''){
+    postUrlDiv.style.display = 'block';
+    postAttachDiv.style.display = 'block';
+  }
+}

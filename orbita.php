@@ -801,12 +801,12 @@ function orbita_form_shortcode() {
 	$html .= '          <label for="orbita_post_title">Título</label>';
 	$html .= '          <textarea required type="text" class="orbita-post-title-textarea" id="orbita_post_title" name="orbita_post_title" value="' . $get_t . '" rows="1" placeholder="Prefira títulos em português"></textarea>';
 	$html .= '      </div>';
-	$html .= '      <div class="orbita-form-control">';
+	$html .= '      <div class="orbita-form-control" id="orbita-form-post_url">';
 	$html .= '          <label for="orbita_post_url">Link</label>';
 	$html .= '          <input type="url" id="orbita_post_url" name="orbita_post_url" placeholder="https://" value="' . $get_u . '">';
 	$html .= '          <pre>Deixe o link vazio para iniciar uma discussão (que pode ser uma dúvida, por exemplo). Se você enviar um comentário ele irá aparecer no topo.</pre>';
 	$html .= '      </div>';
-	$html .= '      <div class="orbita-form-control">';
+	$html .= '      <div class="orbita-form-control" id="orbita-form-post_attach">';
 	$html .= '          <label for="orbita_post_attach">Imagem</label>';
 	$html .= '          <input type="file" id="orbita_post_attach" name="orbita_post_attach" accept=".jpg, .jpeg, .png, .webp">';
 	$html .= '          <pre>Formatos aceitos: JPG/JPEG, PNG e WEBP.<br />Tamanho máximo: ' . ORBITA_IMAGE_MAX_SIZE . ' MB.</pre>';
@@ -840,16 +840,21 @@ function orbita_convert_image( $image ) {
     $image_height = imagesy( $image_original );
     $max_size = 1200;
 
-    if ( $image_width > $image_height ) {
-        $new_width = min( $max_size, $image_width );
-        $new_height = ( $image_height / $image_width ) * $new_width;
-    } else {
-        $new_height = min( $max_size, $image_height );
-        $new_width = ( $image_width / $image_height ) * $new_height;
-    }
+	if( $image_width > 1200 || $image_height > 1200 ) {
+		$ratio = $image_width / $image_height;
+		if ( $image_width > $image_height ) {
+			$new_width = $max_size;
+			$new_height = $max_size / $ratio;
+		} else {
+			$new_height = $max_size;
+			$new_width = $max_size * $ratio;
+		}
 
-    $new_image = imagecreatetruecolor( $new_width, $new_height );
-    imagecopyresampled( $new_image, $image_original, 0, 0, 0, 0, $max_size, $new_height, $image_width, $image_height );
+		$new_image = imagecreatetruecolor( $new_width, $new_height );
+		imagecopyresampled( $new_image, $image_original, 0, 0, 0, 0, $max_size, $new_height, $image_width, $image_height );
+	} else {
+		$new_image = $image_original;
+	}
 
     $result = tempnam( sys_get_temp_dir(), 'orbita_temp_' ) . '.jpg';
 
@@ -890,7 +895,7 @@ function orbita_form_post() {
 
 		$valid_attach = null;
 		$post_attach = $_FILES['orbita_post_attach'];
-		if( isset($post_attach) && isset($post_attach['type']) && (count($post_attach) > 0) ) {
+		if( isset($post_attach) && $post_attach['error'] == UPLOAD_ERR_OK ) {
 			$content_type = $post_attach['type'];
 			$size = $post_attach['size'];
 
