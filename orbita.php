@@ -636,10 +636,10 @@ function orbita_link_options( $url = '', $title = '' ) {
 	if ( $options ) {
 		$html = '<span class="options">';
 		if( isset( $options['paywall'] ) ) {
-			$html .= '<a href="' . $options['paywall'] . '">[sem paywall]</a> ';
+			$html .= '<a href="' . $options['paywall'] . '">[sem paywall]</a>&nbsp;';
 		}
 		if( isset( $options['translate'] ) ) {
-			$html .= '<a href="' . $options['translate'] . '">[traduzir]</a> ';
+			$html .= '<a href="' . $options['translate'] . '">[traduzir]</a>&nbsp;';
 		}
 		$html .= '</span>';
 	}
