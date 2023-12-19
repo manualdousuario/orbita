@@ -11,7 +11,7 @@
  * Plugin Name:     Órbita
  * Plugin URI:      https://gnun.es
  * Description:     Órbita é o plugin para criar um sistema Hacker News-like para o Manual do Usuário
- * Version:         1.10.6
+ * Version:         1.10.7
  * Author:          Gabriel Nunes
  * Author URI:      https://gnun.es
  * License:         GPL v3
@@ -298,7 +298,7 @@ function orbita_get_post_html( $post_id ) {
 	if ( ! $external_url ) {
 		$external_url = get_permalink();
 	}
-	$only_domain = strpos($external_url, wp_parse_url( str_replace( 'www.', '', get_bloginfo('url') ), PHP_URL_HOST ) . '/orbita') !== false ? '' : '&nbsp;<span class="domain">' . wp_parse_url( str_replace( 'www.', '', $external_url ), PHP_URL_HOST ) . '</span>';
+	$only_domain = strpos($external_url, wp_parse_url( str_replace( 'www.', '', get_bloginfo('url') ), PHP_URL_HOST ) . '/orbita') !== false ? '' : '<span class="domain">' . wp_parse_url( str_replace( 'www.', '', $external_url ), PHP_URL_HOST ) . '</span>';
 	$count       = get_post_meta( $post_id, 'post_like_count', true );
 	if ( ! $count ) {
 		$count = '0';
@@ -531,6 +531,11 @@ function orbita_link_options( $url = '', $title = '' ) {
 	$html = null;
 	$options = [];
 
+	$host = wp_parse_url( str_replace( 'www.', '', get_bloginfo('url') ), PHP_URL_HOST );
+	if ( str_contains( $url, $host )) {
+		$url = '';
+	}
+
 	if( $url ) {
 		$url = esc_url( $url );
 		$publishers = [
@@ -615,11 +620,15 @@ function orbita_link_options( $url = '', $title = '' ) {
 		}
 	}
 
-	if( $title && isset( $options['paywall'] ) ) {
+	if( $title && $url ) {
 		$tags = [ 'es', 'en' ];
 		foreach ( $tags as $tag ){
 			if ( str_contains( $title, '[' . $tag . ']' )){
-				$options['translate'] = 'https://translate.google.com/translate?sl=' . $tag . '&tl=pt&hl=pt-BR&u=' . $options['paywall'];
+				if(isset($options['paywall'])) {
+					$options['translate'] = 'https://translate.google.com/translate?sl=' . $tag . '&tl=pt&hl=pt-BR&u=' . $options['paywall'];
+				} else {
+					$options['translate'] = 'https://translate.google.com/translate?sl=' . $tag . '&tl=pt&hl=pt-BR&u=' . $url;
+				}
 			}
 		}
 	}
@@ -627,10 +636,10 @@ function orbita_link_options( $url = '', $title = '' ) {
 	if ( $options ) {
 		$html = '<span class="options">';
 		if( isset( $options['paywall'] ) ) {
-			$html .= '<a href="' . $options['paywall'] . '">&nbsp;[sem paywall]</a>';
+			$html .= '<a href="' . $options['paywall'] . '">[sem paywall]</a> ';
 		}
 		if( isset( $options['translate'] ) ) {
-			$html .= ', <a href="' . $options['translate'] . '">&nbsp;[traduzir]</a>';
+			$html .= '<a href="' . $options['translate'] . '">[traduzir]</a> ';
 		}
 		$html .= '</span>';
 	}
