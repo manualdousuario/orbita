@@ -77,8 +77,10 @@ let postAttachInput = document.getElementById('orbita_post_attach');
 const postUrlDiv = document.getElementById('orbita-form-post_url');
 const postAttachDiv = document.getElementById('orbita-form-post_attach');
 
-postUrlInput.addEventListener('input', toggleAttachUrl);
-postAttachInput.addEventListener('input', toggleAttachUrl);
+if (postUrlInput && postAttachInput) {
+  postUrlInput.addEventListener('input', toggleAttachUrl);
+  postAttachInput.addEventListener('input', toggleAttachUrl);
+}
 
 function toggleAttachUrl() {
   verifyPostAttachFilesize();
