@@ -11,7 +11,7 @@
  * Plugin Name:     Órbita
  * Plugin URI:      https://gnun.es
  * Description:     Órbita é o plugin para criar um sistema Hacker News-like para o Manual do Usuário
- * Version:         1.10.7
+ * Version:         1.11
  * Author:          Gabriel Nunes
  * Author URI:      https://gnun.es
  * License:         GPL v3
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define plugin version constant
  */
-define( 'ORBITA_VERSION', '1.10.5' );
+define( 'ORBITA_VERSION', '1.11' );
 define( 'ORBITA_IMAGE_MAX_SIZE', '10' ); // MB
 
 /**
@@ -48,6 +48,9 @@ define( 'ORBITA_IMAGE_MAX_SIZE', '10' ); // MB
  */
 function orbita_enqueue_styles() {
 	wp_register_style( 'orbita', plugins_url( '/public/main.css', __FILE__ ), array(), ORBITA_VERSION, 'all' );
+
+	wp_enqueue_style( 'orbita' );
+	wp_enqueue_script( 'orbita' );
 }
 
 add_action( 'wp_enqueue_scripts', 'orbita_enqueue_styles' );
@@ -263,9 +266,6 @@ function orbita_get_vote_html( $post_id ) {
  * Get Header
  */
 function orbita_get_header_html() {
-	wp_enqueue_style( 'orbita' );
-	wp_enqueue_script( 'orbita' );
-
 	$html  = '<div class="orbita-header">';
 	$html .= '  <a href="/orbita/postar/" class="orbita-post-button">Postar</a>';
 	$html .= '  <div>';
@@ -276,6 +276,7 @@ function orbita_get_header_html() {
 	$html .= '      </select></label>';
 	$html .= '  </div>';
 	$html .= '  <div>';
+	$html .= '      <a href="https://bolha.us/@orbita" class="mastodon"><img src="' . plugin_dir_url(__FILE__) . 'assets/mastodon.svg" width="32" height="32" alt="Perfil no Mastodon" /></a>';
 	$html .= '      <a href="https://t.me/orbitafeed" class="telegram"><img src="' . plugin_dir_url(__FILE__) . 'assets/telegram.svg" width="32" height="32" alt="Canal no Telegram" /></a>';
 	$html .= '      <a href="/feed/?post_type=orbita_post" class="rss"><img src="' . plugin_dir_url(__FILE__) . 'assets/rss.svg" width="32" height="32" alt="Feed RSS" /></a>';
 	$html .= '  </div>';
@@ -448,7 +449,6 @@ function orbita_ranking_shortcode( $atts = array(), $content = null, $tag = '' )
 	$posts_array = array_slice( $posts_array, 0, $orbita_rank_atts['limit'] );
 
 	$html = '<div class="orbita-ranking">';
-	$html .= orbita_get_header_html();
 	$html .= '<ol class="orbita-list">';
 
 	foreach ( $posts_array as $post ) {

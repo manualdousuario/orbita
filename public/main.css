@@ -146,6 +146,7 @@
 .orbita-header label {
   margin: 0;
 }
+.orbita-header .mastodon img,
 .orbita-header .telegram img,
 .orbita-header .rss img {
   height: 1.5rem;
@@ -153,6 +154,7 @@
   display: block;
 }
 @media (prefers-color-scheme: dark) {
+  .orbita-header .mastodon img,
   .orbita-header .telegram img {
     filter: invert(100%);
   }

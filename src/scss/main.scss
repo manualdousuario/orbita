@@ -168,6 +168,7 @@ $desktop: "only screen and (min-width : 700px)";
     margin: 0;
   }
 
+  .mastodon,
   .telegram,
   .rss {
     img {
@@ -177,6 +178,7 @@ $desktop: "only screen and (min-width : 700px)";
     }
   }
 
+  .mastodon,
   .telegram {
     img {
       @media (prefers-color-scheme: dark) {
