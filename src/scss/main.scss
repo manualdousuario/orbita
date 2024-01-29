@@ -1,5 +1,20 @@
 $desktop: "only screen and (min-width : 700px)";
 
+[data-theme="dark"] .orbita-header {
+  .mastodon,
+  .telegram {
+    img {
+      filter: invert(100%);
+    }
+  } 
+}
+
+[data-theme="dark"] .orbita-vote-button {
+  img {
+    filter: invert(100%);
+  }
+}
+
 .orbita_post-template-default {
   .post-navigation {
     display: none;
@@ -87,17 +102,16 @@ $desktop: "only screen and (min-width : 700px)";
   img {
     width: 17px;
     height: auto;
-    @media (prefers-color-scheme: dark) {
-      filter: invert(100%);
-    }
   }
 }
+
 .orbita-vote-can-vote {
   cursor: pointer;
   &:hover {
     filter: invert(40%) sepia(58%) saturate(3819%) hue-rotate(214deg) brightness(91%) contrast(94%);
   }
 }
+
 .orbita-vote-already-voted {
   cursor: default !important;
   opacity: 0.5;
@@ -178,25 +192,9 @@ $desktop: "only screen and (min-width : 700px)";
     }
   }
 
-  .mastodon,
-  .telegram {
-    img {
-      @media (prefers-color-scheme: dark) {
-        filter: invert(100%);
-      }
-    }
-  }
-
   .orbita-post-button {
-    padding: .43rem 1rem;
+    padding: .4rem 1rem;
     margin: -1rem auto -1rem -1rem;
-    border-radius: var(--borda-curva) 0 0 var(--borda-curva);
-    background-color: var(--cor-botao);
-    color: var(--cor-chapada);
-  }
-
-  .orbita-post-button:hover {
-    background-color: var(--cor-botao-hov);
   }
 }
 
