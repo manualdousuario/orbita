@@ -11,7 +11,7 @@
  * Plugin Name:     Órbita
  * Plugin URI:      https://gnun.es
  * Description:     Órbita é o plugin para criar um sistema Hacker News-like para o Manual do Usuário
- * Version:         1.12
+ * Version:         1.2
  * Author:          Gabriel Nunes
  * Author URI:      https://gnun.es
  * License:         GPL v3
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define plugin version constant
  */
-define( 'ORBITA_VERSION', '1.12' );
+define( 'ORBITA_VERSION', '1.2' );
 define( 'ORBITA_IMAGE_MAX_SIZE', '10' ); // MB
 
 /**
@@ -541,7 +541,7 @@ function orbita_link_options( $url = '', $title = '' ) {
 		$publishers = [
 			[
 				"url" => "ft.com/",
-				"paywall" => "https://leiaisso.net/"
+				"paywall" => "https://parede.pcdomanual.com/"
 			], 
 			[
 				"url" => "bloomberg.com/",
@@ -549,27 +549,27 @@ function orbita_link_options( $url = '', $title = '' ) {
 			], 
 			[
 				"url" => "folha.uol.com.br/",
-				"paywall" => "https://leiaisso.net/"
+				"paywall" => "https://parede.pcdomanual.com/"
 			], 
 			[
 				"url" => "uol.com.br/",
-				"paywall" => "https://leiaisso.net/"
+				"paywall" => "https://parede.pcdomanual.com/"
 			], 
 			[
 				"url" => "oglobo.globo.com/",
-				"paywall" => "https://leiaisso.net/"
+				"paywall" => "https://parede.pcdomanual.com/"
 			], 
 			[
 				"url" => "estadao.com.br/",
-				"paywall" => "https://archive.ph/submit/?url="
+				"paywall" => "https://parede.pcdomanual.com/"
 			], 
 			[
 				"url" => "nytimes.com/",
-				"paywall" => "https://archive.ph/submit/?url="
+				"paywall" => "https://parede.pcdomanual.com/"
 			], 
 			[
 				"url" => "washingtonpost.com/",
-				"paywall" => "https://leiaisso.net/"
+				"paywall" => "https://parede.pcdomanual.com/"
 			], 
 			[
 				"url" => "wsj.com/",
@@ -581,19 +581,19 @@ function orbita_link_options( $url = '', $title = '' ) {
 			], 
 			[
 				"url" => "veja.abril.com.br/",
-				"paywall" => "https://leiaisso.net/"
+				"paywall" => "https://parede.pcdomanual.com/"
 			], 
 			[
 				"url" => "exame.com/",
-				"paywall" => "https://leiaisso.net/"
+				"paywall" => "https://parede.pcdomanual.com/"
 			], 
 			[
 				"url" => "super.abril.com.br/",
-				"paywall" => "https://leiaisso.net/"
+				"paywall" => "https://parede.pcdomanual.com/"
 			], 
 			[
 				"url" => "valor.globo.com/",
-				"paywall" => "https://leiaisso.net/"
+				"paywall" => "https://parede.pcdomanual.com/"
 			], 
 			[
 				"url" => "newyorker.com/",
@@ -609,7 +609,7 @@ function orbita_link_options( $url = '', $title = '' ) {
 			], 
 			[
 				"url" => "wired.com/",
-				"paywall" => "https://leiaisso.net/"
+				"paywall" => "https://parede.pcdomanual.com/"
 			] 
 		]; 
 
@@ -634,14 +634,12 @@ function orbita_link_options( $url = '', $title = '' ) {
 	}
 
 	if ( $options ) {
-		$html = '<span class="options">';
 		if( isset( $options['paywall'] ) ) {
-			$html .= '<a href="' . $options['paywall'] . '">[sem paywall]</a>&nbsp;';
+			$html .= '<a href="' . $options['paywall'] . '">[sem&nbsp;paywall]</a>&nbsp;';
 		}
 		if( isset( $options['translate'] ) ) {
 			$html .= '<a href="' . $options['translate'] . '">[traduzir]</a>&nbsp;';
 		}
-		$html .= '</span>';
 	}
 
 	return $html;
