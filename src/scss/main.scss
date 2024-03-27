@@ -143,8 +143,8 @@ $desktop: "only screen and (min-width : 700px)";
   column-gap: 1rem;
   padding: .5rem 1rem;
   margin-bottom: 2rem;
-  background-color: var(--cor-caixas);
-  border-radius: var(--borda-curva);
+  background-color: var(--cor-destaques);
+  border-radius: var(--med-borda);
   font-size: var(--fs-0);
 
   div {
@@ -154,11 +154,11 @@ $desktop: "only screen and (min-width : 700px)";
     column-gap: 1rem;
     a {
       &:visited {
-        color: var(--color-link);
+        color: var(--cor-link-ori);
       }
   
       &:hover {
-        color: var(--color-link-states);
+        color: var(--cor-link-est);
       }
     }
   }
@@ -204,7 +204,7 @@ $desktop: "only screen and (min-width : 700px)";
   }
 
   pre {
-    max-width: var(--line-length);
+    max-width: var(--med-comp-linha);
     font-size: 1rem;
     white-space: pre-wrap;
   }
@@ -212,12 +212,12 @@ $desktop: "only screen and (min-width : 700px)";
   input[type="text"],
   input[type="url"],
   input[type="file"] {
-    width: var(--line-length);
+    width: var(--med-comp-linha);
     margin-bottom: 1rem;
   }
 
   textarea {
-    max-width: var(--line-length);
+    max-width: var(--med-comp-linha);
   }
 
   .orbita-help-block {
