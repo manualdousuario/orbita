@@ -16,8 +16,8 @@ $desktop: "only screen and (min-width : 700px)";
 }
 
 .orbita_post-template-default {
-  .post-navigation {
-    display: none;
+  .navigation {
+    margin: var(--med-salto-grande) 0 !important;
   }
 }
 
