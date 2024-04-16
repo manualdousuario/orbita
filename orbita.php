@@ -11,7 +11,7 @@
  * Plugin Name:     Órbita
  * Plugin URI:      https://gnun.es
  * Description:     Órbita é o plugin para criar um sistema Hacker News-like para o Manual do Usuário
- * Version:         1.13
+ * Version:         1.13.1
  * Author:          Gabriel Nunes
  * Author URI:      https://gnun.es
  * License:         GPL v3
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define plugin version constant
  */
-define( 'ORBITA_VERSION', '1.13' );
+define( 'ORBITA_VERSION', '1.13.1' );
 define( 'ORBITA_IMAGE_MAX_SIZE', '10' ); // MB
 
 /**
@@ -198,7 +198,7 @@ if( is_plugin_active( 'autodescription/autodescription.php' ) ) {
 		
 		return $details;
 	}
-	add_filter('the_seo_framework_image_details', 'orbita_tsf_default_ogimage', 10, 2);
+	add_filter('the_seo_framework_custom_image_details', 'orbita_tsf_default_ogimage', 10, 2);
 }
 
 /****************** Templates **********************/
@@ -509,10 +509,10 @@ function orbita_posts_shortcode( $atts = array(), $content = null, $tag = '' ) {
 
 		$paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
 
-		$html .= '<nav class="navigation posts-navigation orbita-navigation" aria-label="Posts"><div class="nav-links">';
+		$html .= '<nav class="navigation posts-navigation orbita-navigation link-alt" aria-label="Posts"><div class="nav-links">';
 		$html .= '<h2 class="screen-reader-text">Navegação por posts</h2>';
-		$html .= '<div class="nav-previous">'. get_previous_posts_link( '&laquo; Tópicos mais recentes' ) .'</div>';
-		$html .= '<div class="nav-next">'. get_next_posts_link( 'Tópicos mais antigos &raquo;', $query->max_num_pages ) .'</div>';
+		$html .= '<div class="nav-previous">'. get_previous_posts_link( '&laquo; Conversas mais recentes' ) .'</div>';
+		$html .= '<div class="nav-next">'. get_next_posts_link( 'Conversas mais antigas &raquo;', $query->max_num_pages ) .'</div>';
 		$html .= '</div></nav>';
 	endif;
 
@@ -828,7 +828,7 @@ function orbita_form_shortcode() {
 	$html .= '      <input type="submit" value="Publicar">';
 	$html .= '  </form>';
 	$html .= '</div>';
-	$html .= '<div class="orbita-bookmarklet ctx-atencao">';
+	$html .= '<div class="orbita-bookmarklet ctx-dica">';
 	$html .= '<p>Se preferir, pode usar nosso bookmarklet! Arraste o botão abaixo para a sua barra de favoritos e clique nele quando quiser compartilhar um link.</p>';
 	$html .= '  <p><a onclick="return false" href="javascript:window.location=%22https://manualdousuario.net/orbita/postar?u=%22+encodeURIComponent(document.location)+%22&t=%22+encodeURIComponent(document.title)">Postar no Órbita</a></p>';
 	$html .= '</div>';
