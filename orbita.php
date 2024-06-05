@@ -11,7 +11,7 @@
  * Plugin Name:     Órbita
  * Plugin URI:      https://gnun.es
  * Description:     Órbita é o plugin para criar um sistema Hacker News-like para o Manual do Usuário
- * Version:         1.13.1
+ * Version:         1.14
  * Author:          Gabriel Nunes
  * Author URI:      https://gnun.es
  * License:         GPL v3
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define plugin version constant
  */
-define( 'ORBITA_VERSION', '1.13.1' );
+define( 'ORBITA_VERSION', '1.14' );
 define( 'ORBITA_IMAGE_MAX_SIZE', '10' ); // MB
 
 /**
@@ -256,7 +256,7 @@ function orbita_get_vote_html( $post_id ) {
 	}
 
 	$html  = '<button title="' . $title . '" class="orbita-vote-button ' . $additional_class . '" data-post-id="' . $post_id . '">';
-	$html .= '    <img loading="lazy" src="' . plugin_dir_url(__FILE__) . 'assets/vote.svg" alt="Votar" width="17" height="17" />';
+	$html .= '    <img loading="lazy" src="' . plugin_dir_url(__FILE__) . 'assets/fogo.svg" alt="Votar" width="17" height="17" />';
 	$html .= '</button>';
 
 	return $html;
@@ -635,10 +635,10 @@ function orbita_link_options( $url = '', $title = '' ) {
 
 	if ( $options ) {
 		if( isset( $options['paywall'] ) ) {
-			$html .= '<a href="' . $options['paywall'] . '">[sem&nbsp;paywall]</a>&nbsp;';
+			$html .= '<a href="' . $options['paywall'] . '" class="sem-paywall">sem&nbsp;paywall</a>&nbsp;';
 		}
 		if( isset( $options['translate'] ) ) {
-			$html .= '<a href="' . $options['translate'] . '">[traduzir]</a>&nbsp;';
+			$html .= '<a href="' . $options['translate'] . '" class="traduzir">traduzir</a>&nbsp;';
 		}
 	}
 
