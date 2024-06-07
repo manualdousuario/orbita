@@ -40,19 +40,19 @@ $desktop: "only screen and (min-width : 700px)";
     max-width: inherit;
     list-style: none;
     margin: 0 0 1.5rem;
-    line-height: 1.5;
     display: grid; 
     grid-template-columns: auto 1fr; 
-    gap: 0px 12px; 
+    gap: 0 1rem; 
     grid-template-areas: 
-      "vote meta"; 
-      
+    "vote meta"; 
+
   }
 
   .vote {
     grid-area: vote;
     text-align: center;
     align-self: center;
+    min-width: 1.5rem;
 
     button {
       z-index: 2;
@@ -70,8 +70,8 @@ $desktop: "only screen and (min-width : 700px)";
     grid-area: meta;
     .title {
       .link {
-          display: inline;
-          margin-bottom: 0;
+        display: inline;
+        margin-bottom: 0;
       }
       .domain {
         color: #535353;
@@ -97,6 +97,22 @@ $desktop: "only screen and (min-width : 700px)";
   }
 }
 
+a.traduzir,
+a.sem-paywall {
+  padding: 2px 4px;
+  margin: 0 .5rem;
+  text-decoration: none;
+  border: 1px solid var(--cor-bordas);
+  border-radius: var(--med-borda);
+  background-color: var(--cor-destaques);
+  font-family: var(--ff-monospace);
+  font-size: var(--fs-0);
+}
+a.traduzir:hover,
+a.sem-paywall:hover {
+  background-color: var(--cor-bordas);
+}
+
 .orbita-vote-can-vote {
   cursor: pointer;
   &:hover {
@@ -114,24 +130,28 @@ $desktop: "only screen and (min-width : 700px)";
     color: #535353;
     display: inline-block;
   }
+  a.traduzir,
+  a.sem-paywall {
+    font-size: var(--fs-2);
+  }
 }
 
 .orbita-comment {
 	margin: 0 0 1.5rem;
 	line-height: 1.2;
 	border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  
+
 	@media #{$desktop} {
-	  padding-bottom: 0;
-	  border-bottom: 0;
-	}
-  
-	&-content {
-	  font-size: 95%;
-	  font-family: var(--ff-monospace);
-	  padding: 0 21px;
-	  display: block;
-	}
+   padding-bottom: 0;
+   border-bottom: 0;
+ }
+
+ &-content {
+   font-size: 95%;
+   font-family: var(--ff-monospace);
+   padding: 0 21px;
+   display: block;
+ }
 }
 
 .orbita-header {
@@ -156,7 +176,7 @@ $desktop: "only screen and (min-width : 700px)";
       &:visited {
         color: var(--cor-link-ori);
       }
-  
+
       &:hover {
         color: var(--cor-link-est);
       }
