@@ -19,6 +19,9 @@ document.addEventListener(
         return false;
       });
     });
+
+    toggleAttachUrl(postUrlInput);
+    toggleAttachUrl(postAttachInput);
   },
   false
 );
