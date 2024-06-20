@@ -11,7 +11,7 @@
  * Plugin Name:     Órbita
  * Plugin URI:      https://gnun.es
  * Description:     Órbita é o plugin para criar um sistema Hacker News-like para o Manual do Usuário
- * Version:         1.14.1
+ * Version:         1.15
  * Author:          Gabriel Nunes
  * Author URI:      https://gnun.es
  * License:         GPL v3
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Define plugin version constant
  */
-define( 'ORBITA_VERSION', '1.14.1' );
+define( 'ORBITA_VERSION', '1.15' );
 define( 'ORBITA_IMAGE_MAX_SIZE', '10' ); // MB
 
 /**
@@ -160,7 +160,7 @@ add_action('admin_init', 'orbita_setup_subscriber_capabilities');
 function abbreviate_time( $human_date ) {
 	$search = array( 'anos', 'ano', 'meses', 'mês', 'semanas', 'semana', 'dias', 'dia', 'horas', 'hora', 'minutos', 'minuto', 'segundos', 'segundo' );
 	$replace = array( 'a', 'a', 'm', 'm', 's', 's', 'd', 'd', 'h', 'h', 'min', 'min', 'seg', 'seg' );
-	
+
 	return str_replace( $search, $replace, $human_date );
 }
 
@@ -185,7 +185,7 @@ if( is_plugin_active( 'autodescription/autodescription.php' ) ) {
 					if( file_exists( plugin_dir_path(__FILE__) . 'assets/ogimage.png' ) ) {
 						$width = 1280;
 						$height = 720;
-					
+
 						foreach($details as &$detail) {
 							$detail['url'] = plugin_dir_url(__FILE__) . 'assets/ogimage.png';
 							$detail['width'] = $width;
@@ -195,7 +195,7 @@ if( is_plugin_active( 'autodescription/autodescription.php' ) ) {
 				}
 			}
 		}
-		
+
 		return $details;
 	}
 	add_filter('the_seo_framework_custom_image_details', 'orbita_tsf_default_ogimage', 10, 2);
@@ -267,20 +267,22 @@ function orbita_get_vote_html( $post_id ) {
  */
 function orbita_get_header_html() {
 	$html  = '<div class="orbita-header">';
-	$html .= '  <a href="/orbita/postar/" class="orbita-post-button">Postar</a>';
-	$html .= '  <div>';
-	$html .= ' <label aria-label="Filtros"><select onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">';
-	$html .= '			<option disabled ' . ( ( is_page('postar') || is_singular('orbita_post') ) ? 'selected' : '' ) . '>Filtros</option>';
-	$html .= '          <option value="/orbita" '. ( is_page('orbita') ? 'selected' : '' ) . '>Populares</option>';
-	$html .= '          <option value="/orbita/tudo" ' . ( is_page('tudo') ? 'selected' : '' ) . '>Últimas</option>';
-	$html .= '      </select></label>';
-	$html .= '  </div>';
-	$html .= '  <div>';
-	$html .= '      <a href="https://bolha.us/@orbita" class="mastodon"><img src="' . plugin_dir_url(__FILE__) . 'assets/mastodon.svg" width="32" height="32" alt="Perfil no Mastodon" /></a>';
-	$html .= '      <a href="https://t.me/orbitafeed" class="telegram"><img src="' . plugin_dir_url(__FILE__) . 'assets/telegram.svg" width="32" height="32" alt="Canal no Telegram" /></a>';
-	$html .= '      <a href="/feed/?post_type=orbita_post" class="rss"><img src="' . plugin_dir_url(__FILE__) . 'assets/rss.svg" width="32" height="32" alt="Feed RSS" /></a>';
+	$html .= '  <a href="/orbita/postar/" class="post"><img src="' . plugin_dir_url(__FILE__) . 'assets/post.svg" alt="Postar" title="Postar" /></a>';
+	$html .= '  <div class="header-icons">';
+	$html .= '    <div class="icon fire' . ( is_page('orbita') ? ' selected' : '' ) . '" onclick="window.location.href=\'/orbita\'">';
+	$html .= '        <img src="' . plugin_dir_url(__FILE__) . 'assets/fogo.svg" alt="Populares" title="Populares">';
+	$html .= '    </div>';
+	$html .= '    <div class="icon sort' . ( is_page('tudo') ? ' selected' : '' ) . '" onclick="window.location.href=\'/orbita/tudo\'">';
+	$html .= '        <img src="' . plugin_dir_url(__FILE__) . 'assets/ordem.svg" alt="Últimas" title="Últimas">';
+	$html .= '    </div>';
 	$html .= '  </div>';
 	$html .= '</div>';
+	$html .= '<p class="orbita-follow">';
+	$html .= '	Acompanhe o Órbita no ';
+	$html .= '	<a href="https://bolha.us/@orbita" title="Perfil no Mastodon">Mastodon</a>, ';
+	$html .= '	<a href="https://t.me/orbitafeed" title="Canal no Telegram">Telegram</a> e ';
+	$html .= '	<a href="/feed/?post_type=orbita_post" title="RSS/Atom">RSS</a>';
+	$html .= '</p>';
 
 	return $html;
 }
@@ -542,76 +544,76 @@ function orbita_link_options( $url = '', $title = '' ) {
 			[
 				"url" => "ft.com/",
 				"paywall" => "https://parede.pcdomanual.com/"
-			], 
+			],
 			[
 				"url" => "bloomberg.com/",
 				"paywall" => "https://archive.ph/submit/?url="
-			], 
+			],
 			[
 				"url" => "folha.uol.com.br/",
 				"paywall" => "https://parede.pcdomanual.com/"
-			], 
+			],
 			[
 				"url" => "uol.com.br/",
 				"paywall" => "https://parede.pcdomanual.com/"
-			], 
+			],
 			[
 				"url" => "oglobo.globo.com/",
 				"paywall" => "https://parede.pcdomanual.com/"
-			], 
+			],
 			[
 				"url" => "estadao.com.br/",
 				"paywall" => "https://parede.pcdomanual.com/"
-			], 
+			],
 			[
 				"url" => "nytimes.com/",
 				"paywall" => "https://parede.pcdomanual.com/"
-			], 
+			],
 			[
 				"url" => "washingtonpost.com/",
 				"paywall" => "https://parede.pcdomanual.com/"
-			], 
+			],
 			[
 				"url" => "wsj.com/",
 				"paywall" => "https://archive.ph/submit/?url="
-			], 
+			],
 			[
 				"url" => "medium.com/",
 				"paywall" => "https://scribe.rip/"
-			], 
+			],
 			[
 				"url" => "veja.abril.com.br/",
 				"paywall" => "https://parede.pcdomanual.com/"
-			], 
+			],
 			[
 				"url" => "exame.com/",
 				"paywall" => "https://parede.pcdomanual.com/"
-			], 
+			],
 			[
 				"url" => "super.abril.com.br/",
 				"paywall" => "https://parede.pcdomanual.com/"
-			], 
+			],
 			[
 				"url" => "valor.globo.com/",
 				"paywall" => "https://parede.pcdomanual.com/"
-			], 
+			],
 			[
 				"url" => "newyorker.com/",
 				"paywall" => "https://archive.ph/submit/?url="
-			], 
+			],
 			[
 				"url" => "theatlantic.com/",
 				"paywall" => "https://archive.ph/submit/?url="
-			], 
+			],
 			[
 				"url" => "technologyreview.com/",
 				"paywall" => "https://archive.ph/submit/?url="
-			], 
+			],
 			[
 				"url" => "wired.com/",
 				"paywall" => "https://parede.pcdomanual.com/"
-			] 
-		]; 
+			]
+		];
 
 		foreach ( $publishers as $publisher ) {
 			if ( preg_match("~" . preg_quote( $publisher['url'], "~" ) . "~i", $url ) ) {
@@ -1049,7 +1051,7 @@ function orbita_save_ogimage( $post_id ) {
 
 		$og_image_url = '';
 		$query_ogimages = $xpath->query("//meta[@property='og:image']//@content");
-		
+
 		foreach( $query_ogimages as $query ) {
 			$og_image_url = $query->nodeValue;
 		}
@@ -1093,14 +1095,14 @@ function orbita_save_ogimage( $post_id ) {
 						$wp_upload_dir = wp_upload_dir();
 						$upload_dir = $wp_upload_dir['basedir'] . '/orbita' . $wp_upload_dir['subdir'];
 						wp_mkdir_p( $upload_dir );
-			
+
 						// Filename format: postid_timestamp.extension
 						$filename = wp_unique_filename($upload_dir, $post_id . '_' . time() . '.' . $extension);
 						$upload_file = $upload_dir . '/' . $filename;
 						file_put_contents( $upload_file, $image_body );
-		
+
 						$post_mime_type = wp_check_filetype( basename( $upload_file ), null );
-		
+
 						$attachment = array(
 							'guid'           => $upload_file,
 							'post_mime_type' => $post_mime_type['type'],
@@ -1111,7 +1113,7 @@ function orbita_save_ogimage( $post_id ) {
 						$attachment_id = wp_insert_attachment( $attachment, $upload_file, $post_id );
 
 						require_once( ABSPATH . 'wp-admin/includes/image.php' );
-		
+
 						$attach_data = wp_generate_attachment_metadata( $attachment_id, $upload_file );
 						wp_update_attachment_metadata( $attachment_id, $attach_data );
 
@@ -1274,7 +1276,7 @@ if (defined('WP_CLI') && WP_CLI) {
 				 * : Number of posts to process at a time. Default is 10.
 				 */
 				$posts_per_page = isset( $assoc_args['posts_per_page'] ) ? intval( $assoc_args['posts_per_page'] ) : 10;
-			
+
 				$meta_query = [
 					'relation'    => 'AND',
 					[
@@ -1291,14 +1293,14 @@ if (defined('WP_CLI') && WP_CLI) {
 						'compare' => 'NOT EXISTS'
 					]
 				];
-	
+
 				$query = new WP_Query([
 					'posts_per_page' => $posts_per_page,
 					'post_type'      => 'orbita_post',
 					'post_status'    => 'published',
 					'meta_query'     => $meta_query
 				]);
-	
+
 				if ($query->have_posts()) {
 					while ($query->have_posts()) {
 						$query->the_post();
@@ -1313,7 +1315,7 @@ if (defined('WP_CLI') && WP_CLI) {
 				}
 
             } elseif ( 'search' === $action ) {
-                
+
 				/**
 				 * Execute the "orbita ogimage search" command.
 				 *
@@ -1321,13 +1323,13 @@ if (defined('WP_CLI') && WP_CLI) {
 				 *
 				 * [--posts_per_page=<posts_per_page>]
 				 * : Number of posts to process at a time. Default is -1.
-				 * 
+				 *
 				 * [--external_url_ogimage=<e_>]
 				 * : filter by external_url_ogimage code
 				 */
 				$posts_per_page = isset( $assoc_args['posts_per_page'] ) ? intval( $assoc_args['posts_per_page'] ) : -1;
 				$external_url_ogimage = isset( $assoc_args['external_url_ogimage'] ) ? $assoc_args['external_url_ogimage'] : null;
-				
+
 				if(	$external_url_ogimage == null ) {
 					WP_CLI::error( 'Parametro --external_url_ogimage é obrigatório!' );
 				}
