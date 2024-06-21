@@ -269,8 +269,8 @@ function orbita_get_header_html() {
 	$html  = '<div class="orbita-header">';
 	$html .= '  <a href="/orbita/postar/" class="post"><img src="' . plugin_dir_url(__FILE__) . 'assets/post.svg" alt="Postar" title="Postar" /></a>';
 	$html .= '  <div class="header-icons">';
-	$html .= '    <div class="icon fire' . ( is_page('orbita') ? ' selected' : '' ) . '" onclick="window.location.href=\'/orbita\'">';
-	$html .= '        <img src="' . plugin_dir_url(__FILE__) . 'assets/fogo.svg" alt="Populares" title="Populares">';
+	$html .= '    <div class="icon trend' . ( is_page('orbita') ? ' selected' : '' ) . '" onclick="window.location.href=\'/orbita\'">';
+	$html .= '        <img src="' . plugin_dir_url(__FILE__) . 'assets/trend.svg" alt="Populares" title="Populares">';
 	$html .= '    </div>';
 	$html .= '    <div class="icon sort' . ( is_page('tudo') ? ' selected' : '' ) . '" onclick="window.location.href=\'/orbita/tudo\'">';
 	$html .= '        <img src="' . plugin_dir_url(__FILE__) . 'assets/ordem.svg" alt="Últimas" title="Últimas">';

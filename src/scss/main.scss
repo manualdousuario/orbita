@@ -3,7 +3,7 @@ $desktop: "only screen and (min-width : 700px)";
 [data-theme="dark"] .orbita-header {
   .post,
   .sort,
-  .fire {
+  .trend {
     img {
       filter: invert(100%);
     }
@@ -189,7 +189,7 @@ a.sem-paywall:hover {
 
   .post,
   .sort,
-  .fire {
+  .trend {
     img {
       width: auto;
       display: block;
@@ -197,16 +197,16 @@ a.sem-paywall:hover {
   }
 
   .sort,
-  .fire {
+  .trend {
     img {
       cursor: pointer;
       opacity: 0.5;
     }
   }
 
-  .fire {
+  .trend {
     img {
-      height: 1.5rem;
+      height: 1.7rem;
     }
   }
 

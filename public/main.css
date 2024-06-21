@@ -1,6 +1,6 @@
 [data-theme="dark"] .orbita-header .post img,
 [data-theme="dark"] .orbita-header .sort img,
-[data-theme="dark"] .orbita-header .fire img {
+[data-theme="dark"] .orbita-header .trend img {
   filter: invert(100%);
 }
 
@@ -159,17 +159,17 @@ a.sem-paywall:hover {
 }
 .orbita-header .post img,
 .orbita-header .sort img,
-.orbita-header .fire img {
+.orbita-header .trend img {
   width: auto;
   display: block;
 }
 .orbita-header .sort img,
-.orbita-header .fire img {
+.orbita-header .trend img {
   cursor: pointer;
   opacity: 0.5;
 }
-.orbita-header .fire img {
-  height: 1.5rem;
+.orbita-header .trend img {
+  height: 1.7rem;
 }
 .orbita-header .sort img {
   height: 1.8rem;
