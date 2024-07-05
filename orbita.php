@@ -639,7 +639,7 @@ function orbita_link_options( $url = '', $title = '' ) {
 		if( isset( $options['paywall'] ) ) {
 			$html .= '<a href="' . $options['paywall'] . '" class="sem-paywall">sem&nbsp;paywall</a>&nbsp;';
 		}
-		if( isset( $options['translate'] ) ) {
+		if( isset( $options['translate'] ) && !wp_oembed_get( $url ) ) {
 			$html .= '<a href="' . $options['translate'] . '" class="traduzir">traduzir</a>&nbsp;';
 		}
 	}
