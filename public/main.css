@@ -169,13 +169,13 @@ a.sem-paywall:hover {
   opacity: 0.5;
 }
 .orbita-header .trend img {
-  height: 1.7rem;
+  height: 1.4rem;
 }
 .orbita-header .sort img {
-  height: 1.8rem;
+  height: 1.5rem;
 }
 .orbita-header .post img {
-  height: 2rem;
+  height: 1.5rem;
 }
 .orbita-header .orbita-post-button {
   padding: .4rem 1rem;
@@ -209,11 +209,7 @@ a.sem-paywall:hover {
 .orbita-form-control input[type="text"],
 .orbita-form-control input[type="url"],
 .orbita-form-control input[type="file"] {
-  width: var(--med-comp-linha);
   margin-bottom: 1rem;
-}
-.orbita-form-control textarea {
-  max-width: var(--med-comp-linha);
 }
 .orbita-form-control .orbita-help-block {
   font-family: var(--ff-monospace);

@@ -206,19 +206,19 @@ a.sem-paywall:hover {
 
   .trend {
     img {
-      height: 1.7rem;
+      height: 1.4rem;
     }
   }
 
   .sort {
     img {
-      height: 1.8rem;
+      height: 1.5rem;
     }
   }
 
   .post {
     img {
-      height: 2rem;
+      height: 1.5rem;
     }
   }
 
@@ -257,12 +257,7 @@ a.sem-paywall:hover {
   input[type="text"],
   input[type="url"],
   input[type="file"] {
-    width: var(--med-comp-linha);
     margin-bottom: 1rem;
-  }
-
-  textarea {
-    max-width: var(--med-comp-linha);
   }
 
   .orbita-help-block {
