@@ -135,12 +135,13 @@ a.sem-paywall:hover {
 .orbita-header {
   display: flex;
   justify-content: space-between;
-  padding: .5rem 1.25rem;
+  padding: .5rem .5rem;
   margin-bottom: 2rem;
   background-color: var(--cor-destaques);
   border-radius: var(--med-borda);
   border: 1px solid var(--cor-bordas);
   font-size: var(--fs-0);
+  font-family: var(--ff-monospace);
 }
 .orbita-header div {
   display: flex;
@@ -154,32 +155,11 @@ a.sem-paywall:hover {
 .orbita-header div a:hover {
   color: var(--cor-link-est);
 }
-.orbita-header .header-icons .selected img {
+.orbita-header .option {
+  opacity: .5;
+}
+.orbita-header .selected {
   opacity: 1;
-}
-.orbita-header .post img,
-.orbita-header .sort img,
-.orbita-header .trend img {
-  width: auto;
-  display: block;
-}
-.orbita-header .sort img,
-.orbita-header .trend img {
-  cursor: pointer;
-  opacity: 0.5;
-}
-.orbita-header .trend img {
-  height: 1.4rem;
-}
-.orbita-header .sort img {
-  height: 1.5rem;
-}
-.orbita-header .post img {
-  height: 1.5rem;
-}
-.orbita-header .orbita-post-button {
-  padding: .4rem 1rem;
-  margin: -1rem auto -1rem -1rem;
 }
 
 .orbita-ranking ol {

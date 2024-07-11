@@ -158,12 +158,13 @@ a.sem-paywall:hover {
 .orbita-header {
   display: flex;
   justify-content: space-between;
-  padding: .5rem 1.25rem;
+  padding: .5rem .5rem;
   margin-bottom: 2rem;
   background-color: var(--cor-destaques);
   border-radius: var(--med-borda);
   border: 1px solid var(--cor-bordas);
   font-size: var(--fs-0);
+  font-family: var(--ff-monospace);
 
   div {
     display: flex;
@@ -181,50 +182,12 @@ a.sem-paywall:hover {
     }
   }
 
-  .header-icons .selected {
-    img {
-      opacity: 1;
-    }
+  .option {
+    opacity: .5;
   }
 
-  .post,
-  .sort,
-  .trend {
-    img {
-      width: auto;
-      display: block;
-    }
-  }
-
-  .sort,
-  .trend {
-    img {
-      cursor: pointer;
-      opacity: 0.5;
-    }
-  }
-
-  .trend {
-    img {
-      height: 1.4rem;
-    }
-  }
-
-  .sort {
-    img {
-      height: 1.5rem;
-    }
-  }
-
-  .post {
-    img {
-      height: 1.5rem;
-    }
-  }
-
-  .orbita-post-button {
-    padding: .4rem 1rem;
-    margin: -1rem auto -1rem -1rem;
+  .selected {
+    opacity: 1;
   }
 }
 
