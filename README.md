@@ -27,6 +27,12 @@ Caso queira alterar o arquivo de estilo `main.scss`
 grunt watch
 ```
 
+Minificar arquivo JavaScript
+
+```bash
+grunt concat && grunt uglify
+```
+
 Gerar arquivo `orbita.zip`
 
 ```bash
