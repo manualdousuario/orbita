@@ -267,11 +267,11 @@ function orbita_get_vote_html( $post_id ) {
  */
 function orbita_get_header_html() {
 	$html  = '<div class="orbita-header">';
-	$html .= '  <a href="/orbita/postar/" class="post">postar</a>';
+	$html .= '  <a href="/orbita/postar/" class="post">Postar</a>';
 	$html .= '  <div>';
-	$html .= '    <a href="/orbita/" class="option ' . ( is_page('orbita') ? 'selected' : '' ) . '">populares</a>';
+	$html .= '    <a href="/orbita/" class="option ' . ( is_page('orbita') ? 'selected' : '' ) . '">Populares</a>';
 	$html .= '    <span>&middot;</span>';
-	$html .= '    <a href="/orbita/tudo/" class="option ' . ( is_page('tudo') ? 'selected' : '' ) . '">tudo</a>';
+	$html .= '    <a href="/orbita/tudo/" class="option ' . ( is_page('tudo') ? 'selected' : '' ) . '">Tudo</a>';
 	$html .= '  </div>';
 	$html .= '</div>';
 	$html .= '<p class="orbita-follow">';
