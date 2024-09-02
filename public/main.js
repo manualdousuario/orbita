@@ -19,9 +19,6 @@ document.addEventListener(
         return false;
       });
     });
-
-    toggleAttachUrl(postUrlInput);
-    toggleAttachUrl(postAttachInput);
   },
   false
 );
@@ -74,17 +71,6 @@ function verifyPostAttachFilesize() {
   }
 }
 
-// Some com o campo de link ou de imagem, depdende de qual for preenchido
-let postUrlInput = document.getElementById('orbita_post_url');
-let postAttachInput = document.getElementById('orbita_post_attach');
-const postUrlDiv = document.getElementById('orbita-form-post_url');
-const postAttachDiv = document.getElementById('orbita-form-post_attach');
-
-if (postUrlInput && postAttachInput) {
-  postUrlInput.addEventListener('input', toggleAttachUrl);
-  postAttachInput.addEventListener('input', toggleAttachUrl);
-}
-
 function toggleAttachUrl() {
   verifyPostAttachFilesize();
 
@@ -96,8 +82,22 @@ function toggleAttachUrl() {
     postUrlDiv.style.display = 'none';
     postAttachDiv.style.display = 'block';
   }
-  if(postAttachInput.value == '' && postUrlInput.value == ''){
+  if (postAttachInput.value == '' && postUrlInput.value == '') {
     postUrlDiv.style.display = 'block';
     postAttachDiv.style.display = 'block';
   }
 }
+
+  // Some com o campo de link ou de imagem, depdende de qual for preenchido
+  let postUrlInput = document.getElementById('orbita_post_url');
+  let postAttachInput = document.getElementById('orbita_post_attach');
+  const postUrlDiv = document.getElementById('orbita-form-post_url');
+  const postAttachDiv = document.getElementById('orbita-form-post_attach');
+
+  if (postUrlInput && postAttachInput) {
+    toggleAttachUrl(postUrlInput);
+    toggleAttachUrl(postAttachInput);
+
+    postUrlInput.addEventListener('input', toggleAttachUrl);
+    postAttachInput.addEventListener('input', toggleAttachUrl);
+  }
