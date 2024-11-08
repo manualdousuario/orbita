@@ -6,8 +6,7 @@ document.addEventListener(
     if (titleTextArea) {
       titleTextArea.addEventListener("keyup", (event) => {
         const charactersPerLine = event.target.offsetWidth / 10;
-        event.target.rows =
-          Math.round(event.target.value.length / charactersPerLine) + 1;
+        event.target.rows = Math.round(event.target.value.length / charactersPerLine) + 1;
       });
     }
 
@@ -29,7 +28,7 @@ function upVote(postId, object) {
   const ajax = new XMLHttpRequest();
 
   // Seta tipo de requisição: Post e a URL da API
-  ajax.open("POST", orbitaApi.restURL + "orbitaApi/v1/likes", true);
+  ajax.open("POST", orbitaApi.restURL + 'orbitaApi/v1/likes', true);
   ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   ajax.setRequestHeader("X-WP-Nonce", orbitaApi.restNonce);
 
@@ -58,7 +57,7 @@ function upVote(postId, object) {
 
 // Verifica o tamanho da imagem anexada ao post antes de enviar
 function verifyPostAttachFilesize() {
-  const input = document.getElementById("orbita_post_attach");
+  const input = document.getElementById('orbita_post_attach');
 
   if (input.files.length > 0) {
     const file = input.files[0];
@@ -66,8 +65,8 @@ function verifyPostAttachFilesize() {
     const fileMb = fileBytes / (1024 * 1024);
 
     if (fileMb > 10) {
-      input.value = "";
-      alert("O arquivo é maior que 10 MB");
+      input.value = '';
+      alert('O arquivo é maior que 10 MB');
     }
   }
 }
@@ -75,30 +74,30 @@ function verifyPostAttachFilesize() {
 function toggleAttachUrl() {
   verifyPostAttachFilesize();
 
-  if (postUrlInput.value !== "") {
-    postAttachDiv.style.display = "none";
-    postUrlDiv.style.display = "block";
+  if (postUrlInput.value !== '') {
+    postAttachDiv.style.display = 'none';
+    postUrlDiv.style.display = 'block';
   }
-  if (postAttachInput.value !== "") {
-    postUrlDiv.style.display = "none";
-    postAttachDiv.style.display = "block";
+  if (postAttachInput.value !== '') {
+    postUrlDiv.style.display = 'none';
+    postAttachDiv.style.display = 'block';
   }
-  if (postAttachInput.value == "" && postUrlInput.value == "") {
-    postUrlDiv.style.display = "block";
-    postAttachDiv.style.display = "block";
+  if (postAttachInput.value == '' && postUrlInput.value == '') {
+    postUrlDiv.style.display = 'block';
+    postAttachDiv.style.display = 'block';
   }
 }
 
-// Some com o campo de link ou de imagem, depdende de qual for preenchido
-let postUrlInput = document.getElementById("orbita_post_url");
-let postAttachInput = document.getElementById("orbita_post_attach");
-const postUrlDiv = document.getElementById("orbita-form-post_url");
-const postAttachDiv = document.getElementById("orbita-form-post_attach");
+  // Some com o campo de link ou de imagem, depdende de qual for preenchido
+  let postUrlInput = document.getElementById('orbita_post_url');
+  let postAttachInput = document.getElementById('orbita_post_attach');
+  const postUrlDiv = document.getElementById('orbita-form-post_url');
+  const postAttachDiv = document.getElementById('orbita-form-post_attach');
 
-if (postUrlInput && postAttachInput) {
-  toggleAttachUrl(postUrlInput);
-  toggleAttachUrl(postAttachInput);
+  if (postUrlInput && postAttachInput) {
+    toggleAttachUrl(postUrlInput);
+    toggleAttachUrl(postAttachInput);
 
-  postUrlInput.addEventListener("input", toggleAttachUrl);
-  postAttachInput.addEventListener("input", toggleAttachUrl);
-}
+    postUrlInput.addEventListener('input', toggleAttachUrl);
+    postAttachInput.addEventListener('input', toggleAttachUrl);
+  }
