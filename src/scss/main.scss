@@ -158,12 +158,12 @@ a.sem-paywall:hover {
 .orbita-header {
   display: flex;
   justify-content: space-between;
-  padding: .5rem .5rem;
-  margin-bottom: 2rem;
+  padding: .75rem 1rem;
+  margin-bottom: .35rem;
   background-color: var(--cor-destaques);
   border-radius: var(--med-borda);
   border: 1px solid var(--cor-bordas);
-  font-size: var(--fs-0);
+  line-height: 1;
 
   div {
     display: flex;
@@ -297,5 +297,9 @@ a.sem-paywall:hover {
 .orbita-follow {
   font-size: var(--fs-0);
   font-family: var(--ff-monospace);
-  margin-top: -20px;
+  text-align: center;
+
+  @media #{$desktop} {
+    text-align: left;
+  }
 }
