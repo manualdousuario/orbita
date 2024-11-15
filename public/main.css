@@ -1,10 +1,10 @@
-[data-theme="dark"] .orbita-header .post img,
-[data-theme="dark"] .orbita-header .sort img,
-[data-theme="dark"] .orbita-header .trend img {
+[data-theme=dark] .orbita-header .post img,
+[data-theme=dark] .orbita-header .sort img,
+[data-theme=dark] .orbita-header .trend img {
   filter: invert(100%);
 }
 
-[data-theme="dark"] .orbita-vote-button img {
+[data-theme=dark] .orbita-vote-button img {
   filter: invert(100%);
 }
 
@@ -79,7 +79,7 @@
 a.traduzir,
 a.sem-paywall {
   padding: 2px 4px;
-  margin: 0 .5rem;
+  margin: 0 0.5rem;
   text-decoration: none;
   border: 1px solid var(--cor-bordas);
   border-radius: var(--med-borda);
@@ -119,7 +119,7 @@ a.sem-paywall:hover {
   line-height: 1.2;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
-@media only screen and (min-width: 700px) {
+@media only screen and (min-width : 700px) {
   .orbita-comment {
     padding-bottom: 0;
     border-bottom: 0;
@@ -135,12 +135,20 @@ a.sem-paywall:hover {
 .orbita-header {
   display: flex;
   justify-content: space-between;
-  padding: .5rem .5rem;
-  margin-bottom: 2rem;
-  background-color: var(--cor-destaques);
-  border-radius: var(--med-borda);
-  border: 1px solid var(--cor-bordas);
-  font-size: var(--fs-0);
+  padding: 0.75rem 0;
+  margin-bottom: 0.35rem;
+  border-bottom: 1px dashed var(--cor-bordas);
+  line-height: 1;
+}
+.orbita-header a {
+  text-decoration: none;
+}
+.orbita-header a:visited {
+  color: var(--cor-link-ori);
+}
+.orbita-header a:hover {
+  color: var(--cor-link-est);
+  text-decoration: underline;
 }
 .orbita-header div {
   display: flex;
@@ -152,13 +160,14 @@ a.sem-paywall:hover {
   color: var(--cor-link-ori);
 }
 .orbita-header div a:hover {
-  color: var(--cor-link-est);
+  color: var(--cor-link-est) !important;
 }
 .orbita-header .option {
-  opacity: .5;
+  text-decoration: none;
 }
 .orbita-header .selected {
-  opacity: 1;
+  text-decoration: underline !important;
+  color: var(--cor-link-est) !important;
 }
 
 .orbita-ranking ol {
@@ -185,9 +194,9 @@ a.sem-paywall:hover {
   font-size: 1rem;
   white-space: pre-wrap;
 }
-.orbita-form-control input[type="text"],
-.orbita-form-control input[type="url"],
-.orbita-form-control input[type="file"] {
+.orbita-form-control input[type=text],
+.orbita-form-control input[type=url],
+.orbita-form-control input[type=file] {
   margin-bottom: 1rem;
 }
 .orbita-form-control .orbita-help-block {
@@ -214,7 +223,7 @@ a.sem-paywall:hover {
   margin-top: 32px;
   display: none;
 }
-@media only screen and (min-width: 700px) {
+@media only screen and (min-width : 700px) {
   .orbita-bookmarklet {
     display: block;
   }
@@ -260,7 +269,17 @@ a.sem-paywall:hover {
 .orbita-follow {
   font-size: var(--fs-0);
   font-family: var(--ff-monospace);
-  margin-top: -20px;
+}
+.orbita-follow a:visited {
+  color: var(--cor-link-ori);
+}
+.orbita-follow a:hover {
+  color: var(--cor-link-est);
+}
+@media only screen and (min-width : 700px) {
+  .orbita-follow {
+    text-align: left;
+  }
 }
 
 /*# sourceMappingURL=main.css.map */
