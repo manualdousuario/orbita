@@ -168,6 +168,7 @@ a.sem-paywall:hover {
 .orbita-header .selected {
   text-decoration: underline !important;
   color: var(--cor-link-est) !important;
+  font-weight: 600;
 }
 
 .orbita-ranking ol {
