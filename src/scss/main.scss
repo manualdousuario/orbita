@@ -173,6 +173,7 @@ a.sem-paywall:hover {
     &:hover {
       color: var(--cor-link-est);
       text-decoration: underline;
+      text-underline-offset: 15px;
     }
   }
 
@@ -199,8 +200,8 @@ a.sem-paywall:hover {
 
   .selected {
     text-decoration: underline !important;
+    text-underline-offset: 15px;
     color: var(--cor-link-est) !important;
-    font-weight: 600;
   }
 }
 

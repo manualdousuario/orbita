@@ -149,6 +149,7 @@ a.sem-paywall:hover {
 .orbita-header a:hover {
   color: var(--cor-link-est);
   text-decoration: underline;
+  text-underline-offset: 15px;
 }
 .orbita-header div {
   display: flex;
@@ -167,8 +168,8 @@ a.sem-paywall:hover {
 }
 .orbita-header .selected {
   text-decoration: underline !important;
+  text-underline-offset: 15px;
   color: var(--cor-link-est) !important;
-  font-weight: 600;
 }
 
 .orbita-ranking ol {
