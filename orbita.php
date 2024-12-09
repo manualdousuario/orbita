@@ -11,7 +11,7 @@
  * Plugin Name:     Órbita
  * Plugin URI:      https://gnun.es
  * Description:     Órbita é o plugin para criar um sistema Hacker News-like para o Manual do Usuário
- * Version:         1.15.2.1
+ * Version:         1.15.2.2
  * Author:          Gabriel Nunes
  * Author URI:      https://gnun.es
  * License:         GPL v3
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Define plugin version constant
  */
 
-define( 'ORBITA_VERSION', '1.15.2.1' );
+define( 'ORBITA_VERSION', '1.15.2.2' );
 define( 'ORBITA_IMAGE_MAX_SIZE', '10' ); // MB
 
 /**
@@ -540,7 +540,7 @@ function orbita_link_options( $url = '', $title = '' ) {
 		$publishers = [
 			[
 				"url" => "ft.com/",
-				"paywall" => "https://parede.pcdomanual.com/"
+				"paywall" => "https://marreta.pcdomanual.com/p/"
 			],
 			[
 				"url" => "bloomberg.com/",
@@ -548,27 +548,27 @@ function orbita_link_options( $url = '', $title = '' ) {
 			],
 			[
 				"url" => "folha.uol.com.br/",
-				"paywall" => "https://parede.pcdomanual.com/"
+				"paywall" => "https://marreta.pcdomanual.com/p/"
 			],
 			[
 				"url" => "uol.com.br/",
-				"paywall" => "https://parede.pcdomanual.com/"
+				"paywall" => "https://marreta.pcdomanual.com/p/"
 			],
 			[
 				"url" => "oglobo.globo.com/",
-				"paywall" => "https://parede.pcdomanual.com/"
+				"paywall" => "https://marreta.pcdomanual.com/p/"
 			],
 			[
 				"url" => "estadao.com.br/",
-				"paywall" => "https://parede.pcdomanual.com/"
+				"paywall" => "https://marreta.pcdomanual.com/p/"
 			],
 			[
 				"url" => "nytimes.com/",
-				"paywall" => "https://parede.pcdomanual.com/"
+				"paywall" => "https://marreta.pcdomanual.com/p/"
 			],
 			[
 				"url" => "washingtonpost.com/",
-				"paywall" => "https://parede.pcdomanual.com/"
+				"paywall" => "https://marreta.pcdomanual.com/p/"
 			],
 			[
 				"url" => "wsj.com/",
@@ -580,19 +580,19 @@ function orbita_link_options( $url = '', $title = '' ) {
 			],
 			[
 				"url" => "veja.abril.com.br/",
-				"paywall" => "https://parede.pcdomanual.com/"
+				"paywall" => "https://marreta.pcdomanual.com/p/"
 			],
 			[
 				"url" => "exame.com/",
-				"paywall" => "https://parede.pcdomanual.com/"
+				"paywall" => "https://marreta.pcdomanual.com/p/"
 			],
 			[
 				"url" => "super.abril.com.br/",
-				"paywall" => "https://parede.pcdomanual.com/"
+				"paywall" => "https://marreta.pcdomanual.com/p/"
 			],
 			[
 				"url" => "valor.globo.com/",
-				"paywall" => "https://parede.pcdomanual.com/"
+				"paywall" => "https://marreta.pcdomanual.com/p/"
 			],
 			[
 				"url" => "newyorker.com/",
@@ -608,7 +608,7 @@ function orbita_link_options( $url = '', $title = '' ) {
 			],
 			[
 				"url" => "wired.com/",
-				"paywall" => "https://parede.pcdomanual.com/"
+				"paywall" => "https://marreta.pcdomanual.com/p/"
 			]
 		];
 
