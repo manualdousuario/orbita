@@ -827,7 +827,7 @@ function orbita_form_shortcode() {
 	$html .= '      <input type="submit" value="Publicar">';
 	$html .= '  </form>';
 	$html .= '</div>';
-	$html .= '<div class="orbita-bookmarklet ctx-dica">';
+	$html .= '<div class="orbita-bookmarklet">';
 	$html .= '<p>Se preferir, pode usar nosso bookmarklet! Arraste o botão abaixo para a sua barra de favoritos e clique nele quando quiser compartilhar um link.</p>';
 	$html .= '  <p><a onclick="return false" href="javascript:window.location=%22https://manualdousuario.net/orbita/postar?u=%22+encodeURIComponent(document.location)+%22&t=%22+encodeURIComponent(document.title)">Postar no Órbita</a></p>';
 	$html .= '</div>';
