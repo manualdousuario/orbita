@@ -221,9 +221,10 @@ a.sem-paywall:hover {
 }
 
 .orbita-bookmarklet {
-  padding: 24px;
-  margin-top: 32px;
+  border-radius: var(--med-borda);
   display: none;
+  margin: 32px var(--med-salto-pequeno) 0;
+  padding: .5rem .75rem;
 }
 @media only screen and (min-width : 700px) {
   .orbita-bookmarklet {
