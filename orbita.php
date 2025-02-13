@@ -265,7 +265,7 @@ function orbita_get_vote_html( $post_id ) {
 		$title            = 'Você já votou!';
 	}
 
-	$html  = '<button title="' . $title . '" class="orbita-vote-button ' . $additional_class . '" data-post-id="' . $post_id . '">⬆️</button>';
+	$html  = '<button title="' . $title . '" class="orbita-vote-button ' . $additional_class . '" data-post-id="' . $post_id . '">▲</button>';
 
 	return $html;
 }
