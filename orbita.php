@@ -11,7 +11,7 @@
  * Plugin Name:     Órbita
  * Plugin URI:      https://gnun.es
  * Description:     Órbita é o plugin para criar um sistema Hacker News-like para o Manual do Usuário
- * Version:         1.15.3
+ * Version:         1.16
  * Author:          Gabriel Nunes
  * Author URI:      https://gnun.es
  * License:         GPL v3
@@ -41,44 +41,53 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Define plugin version constant
  */
 
-define( 'ORBITA_VERSION', '1.15.3.2' );
+define( 'ORBITA_VERSION', '1.16' );
 define( 'ORBITA_IMAGE_MAX_SIZE', '10' ); // MB
 
 /**
- * Enqueue style file
+ * Enqueue assets
  */
-function orbita_enqueue_styles() {
-	wp_register_style( 'orbita', plugins_url( '/public/main.css', __FILE__ ), array(), ORBITA_VERSION, 'all' );
+function orbita_enqueue_assets() {
+    $post = get_post();
 
-	wp_enqueue_style( 'orbita' );
-	wp_enqueue_script( 'orbita' );
+    if ( ! $post || ! isset( $post->post_content ) ) {
+        return;
+    }
+
+    $shortcodes = array( 'orbita-header', 'orbita-posts', 'orbita-my-posts', 'orbita-my-comments', 'orbita-form' );
+
+    foreach ( $shortcodes as $shortcode ) {
+        if ( has_shortcode( $post->post_content, $shortcode ) || is_singular( 'orbita_post' ) ) {
+			// style
+            wp_register_style( 'orbita', plugins_url( '/public/main.min.css', __FILE__ ), array(), ORBITA_VERSION, 'all' );
+			wp_enqueue_style( 'orbita' );
+
+			// preload style
+            add_filter('wp_preload_resources', function($preload_resources) {
+                $preload_resources[] = array(
+					'href' => plugins_url() . '/orbita/public/main.min.css?ver=' . ORBITA_VERSION,
+					'as' => 'style',
+					'type' => 'text/css',
+					'media' => 'all',
+				);
+				return $preload_resources;
+            });
+
+			// script
+            wp_register_script( 'orbita', plugins_url( '/public/main.min.js', __FILE__ ), array(), ORBITA_VERSION, array( 'strategy' => 'async' ) );
+            wp_enqueue_script( 'orbita' );
+
+            $orbita_inline_script = "var orbitaApi = {
+				restURL: '" . rest_url() . "',
+				restNonce: '" . wp_create_nonce( 'wp_rest' ) . "'
+			};";
+			wp_add_inline_script( 'orbita', $orbita_inline_script );
+
+            break;
+        }
+    }
 }
-
-add_action( 'wp_enqueue_scripts', 'orbita_enqueue_styles' );
-
-function orbita_preload_style ($preload_resources) {
-	$preload_resources[] = array(
-		'href' => plugins_url() . '/orbita/public/main.css?ver=' . ORBITA_VERSION,
-		'as' => 'style',
-		'type' => 'text/css',
-		'media' => 'all',
-	);
-	return $preload_resources;
-}
-add_filter('wp_preload_resources', 'orbita_preload_style');
-
-/**
- * Enqueue script file
- */
-function orbita_enqueue_scripts() {
-	wp_register_script( 'orbita', plugins_url( '/public/main.min.js', __FILE__ ), array(), ORBITA_VERSION, array( 'strategy' => 'async' ) );
-	$orbita_inline_script = "var orbitaApi = {
-		restURL: '" . rest_url() . "',
-		restNonce: '" . wp_create_nonce( 'wp_rest' ) . "'
-	};";
-	wp_add_inline_script( 'orbita', $orbita_inline_script );
-}
-add_action( 'wp_enqueue_scripts', 'orbita_enqueue_scripts' );
+add_action( 'wp_enqueue_scripts', 'orbita_enqueue_assets' );
 
 /**
  * Setup post type
@@ -256,9 +265,7 @@ function orbita_get_vote_html( $post_id ) {
 		$title            = 'Você já votou!';
 	}
 
-	$html  = '<button title="' . $title . '" class="orbita-vote-button ' . $additional_class . '" data-post-id="' . $post_id . '">';
-	$html .= '    <img loading="lazy" src="' . plugin_dir_url(__FILE__) . 'assets/fogo.svg" alt="Votar" width="17" height="17" />';
-	$html .= '</button>';
+	$html  = '<button title="' . $title . '" class="orbita-vote-button ' . $additional_class . '" data-post-id="' . $post_id . '">⬆️</button>';
 
 	return $html;
 }
@@ -929,6 +936,10 @@ function orbita_form_post() {
 		}
 
 		$default_category = get_term_by( 'slug', 'link', 'orbita_category' );
+
+		if (!$default_category) {
+			$default_category = (object) ['term_id' => 0];
+		}
 
 		if ( ! isset( $_POST['orbita_post_content'] ) ) {
 			$orbita_post_content = '';
