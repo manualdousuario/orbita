@@ -55,36 +55,50 @@ function orbita_enqueue_assets() {
     }
 
     $shortcodes = array( 'orbita-header', 'orbita-posts', 'orbita-my-posts', 'orbita-my-comments', 'orbita-form' );
+    $cache_key = 'orbita_shortcode_check_' . $post->ID;
 
-    foreach ( $shortcodes as $shortcode ) {
-        if ( has_shortcode( $post->post_content, $shortcode ) || is_singular( 'orbita_post' ) ) {
-			// style
-            wp_register_style( 'orbita', plugins_url( '/public/main.min.css', __FILE__ ), array(), ORBITA_VERSION, 'all' );
-			wp_enqueue_style( 'orbita' );
+    // Tenta obter o resultado do cache
+    $has_shortcode = wp_cache_get( $cache_key );
 
-			// preload style
-            add_filter('wp_preload_resources', function($preload_resources) {
-                $preload_resources[] = array(
-					'href' => plugins_url() . '/orbita/public/main.min.css?ver=' . ORBITA_VERSION,
-					'as' => 'style',
-					'type' => 'text/css',
-					'media' => 'all',
-				);
-				return $preload_resources;
-            });
-
-			// script
-            wp_register_script( 'orbita', plugins_url( '/public/main.min.js', __FILE__ ), array(), ORBITA_VERSION, array( 'strategy' => 'async' ) );
-            wp_enqueue_script( 'orbita' );
-
-            $orbita_inline_script = "var orbitaApi = {
-				restURL: '" . rest_url() . "',
-				restNonce: '" . wp_create_nonce( 'wp_rest' ) . "'
-			};";
-			wp_add_inline_script( 'orbita', $orbita_inline_script );
-
-            break;
+    if ( $has_shortcode === false ) {
+        // Se não estiver no cache, verifica os shortcodes
+        $has_shortcode = false;
+        foreach ( $shortcodes as $shortcode ) {
+            if ( has_shortcode( $post->post_content, $shortcode ) || is_singular( 'orbita_post' ) ) {
+                $has_shortcode = true;
+                break;
+            }
         }
+
+        // Armazena o resultado no cache
+        wp_cache_set( $cache_key, $has_shortcode );
+    }
+
+    if ( $has_shortcode ) {
+        // style
+        wp_register_style( 'orbita', plugins_url( '/public/main.min.css', __FILE__ ), array(), ORBITA_VERSION, 'all' );
+        wp_enqueue_style( 'orbita' );
+
+        // preload style
+        add_filter('wp_preload_resources', function($preload_resources) {
+            $preload_resources[] = array(
+                'href' => plugins_url() . '/orbita/public/main.min.css?ver=' . ORBITA_VERSION,
+                'as' => 'style',
+                'type' => 'text/css',
+                'media' => 'all',
+            );
+            return $preload_resources;
+        });
+
+        // script
+        wp_register_script( 'orbita', plugins_url( '/public/main.min.js', __FILE__ ), array(), ORBITA_VERSION, array( 'strategy' => 'async' ) );
+        wp_enqueue_script( 'orbita' );
+
+        $orbita_inline_script = "var orbitaApi = {
+            restURL: '" . rest_url() . "',
+            restNonce: '" . wp_create_nonce( 'wp_rest' ) . "'
+        };";
+        wp_add_inline_script( 'orbita', $orbita_inline_script );
     }
 }
 add_action( 'wp_enqueue_scripts', 'orbita_enqueue_assets' );
