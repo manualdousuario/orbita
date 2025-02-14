@@ -24,11 +24,9 @@ $desktop: "only screen and (min-width : 700px)";
 
 .orbita_post {
   .orbita-meta {
-    img {
-      vertical-align: baseline;
-      margin-right: 8px;
-      margin-bottom: -2px;
-    }
+    display: flex;
+    align-items: center;
+    column-gap: .25rem;
   }
 }
 
@@ -88,14 +86,10 @@ $desktop: "only screen and (min-width : 700px)";
 .orbita-vote-button {
   border: 0;
   padding: 0;
-  margin-top: -2px;
   cursor: default;
   background: transparent !important;
   overflow: hidden;
-  img {
-    width: 17px;
-    height: auto;
-  }
+  font-size: 1.25rem;
 }
 
 a.traduzir,
@@ -116,14 +110,15 @@ a.sem-paywall:hover {
 
 .orbita-vote-can-vote {
   cursor: pointer;
+  opacity: .5;
   &:hover {
-    filter: invert(40%) sepia(58%) saturate(3819%) hue-rotate(214deg) brightness(91%) contrast(94%);
+    opacity: .75;
   }
 }
 
 .orbita-vote-already-voted {
   cursor: default !important;
-  opacity: 0.5;
+  opacity: 1;
 }
 
 .orbita-post-title {
