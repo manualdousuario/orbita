@@ -10,10 +10,9 @@ $desktop: "only screen and (min-width : 700px)";
   }
 }
 
-[data-theme="dark"] .orbita-vote-button {
-  img {
-    filter: invert(100%);
-  }
+[data-theme="dark"] .orbita-list .vote button,
+[data-theme="dark"] .orbita_post .orbita-meta button {
+    filter: invert(1);
 }
 
 .orbita_post-template-default {
@@ -25,7 +24,7 @@ $desktop: "only screen and (min-width : 700px)";
 .orbita_post {
   .orbita-meta {
     display: flex;
-    align-items: center;
+    align-items: start;
     column-gap: .25rem;
   }
 }
@@ -90,6 +89,8 @@ $desktop: "only screen and (min-width : 700px)";
   background: transparent !important;
   overflow: hidden;
   font-size: 1.25rem;
+  min-width: fit-content;
+  line-height: 1.15;
 }
 
 a.traduzir,
@@ -307,6 +308,7 @@ a.sem-paywall:hover {
 .orbita-follow {
   font-size: var(--fs-0);
   font-family: var(--ff-monospace);
+  text-align: right;
 
   a {
     &:visited {
@@ -316,9 +318,5 @@ a.sem-paywall:hover {
     &:hover {
       color: var(--cor-link-est);
     }
-  }
-
-  @media #{$desktop} {
-    text-align: left;
   }
 }

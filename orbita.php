@@ -11,7 +11,7 @@
  * Plugin Name:     Órbita
  * Plugin URI:      https://gnun.es
  * Description:     Órbita é o plugin para criar um sistema Hacker News-like para o Manual do Usuário
- * Version:         1.16
+ * Version:         1.16.1
  * Author:          Gabriel Nunes
  * Author URI:      https://gnun.es
  * License:         GPL v3
@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Define plugin version constant
  */
 
-define( 'ORBITA_VERSION', '1.16' );
+define( 'ORBITA_VERSION', '1.16.1' );
 define( 'ORBITA_IMAGE_MAX_SIZE', '10' ); // MB
 
 /**
@@ -282,8 +282,8 @@ function orbita_get_header_html() {
 	$html .= '  </div>';
 	$html .= '</div>';
 	$html .= '<p class="orbita-follow">';
-	$html .= '	Siga no ';
-	$html .= '	<a href="https://bolha.us/@orbita" title="Perfil no Mastodon">Mastodon</a>, ';
+	$html .= '	<a href="https://bsky.app/profile/orbita.manualdousuario.net" title="Perfil no Bluesky">Bluesky</a>, ';
+	$html .= '	<a href="https://mastodon.social/@orbita" title="Perfil no Mastodon">Mastodon</a>, ';
 	$html .= '	<a href="https://t.me/orbitafeed" title="Canal no Telegram">Telegram</a> e ';
 	$html .= '	<a href="/feed/?post_type=orbita_post" title="RSS/Atom">RSS</a>';
 	$html .= '</p>';
