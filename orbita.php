@@ -424,6 +424,10 @@ function orbita_ranking_shortcode( $atts = array(), $content = null, $tag = '' )
 			'after' => $orbita_rank_atts['days'] . ' days ago',
 		),
 		'post__not_in'   => get_option( 'sticky_posts' ),
+		'no_found_rows'  => true,
+		'update_post_meta_cache'  => false,
+		'update_post_term_cache'  => false,
+		'update_menu_item_cache'  => false,
 	);
 
 	$orbita_posts_array = orbita_ranking_calculator(
@@ -441,6 +445,10 @@ function orbita_ranking_shortcode( $atts = array(), $content = null, $tag = '' )
 			),
 		),
 		'post__not_in'  => get_option( 'sticky_posts' ),
+		'no_found_rows'  => true,
+		'update_post_meta_cache'  => false,
+		'update_post_term_cache'  => false,
+		'update_menu_item_cache'  => false,
 	);
 
 	$blog_posts_array = orbita_ranking_calculator(
@@ -493,6 +501,10 @@ function orbita_posts_shortcode( $atts = array(), $content = null, $tag = '' ) {
 		'posts_per_page' => 10,
 		'paged'          => $paged,
 		'post__not_in'   => get_option( 'sticky_posts' ),
+		'no_found_rows'  => true,
+		'update_post_meta_cache'  => false,
+		'update_post_term_cache'  => false,
+		'update_menu_item_cache'  => false,
 	);
 
 	if ( true === $orbita_posts_atts['latest'] ) {
