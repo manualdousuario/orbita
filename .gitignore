@@ -1,4 +1,1 @@
-node_modules
-.sass-cache
-*.zip
-assets/.DS_Store
+/public/.DS_Store
