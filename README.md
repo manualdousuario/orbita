@@ -2,43 +2,6 @@
 
 Plugin de WordPress para criar um painel de debates baseado em links, similar ao Hacker News, para o [Manual do Usuário](https://manualdousuario.net).
 
-## Rodar o projeto
-
-Requisitos
-- Node.js
-
-Clone o repositório
-
-```bash
-git clone git@github.com:manualdousuario/orbita.git
-```
-
-Instale as dependências
-
-```bash
-cd orbita
-npm install
-npm install --global grunt sass ruby
-```
-
-Caso queira alterar o arquivo de estilo `main.scss`
-
-```bash
-grunt watch
-```
-
-Minificar arquivo JavaScript
-
-```bash
-grunt concat && grunt uglify
-```
-
-Gerar arquivo `orbita.zip`
-
-```bash
-grunt compress
-```
-
 ## Shortcodes
 
 `[orbita-form]`: formulário de postagem

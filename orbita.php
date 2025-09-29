@@ -414,7 +414,7 @@ function orbita_ranking_shortcode( $atts = array(), $content = null, $tag = '' )
 
 	$args_orbita = array(
 		'post_type'      => 'orbita_post',
-		'posts_per_page' => -1,
+		'posts_per_page' => $orbita_rank_atts['limit'] * 3, // OTIMIZAÇÃO: Em vez de -1
 		'date_query'     => array(
 			'after' => $orbita_rank_atts['days'] . ' days ago',
 		),
