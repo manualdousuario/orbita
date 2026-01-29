@@ -23,11 +23,6 @@ document.addEventListener(
   false
 );
 
-/**
- * Envia um voto para um post através da API REST
- * @param {string} postId - ID do post a ser votado
- * @param {HTMLElement} object - Elemento HTML do botão de voto
- */
 async function upVote(postId, object) {
   const url = `${orbitaApi.restURL}orbitaApi/v1/likes`;
   const formData = new URLSearchParams();
