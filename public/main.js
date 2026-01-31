@@ -23,36 +23,42 @@ document.addEventListener(
   false
 );
 
-function upVote(postId, object) {
-  // Exemplo de requisição POST
-  const ajax = new XMLHttpRequest();
+async function upVote(postId, object) {
+  const url = `${orbitaApi.restURL}orbitaApi/v1/likes`;
+  const formData = new URLSearchParams();
+  formData.append('post_id', postId);
 
-  // Seta tipo de requisição: Post e a URL da API
-  ajax.open("POST", orbitaApi.restURL + 'orbitaApi/v1/likes', true);
-  ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-  ajax.setRequestHeader("X-WP-Nonce", orbitaApi.restNonce);
-
-  // Seta paramêtros da requisição e envia a requisição
-  ajax.send("post_id=" + postId);
-
-  // Cria um evento para receber o retorno.
-  ajax.onreadystatechange = function () {
-    // Caso o state seja 4 e o http.status for 200, é porque a requisiçõe deu certo.
-    if (ajax.readyState === 4 && ajax.status === 200) {
-      const data = ajax.responseText;
-
-      const jsonData = JSON.parse(data);
-      if (jsonData.success) {
-        const textToUpdate = document.querySelector(
-          "[data-votes-post-id='" + postId + "']"
-        );
-        textToUpdate.innerHTML = jsonData.count;
-
-        object.classList.add("orbita-vote-already-voted");
-        object.classList.remove("orbita-vote-can-vote");
-      }
-    }
+  const headers = {
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'X-WP-Nonce': orbitaApi.restNonce,
   };
+
+  try {
+  const response = await fetch(url, {
+    method: 'POST',
+    headers,
+    body: formData.toString(),
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const jsonData = await response.json();
+
+  if (jsonData.success) {
+    const textToUpdate = document.querySelector(
+      `[data-votes-post-id='${postId}']`,
+    );
+    textToUpdate.innerHTML = jsonData.count;
+
+    object.classList.add('orbita-vote-already-voted');
+    object.classList.remove('orbita-vote-can-vote');
+  }
+
+  } catch (error) {
+    throw new Error('Erro ao enviar voto:', error);
+  }
 }
 
 // Verifica o tamanho da imagem anexada ao post antes de enviar
