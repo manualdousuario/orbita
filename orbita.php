@@ -833,6 +833,7 @@ function orbita_form_shortcode() {
 	$html .= '      <div class="orbita-form-control">';
 	$html .= '          <label for="orbita_post_content">Comentário</label>';
 	$html .= '          <textarea rows="5" id="orbita_post_content" name="orbita_post_content"></textarea>';
+	$html .= '<p style="font-family: var(--ff-monospace); font-size: var(--fs-0);"><strong>Atenção!</strong> Este formulário &ast;não&ast; aceita Markdown.</p>';
 	$html .= '      </div>';
 	$html .= '      <div class="orbita-form-control">';
 	$html .= '          <pre>Antes de postar, leia nossas <a href="https://manualdousuario.net/doc-comentarios/">dicas e orientações para comentários</a>.</pre>';
