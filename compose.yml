@@ -1,0 +1,140 @@
+services:
+  orbita:
+    image: ghcr.io/manualdousuario/orbita:latest
+    container_name: orbita
+    env_file: .env
+    ports:
+      - 8080:8080
+    volumes:
+      - /opt/orbita/storage:/var/www/html/storage
+    environment:
+      LOG_OUTPUT_LEVEL: warn
+      LOG_STACK: ${LOG_STACK:-app,error,stderr}
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8080/up"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+    depends_on:
+      orbita_db:
+        condition: service_healthy
+      orbita_valkey:
+        condition: service_healthy
+    stop_grace_period: ${ORBITA_STOP_GRACE:-45s}
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          memory: ${ORBITA_MEMORY_LIMIT:-2g}
+          cpus: ${ORBITA_CPU_LIMIT:-2}
+    restart: unless-stopped
+    networks:
+      - orbita
+      # - reverse-proxy
+
+  orbita_db:
+    image: mariadb:11.4
+    container_name: orbita_db
+    environment:
+      MARIADB_DATABASE: ${MARIADB_DATABASE:-orbita_laravel}
+      MARIADB_USER: ${MARIADB_USER:-orbita}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD:?MARIADB_PASSWORD is required}
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:?MARIADB_ROOT_PASSWORD is required}
+    command:
+      - --innodb-buffer-pool-size=${MARIADB_INNODB_BUFFER_POOL_SIZE:-512M}
+      - --innodb-log-file-size=${MARIADB_INNODB_LOG_FILE_SIZE:-128M}
+      - --innodb-flush-log-at-trx-commit=${MARIADB_INNODB_FLUSH_LOG_AT_TRX_COMMIT:-1}
+      - --innodb-flush-method=${MARIADB_INNODB_FLUSH_METHOD:-O_DIRECT}
+      - --max-connections=${MARIADB_MAX_CONNECTIONS:-100}
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --innodb-ft-min-token-size=${MARIADB_INNODB_FT_MIN_TOKEN_SIZE:-2}
+      - --slow-query-log=${MARIADB_SLOW_QUERY_LOG:-1}
+      - --long-query-time=${MARIADB_LONG_QUERY_TIME:-1}
+    volumes:
+      - /opt/orbita/mariadb/data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    stop_grace_period: 60s
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          memory: ${MARIADB_MEMORY_LIMIT:-1g}
+    restart: unless-stopped
+    networks:
+      - orbita
+
+  orbita_valkey:
+    image: valkey/valkey:8-alpine
+    container_name: orbita_valkey
+    environment:
+      VALKEY_PASSWORD: ${REDIS_PASSWORD:?REDIS_PASSWORD is required}
+    command:
+      - valkey-server
+      - --requirepass
+      - ${REDIS_PASSWORD:?REDIS_PASSWORD is required}
+      - --maxmemory
+      - ${VALKEY_MAXMEMORY:-512mb}
+      - --maxmemory-policy
+      - volatile-lru
+      - --maxmemory-samples
+      - "10"
+      - --appendonly
+      - "yes"
+      - --appendfsync
+      - everysec
+      - --no-appendfsync-on-rewrite
+      - "yes"
+      - --auto-aof-rewrite-percentage
+      - "100"
+      - --auto-aof-rewrite-min-size
+      - 64mb
+      - --save
+      - ""
+    volumes:
+      - /opt/orbita/valkey:/data
+    healthcheck:
+      test: ["CMD-SHELL", "valkey-cli --no-auth-warning -a \"$$VALKEY_PASSWORD\" ping | grep -q PONG"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    stop_grace_period: 30s
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          memory: ${VALKEY_MEMORY_LIMIT:-768m}
+    restart: unless-stopped
+    networks:
+      - orbita
+
+networks:
+  orbita:
+    name: orbita
+  # reverse-proxy:
+  #   external: true

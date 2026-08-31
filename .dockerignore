@@ -1,0 +1,59 @@
+# Build context for the Laravel image. vendor/ is rebuilt by `composer install` and
+# public/build by the Node assets stage, so both are excluded to keep the context small
+# and avoid shipping stale local artifacts.
+
+.git
+.github
+.claude
+.superpowers
+.playwright-mcp
+
+**/*.md
+docs/
+.review/
+.lgpd/
+
+auth.json
+
+Dockerfile
+compose.yml
+docker-compose*.yml
+.dockerignore
+
+# Environment (keep .env.example out of the image too; env is injected at runtime)
+.env
+.env.*
+
+# Dependencies / build output (regenerated in the image)
+vendor/
+node_modules/
+public/build/
+public/hot
+
+# Sitemap cache: per-environment (URLs follow the serving host) and rebuilt on demand.
+storage/app/sitemap/
+
+# Tests / QA (not needed in the production image)
+tests/
+phpunit.xml
+.phpunit.result.cache
+.phpunit.cache
+.php-cs-fixer.cache
+
+# Local runtime / backups
+storage/logs/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+temp/
+orbita/
+
+.vscode/
+.idea/
+.nova
+.zed
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+desktop.ini

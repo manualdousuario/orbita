@@ -1,0 +1,15 @@
+#!/command/with-contenv sh
+
+if [ "${ORBITA_QUEUE:-true}" != "true" ]; then
+    echo "[orbita] queue worker disabled by ORBITA_QUEUE"
+    exit 0
+fi
+
+cd /var/www/html || exit 1
+
+# --sleep=3: polls both queues on every wake; sleep=1 would hammer an idle jobs table. Override with ORBITA_QUEUE_SLEEP.
+exec php artisan queue:work \
+    --queue=emails,default \
+    --sleep="${ORBITA_QUEUE_SLEEP:-3}" \
+    --tries=3 \
+    --max-time=3600

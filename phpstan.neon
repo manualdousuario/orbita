@@ -1,0 +1,33 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+    - vendor/phpstan/phpstan-mockery/extension.neon
+    - phpstan-baseline.neon
+
+parameters:
+    level: 5
+
+    paths:
+        - app
+        - bootstrap
+        - config
+        - database
+        - routes
+        - tests
+
+    # Blade renders to PHP under here; analysing generated output reports errors nobody can fix
+    # in a file they did not write.
+    excludePaths:
+        - storage/framework/views/*
+
+    # The Laravel version this actually runs on, so the analyser reasons about the right
+    # signatures instead of guessing from the installed vendor tree.
+    phpVersion: 80400
+
+    # Reads casts() as the source of truth for attribute types. Without it every cast attribute
+    # is mixed, which buries the real findings under noise.
+    parseModelCastsMethod: true
+
+    # The baseline exists so that EXISTING findings do not block a build while NEW code is still
+    # checked. It is a debt ledger, not a silencer: shrink it, never regenerate it to make a
+    # failure go away.
+    reportUnmatchedIgnoredErrors: false

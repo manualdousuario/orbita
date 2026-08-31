@@ -1,0 +1,296 @@
+@import 'tailwindcss' source(none);
+@source '../views';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+    button:not(:disabled),
+    [role='button']:not(:disabled) {
+        cursor: pointer;
+    }
+}
+
+[x-cloak] {
+    display: none !important;
+}
+
+.js-only {
+    display: none;
+}
+.js .js-only {
+    display: flex;
+}
+.js .js-hidden {
+    display: none;
+}
+
+@layer components {
+    .md-content {
+        font-family: var(--font-serif);
+        line-height: 1.5;
+        font-size: 1.2rem;
+        overflow-wrap: anywhere;
+    }
+    .md-content > * + * {
+        margin-top: 0.75em;
+    }
+    .md-content a {
+        color: var(--color-primary-600);
+        text-decoration: underline;
+    }
+    .md-content a:visited {
+        color: var(--color-visited);
+    }
+    .dark .md-content a {
+        color: var(--color-primary-400);
+    }
+    .dark .md-content a:visited {
+        color: var(--color-visited);
+    }
+    .md-content strong {
+        font-weight: 600;
+    }
+    .md-content em {
+        font-style: italic;
+    }
+    .md-content ul,
+    .md-content ol {
+        padding-left: 1.5rem;
+    }
+    .md-content ul {
+        list-style: disc;
+    }
+    .md-content ol {
+        list-style: decimal;
+    }
+    .md-content blockquote {
+        border-left: 3px solid var(--color-primary-300);
+        padding-left: 0.75rem;
+        color: #6b7280;
+        font-style: italic;
+    }
+    .dark .md-content blockquote {
+        color: #9ca3af;
+        border-left-color: var(--color-primary-700);
+    }
+    .md-content code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 1em;
+        background: rgb(0 0 0 / 0.05);
+        padding: 0.1em 0.3em;
+        border-radius: 0.25rem;
+    }
+    .dark .md-content code {
+        background: rgb(255 255 255 / 0.1);
+    }
+    .md-content h1,
+    .md-content h2,
+    .md-content h3 {
+        font-weight: 700;
+        line-height: 1.25;
+    }
+    .md-content img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 0.5rem;
+    }
+
+    .md-content--comment img,
+    .md-content--post img {
+        width: auto;
+        height: auto;
+        object-fit: contain;
+    }
+    .md-content--comment img,
+    .md-content--comment .md-img-wrap {
+        max-width: min(100%, 250px);
+    }
+    .md-content--comment img {
+        max-height: 250px;
+    }
+    .md-content--post img,
+    .md-content--post .md-img-wrap {
+        max-width: min(100%, 450px);
+    }
+    .md-content--post img {
+        max-height: 450px;
+    }
+    .md-content pre {
+        background: rgb(0 0 0 / 0.05);
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        overflow-x: auto;
+    }
+    .dark .md-content pre {
+        background: rgb(255 255 255 / 0.08);
+    }
+    .md-content pre code {
+        background: transparent;
+        padding: 0;
+        border-radius: 0;
+        font-size: 0.875em;
+    }
+
+    .md-content li:has(> input[type='checkbox']) {
+        list-style: none;
+    }
+    .md-content li > input[type='checkbox'] {
+        margin: 0 0.375rem 0.1em -1.25rem;
+        vertical-align: middle;
+    }
+
+    .oembed-frame iframe {
+        width: 100%;
+        max-width: 100%;
+        border: 0;
+    }
+    .oembed-frame.aspect-video iframe {
+        height: 100%;
+    }
+}
+
+@theme {
+    --font-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --font-serif: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+    --color-primary-50: #eef2ff;
+    --color-primary-100: #e0e7ff;
+    --color-primary-200: #c7d2fe;
+    --color-primary-300: #a5b4fc;
+    --color-primary-400: #818cf8;
+    --color-primary-500: #6366f1;
+    --color-primary-600: #4f46e5;
+    --color-primary-700: #4338ca;
+    --color-primary-800: #3730a3;
+    --color-primary-900: #312e81;
+    --color-primary-950: #1e1b4b;
+    --color-visited: #856596;
+    --color-positive: #0e7c5a;
+}
+
+.dark {
+    --color-visited: #c9a8da;
+    --color-positive: #3fbf8f;
+}
+
+.toolbar-scroll {
+    scrollbar-width: none;
+}
+.toolbar-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+@media (width < 40rem) {
+    .reply-breakout {
+        margin-left: calc(-1 * (var(--reply-pad, 0px) + var(--reply-gaps, 0) * 0.5rem));
+        position: relative;
+        z-index: 5;
+    }
+}
+
+.dropdown-sheet {
+    position: absolute;
+    right: 0;
+    margin-top: 0.5rem;
+    width: 20rem;
+}
+
+@media (width < 40rem) {
+    .dropdown-sheet {
+        position: fixed;
+        left: 0.5rem;
+        right: 0.5rem;
+        width: auto;
+    }
+}
+
+@media (pointer: coarse) {
+    input:not([type='checkbox']):not([type='radio']),
+    textarea,
+    select {
+        font-size: 16px;
+    }
+}
+
+.md-img-wrap {
+    position: relative;
+    display: inline-block;
+}
+
+.md-img-wrap > img,
+.md-img-wrap > a.pswp-item {
+    display: block;
+}
+
+.md-img-wrap > a.pswp-item {
+    cursor: zoom-in;
+}
+
+.media-edit-btn {
+    position: absolute;
+    right: 0.375rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 0.375rem;
+    color: #fff;
+    background: rgb(0 0 0 / 0.75);
+    opacity: 0.6;
+    transition: opacity 0.15s ease;
+}
+
+.md-content a.media-edit-btn,
+.md-content a.media-edit-btn:visited,
+.dark .md-content a.media-edit-btn,
+.dark .md-content a.media-edit-btn:visited {
+    color: #fff;
+    text-decoration: none;
+}
+
+.md-content a.pswp-item,
+.md-content a.pswp-item:visited,
+.dark .md-content a.pswp-item,
+.dark .md-content a.pswp-item:visited {
+    color: inherit;
+    text-decoration: none;
+}
+
+.media-edit-btn {
+    top: 0.375rem;
+}
+
+.md-img-wrap:hover .media-edit-btn,
+.media-edit-btn:hover {
+    opacity: 1;
+}
+
+.media-edit-btn > svg {
+    width: 1rem;
+    height: 1rem;
+}
+
+.pswp__custom-caption {
+    position: absolute;
+    left: 50%;
+    bottom: 1rem;
+    transform: translateX(-50%);
+    max-width: min(90%, 60ch);
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.375rem;
+    background: rgb(0 0 0 / 0.7);
+    color: #fff;
+    font-size: 0.875rem;
+    line-height: 1.35;
+    text-align: center;
+    text-wrap: balance;
+    pointer-events: none;
+}
+
+.pswp__custom-caption:empty {
+    display: none;
+}

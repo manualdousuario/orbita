@@ -1,0 +1,629 @@
+# PHPStan baseline — a DEBT LEDGER, not a silencer.
+#
+# Every entry here is a finding that existed when static analysis was introduced. They are
+# listed so that EXISTING code does not block the build while NEW code is still checked at
+# level 5 from day one.
+#
+# The rule: this file only ever shrinks. If a build fails, fix the code — do not regenerate
+# this file to make the failure disappear, because that also erases everything else it was
+# tracking.
+
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Instanceof between App\\Models\\User and Illuminate\\Contracts\\Auth\\MustVerifyEmail will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 1
+			path: app/Actions/Fortify/UpdateUserProfileInformation.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\FailedJob\:\:\$exceptionMessage\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Pages/Queue.php
+
+		-
+			message: '#^Access to an undefined property App\\Filament\\Pages\\Settings\:\:\$form\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Filament/Pages/Settings.php
+
+		-
+			message: '#^Offset ''options'' on array\{type\: ''select'', group\: string, label\: string, help\?\: string\} on left side of \?\? does not exist\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Filament/Pages/Settings.php
+
+		-
+			message: '#^Parameter \#2 \$post of method App\\Services\\CommentService\:\:permalinkFor\(\) expects App\\Models\\Post, Illuminate\\Database\\Eloquent\\Model given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Filament/Resources/Comments/CommentResource.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$display_name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Reports/ReportResource.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Reports/ReportResource.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$username\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Reports/ReportResource.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Support\\Collection\<\(int\|string\),Illuminate\\Database\\Eloquent\\Model\>\:\:each\(\) expects callable\(Illuminate\\Database\\Eloquent\\Model, int\|string\)\: mixed, Closure\(App\\Models\\Report\)\: void given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Filament/Resources/Reports/ReportResource.php
+
+		-
+			message: '#^Parameter \#2 \$post of method App\\Services\\CommentService\:\:permalinkFor\(\) expects App\\Models\\Post, Illuminate\\Database\\Eloquent\\Model given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Filament/Resources/Reports/ReportResource.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>display_name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Filament/Resources/Reports/ReportResource.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$email\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Users/Pages/EditUser.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$username\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Filament/Resources/Users/Pages/EditUser.php
+
+		-
+			message: '#^Method App\\Http\\Controllers\\Auth\\SocialAuthController\:\:redirect\(\) should return Illuminate\\Http\\RedirectResponse but returns Symfony\\Component\\HttpFoundation\\RedirectResponse\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Auth/SocialAuthController.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between Carbon\\Carbon and null will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 1
+			path: app/Http/Controllers/Auth/SocialLinkController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$hashid\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/CommentController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/CommentController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$display_name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/FeedController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$username\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/FeedController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$avatar_url\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/OgImageController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$display_name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/OgImageController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$username\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/OgImageController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/PostController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$username\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/PostController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:authorName\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Http/Controllers/PostController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:isLinkable\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Http/Controllers/PostController.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<int,App\\Models\\Comment\>\:\:map\(\) contains unresolvable type\.$#'
+			identifier: argument.unresolvableType
+			count: 1
+			path: app/Http/Controllers/PostController.php
+
+		-
+			message: '#^Parameter \#1 \$keyBy of method Illuminate\\Support\\Collection\<int,Illuminate\\Database\\Eloquent\\Model\>\:\:keyBy\(\) expects \(callable\(Illuminate\\Database\\Eloquent\\Model, int\)\: \(''github''\|''google''\|''instagram''\|''linkedin''\)\)\|list\<Closure\|string\>\|string, Closure\(App\\Models\\SocialAccount\)\: \(''github''\|''google''\|''instagram''\|''linkedin''\) given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Http/Controllers/UserController.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between Carbon\\Carbon and null will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 2
+			path: app/Http/Controllers/UserController.php
+
+		-
+			message: '#^Trait App\\Livewire\\Concerns\\InteractsWithInfiniteScroll is used zero times and is not analysed\.$#'
+			identifier: trait.unused
+			count: 1
+			path: app/Livewire/Concerns/InteractsWithInfiniteScroll.php
+
+		-
+			message: '#^Call to an undefined method Psr\\Log\\LoggerInterface\:\:getHandlers\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Logging/CapBelowWarning.php
+
+		-
+			message: '#^Call to an undefined method Psr\\Log\\LoggerInterface\:\:setHandlers\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Logging/CapBelowWarning.php
+
+		-
+			message: '#^Property Illuminate\\Mail\\Mailable\:\:\$to \(array\) on left side of \?\? is not nullable\.$#'
+			identifier: nullCoalesce.property
+			count: 1
+			path: app/Mail/AccountDeletionConfirmationMail.php
+
+		-
+			message: '#^Property Illuminate\\Mail\\Mailable\:\:\$to \(array\) on left side of \?\? is not nullable\.$#'
+			identifier: nullCoalesce.property
+			count: 1
+			path: app/Mail/CommentReplyMail.php
+
+		-
+			message: '#^Property Illuminate\\Mail\\Mailable\:\:\$to \(array\) on left side of \?\? is not nullable\.$#'
+			identifier: nullCoalesce.property
+			count: 1
+			path: app/Mail/EmailChangeVerificationMail.php
+
+		-
+			message: '#^Property Illuminate\\Mail\\Mailable\:\:\$to \(array\) on left side of \?\? is not nullable\.$#'
+			identifier: nullCoalesce.property
+			count: 1
+			path: app/Mail/MentionMail.php
+
+		-
+			message: '#^Property Illuminate\\Mail\\Mailable\:\:\$to \(array\) on left side of \?\? is not nullable\.$#'
+			identifier: nullCoalesce.property
+			count: 1
+			path: app/Mail/NewCommentMail.php
+
+		-
+			message: '#^Property Illuminate\\Mail\\Mailable\:\:\$to \(array\) on left side of \?\? is not nullable\.$#'
+			identifier: nullCoalesce.property
+			count: 1
+			path: app/Mail/NewReportMail.php
+
+		-
+			message: '#^Property Illuminate\\Mail\\Mailable\:\:\$to \(array\) on left side of \?\? is not nullable\.$#'
+			identifier: nullCoalesce.property
+			count: 1
+			path: app/Mail/ResetPasswordMail.php
+
+		-
+			message: '#^Property Illuminate\\Mail\\Mailable\:\:\$to \(array\) on left side of \?\? is not nullable\.$#'
+			identifier: nullCoalesce.property
+			count: 1
+			path: app/Mail/SocialLinkConfirmationMail.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\FailedJob\:\:\$exceptionBody\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Models/FailedJob.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\FailedJob\:\:\$exceptionClass\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/FailedJob.php
+
+		-
+			message: '#^Expression on left side of \?\? is not nullable\.$#'
+			identifier: nullCoalesce.expr
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: '#^Method App\\Models\\User\:\:usernameChangeAvailableAt\(\) should return Illuminate\\Support\\Carbon\|null but returns Carbon\\Carbon\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: '#^Using nullsafe method call on non\-nullable type App\\Enums\\UserRole\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: '#^Match arm comparison between ''comment'' and ''comment'' is always true\.$#'
+			identifier: match.alwaysTrue
+			count: 1
+			path: app/Models/UserReaction.php
+
+		-
+			message: '#^Method App\\Services\\BookmarkService\:\:bookmarkedPostIds\(\) should return array\<int, true\> but returns array\<int, bool\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Services/BookmarkService.php
+
+		-
+			message: '#^Cannot call method getClientFilename\(\) on class\-string\|object\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/Services/ImageService.php
+
+		-
+			message: '#^Cannot call method getClientMediaType\(\) on class\-string\|object\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/Services/ImageService.php
+
+		-
+			message: '#^Cannot call method getSize\(\) on class\-string\|object\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: app/Services/ImageService.php
+
+		-
+			message: '#^Property App\\Services\\ImageService\:\:\$maxWidth is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Services/ImageService.php
+
+		-
+			message: '#^Offset ''description'' on array\{label\: string, description\: string\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/MetaTagsService.php
+
+		-
+			message: '#^Parameter \#1 \$height of method Spatie\\SchemaOrg\\ImageObject\:\:height\(\) expects array\<Spatie\\SchemaOrg\\Contracts\\DistanceContract\|Spatie\\SchemaOrg\\Contracts\\QuantitativeValueContract\>\|Spatie\\SchemaOrg\\Contracts\\DistanceContract\|Spatie\\SchemaOrg\\Contracts\\QuantitativeValueContract, int given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Services/MetaTagsService.php
+
+		-
+			message: '#^Parameter \#1 \$width of method Spatie\\SchemaOrg\\ImageObject\:\:width\(\) expects array\<Spatie\\SchemaOrg\\Contracts\\DistanceContract\|Spatie\\SchemaOrg\\Contracts\\QuantitativeValueContract\>\|Spatie\\SchemaOrg\\Contracts\\DistanceContract\|Spatie\\SchemaOrg\\Contracts\\QuantitativeValueContract, int given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Services/MetaTagsService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$display_name\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Services/NotificationService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$title\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/NotificationService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$username\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Services/NotificationService.php
+
+		-
+			message: '#^Parameter \#1 \$post of method App\\Services\\NotificationService\:\:postUrl\(\) expects App\\Models\\Post\|null, Illuminate\\Database\\Eloquent\\Model\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Services/NotificationService.php
+
+		-
+			message: '#^Parameter \#2 \$post of method App\\Services\\CommentService\:\:permalinkFor\(\) expects App\\Models\\Post, Illuminate\\Database\\Eloquent\\Model given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Services/NotificationService.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>display_name" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: app/Services/NotificationService.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>title" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: app/Services/NotificationService.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>username" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: app/Services/NotificationService.php
+
+		-
+			message: '#^Parameter \#1 \$alignment of method ImagickDraw\:\:setTextAlignment\(\) expects 0\|1\|2\|3, int given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Services/OgImageService.php
+
+		-
+			message: '#^Variable \$fallback on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.variable
+			count: 1
+			path: app/Services/OgImageService.php
+
+		-
+			message: '#^PHPDoc tag @throws with type App\\Services\\RuntimeException is not subtype of Throwable$#'
+			identifier: throws.notThrowable
+			count: 1
+			path: app/Services/PostService.php
+
+		-
+			message: '#^Ternary operator condition is always false\.$#'
+			identifier: ternary.alwaysFalse
+			count: 1
+			path: app/Services/SitemapService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$is_banned\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/SocialAuthService.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:isAnonymized\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Services/SocialAuthService.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:isPendingActivation\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Services/SocialAuthService.php
+
+		-
+			message: '#^Parameter \#1 \$user of method App\\Services\\SocialAuthService\:\:authenticate\(\) expects App\\Models\\User, Illuminate\\Database\\Eloquent\\Model given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Services/SocialAuthService.php
+
+		-
+			message: '#^Parameter \#1 \$user of static method App\\Support\\SocialAuthOutcome\:\:loggedIn\(\) expects App\\Models\\User, Illuminate\\Database\\Eloquent\\Model given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Services/SocialAuthService.php
+
+		-
+			message: '#^Parameter \#1 \$user of static method App\\Support\\SocialAuthOutcome\:\:needsVerification\(\) expects App\\Models\\User, Illuminate\\Database\\Eloquent\\Model given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Services/SocialAuthService.php
+
+		-
+			message: '#^PHPDoc tag @var with type Intervention\\Image\\Interfaces\\DriverInterface is not subtype of native type Intervention\\Image\\Drivers\\Vips\\Driver\.$#'
+			identifier: varTag.nativeType
+			count: 1
+			path: app/Support/ImageDriver.php
+
+		-
+			message: '#^Call to function in_array\(\) with arguments ''jpeg'', array\{''jpg'', ''png'', ''gif''\} and true will always evaluate to false\.$#'
+			identifier: function.impossibleType
+			count: 1
+			path: app/Support/ImageFormats.php
+
+		-
+			message: '#^Call to function in_array\(\) with arguments ''jpg'', array\{''jpg'', ''png'', ''gif''\} and true will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: app/Support/ImageFormats.php
+
+		-
+			message: '#^Instanceof between App\\Models\\Media and App\\Models\\Media will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 1
+			path: app/Support/InlineImages.php
+
+		-
+			message: '#^Expression on left side of \?\? is not nullable\.$#'
+			identifier: nullCoalesce.expr
+			count: 1
+			path: app/Support/Markdown.php
+
+		-
+			message: '#^Using nullsafe method call on non\-nullable type Illuminate\\Http\\Request\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Support/Markdown.php
+
+		-
+			message: '#^Call to an undefined method Laravel\\Socialite\\Contracts\\User\:\:getRaw\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Support/SocialProfileNormalizer.php
+
+		-
+			message: '#^Parameter \#2 \$callback of function array_filter expects \(callable\(string\)\: bool\)\|null, ''strlen'' given\.$#'
+			identifier: argument.type
+			count: 1
+			path: config/logging.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\FailedJob\:\:\$exceptionClass\.$#'
+			identifier: property.notFound
+			count: 3
+			path: tests/Feature/Admin/QueuePageTest.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\FailedJob\:\:\$exceptionMessage\.$#'
+			identifier: property.notFound
+			count: 3
+			path: tests/Feature/Admin/QueuePageTest.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\FailedJob\:\:\$exceptionTrace\.$#'
+			identifier: property.notFound
+			count: 3
+			path: tests/Feature/Admin/QueuePageTest.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\FailedJob\:\:\$jobName\.$#'
+			identifier: property.notFound
+			count: 1
+			path: tests/Feature/Admin/QueuePageTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Contracts\\Pagination\\LengthAwarePaginator\<int, App\\Models\\Post\>\:\:pluck\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: tests/Feature/BookmarkServiceTest.php
+
+		-
+			message: '#^Access to an undefined property Livewire\\Component\:\:\$roots\.$#'
+			identifier: property.notFound
+			count: 3
+			path: tests/Feature/CommentTreeEfficiencyTest.php
+
+		-
+			message: '#^Access to an undefined property Livewire\\Component\:\:\$total\.$#'
+			identifier: property.notFound
+			count: 1
+			path: tests/Feature/CommentTreeEfficiencyTest.php
+
+		-
+			message: '#^Access to an undefined property Livewire\\Component\:\:\$tree\.$#'
+			identifier: property.notFound
+			count: 4
+			path: tests/Feature/CommentTreeEfficiencyTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Contracts\\Pagination\\LengthAwarePaginator\<int, App\\Models\\Post\>\:\:pluck\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/Feature/Database/SchemaGuaranteesTest.php
+
+		-
+			message: '#^Call to an undefined static method Illuminate\\Support\\Facades\\Log\:\:shouldHaveReceived\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: tests/Feature/ImageDriverTest.php
+
+		-
+			message: '#^Call to an undefined method Psr\\Log\\LoggerInterface\:\:getHandlers\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: tests/Feature/Logging/LogChannelSplitTest.php
+
+		-
+			message: '#^Called ''env'' outside of the config directory which returns null when the config is cached, use ''config''\.$#'
+			identifier: larastan.noEnvCallsOutsideOfConfig
+			count: 2
+			path: tests/Feature/Logging/LogChannelSplitTest.php
+
+		-
+			message: '#^Expression on left side of \?\? is not nullable\.$#'
+			identifier: nullCoalesce.expr
+			count: 1
+			path: tests/Feature/ReactionServiceTest.php
+
+		-
+			message: '#^Access to an undefined property Livewire\\Component\:\:\$tree\.$#'
+			identifier: property.notFound
+			count: 3
+			path: tests/Feature/ReviewRound2Test.php
+
+		-
+			message: '#^Call to function is_subclass_of\(\) with ''Illuminate\\\\Database\\\\QueryException'' and ''RuntimeException'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: tests/Feature/ReviewRound5Test.php
+
+		-
+			message: '#^Access to an undefined property Livewire\\Component\:\:\$roots\.$#'
+			identifier: property.notFound
+			count: 1
+			path: tests/Feature/Web/CommentThreadTest.php
+
+		-
+			message: '#^Access to an undefined property Livewire\\Component\:\:\$sort\.$#'
+			identifier: property.notFound
+			count: 2
+			path: tests/Feature/Web/CommentThreadTest.php
+
+		-
+			message: '#^Access to an undefined property Livewire\\Component\:\:\$tree\.$#'
+			identifier: property.notFound
+			count: 3
+			path: tests/Feature/Web/CommentThreadTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Testing\\TestResponse\:\:assertSeeLivewire\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/Feature/Web/HomePageTest.php
+
+		-
+			message: '#^Access to an undefined property Livewire\\Component\:\:\$posts\.$#'
+			identifier: property.notFound
+			count: 3
+			path: tests/Feature/Web/IslandAppendTest.php
+
+		-
+			message: '#^Access to an undefined property Livewire\\Component\:\:\$results\.$#'
+			identifier: property.notFound
+			count: 2
+			path: tests/Feature/Web/IslandAppendTest.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Testing\\TestResponse\:\:assertSet\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/Feature/Web/PostComposerResilienceTest.php
+
+		-
+			message: '#^Ternary operator condition is always true\.$#'
+			identifier: ternary.alwaysTrue
+			count: 1
+			path: tests/Feature/Web/PostOembedTest.php

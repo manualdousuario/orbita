@@ -1,0 +1,9 @@
+#!/command/with-contenv sh
+
+[ "${ORBITA_SCHEDULER:-true}" = "true" ] || exit 125
+
+if [ "$1" != "0" ]; then
+    sleep "${ORBITA_RESTART_BACKOFF:-5}"
+fi
+
+exit 0

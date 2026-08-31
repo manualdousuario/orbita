@@ -1,0 +1,10 @@
+#!/command/with-contenv sh
+
+if [ "${ORBITA_SCHEDULER:-true}" != "true" ]; then
+    echo "[orbita] scheduler disabled by ORBITA_SCHEDULER"
+    exit 0
+fi
+
+cd /var/www/html || exit 1
+
+exec php artisan schedule:work
