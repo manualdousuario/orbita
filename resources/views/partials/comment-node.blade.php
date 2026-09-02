@@ -116,7 +116,7 @@
                                             :summary="$node['reaction_summary']" :reported="$node['reported']" :key="'react-comment-'.$node['id']" />
 
                         @if ($allowComments && $node['can_reply'])
-                            <button type="button" x-on:click="replying = !replying"
+                            <button type="button" x-on:click="replying = !replying; replying && $nextTick(() => $refs.replyForm.querySelector('textarea')?.focus())"
                                     class="inline-flex items-center gap-1.5 rounded-md py-3 text-sm font-medium text-gray-500 transition-colors hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400">
                                 <x-heroicon-o-arrow-uturn-left class="h-4 w-4" aria-hidden="true" />
                                 Responder
@@ -165,7 +165,7 @@
                     </div>
 
                     @if ($allowComments && $node['can_reply'])
-                        <div x-show="replying" x-cloak x-transition class="reply-breakout">
+                        <div x-show="replying" x-cloak x-transition x-ref="replyForm" class="reply-breakout">
                             <livewire:comment-form :post-id="$postId" :parent-id="$node['id']" :key="'reply-form-'.$node['id']" />
                         </div>
                     @endif

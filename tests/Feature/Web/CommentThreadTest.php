@@ -389,6 +389,10 @@ it('the reply form breaks out of the thread indent on phones', function () {
 
     // One reply form per node that can still be replied to (level 5 is at max nesting).
     expect(substr_count($html, 'class="reply-breakout"'))->toBe(5);
+
+    // Each "Responder" button focuses its own reply textarea once revealed.
+    expect(substr_count($html, 'x-ref="replyForm"'))->toBe(5);
+    expect(substr_count($html, "replying && \$nextTick(() => \$refs.replyForm.querySelector('textarea')?.focus())"))->toBe(5);
 });
 
 it('reply editors include the shared markdown and mention behaviors', function () {
