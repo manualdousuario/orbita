@@ -190,6 +190,8 @@ new class extends Component
         $this->content = '';
         $this->pendingMediaIds = [];
 
+        $this->dispatch('editor-reset')->el('.markdown-editor');
+
         $this->dispatch('comment-created', postId: $this->postId, parentId: $this->parentId, commentId: (int) $comment->id);
 
         if ($this->isReply) {

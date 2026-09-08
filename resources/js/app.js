@@ -235,6 +235,14 @@ document.addEventListener('alpine:init', () => {
             }
         },
 
+        resetEditor() {
+            this.closeMention();
+            clearTimeout(this.previewTimer);
+            this.previewGeneration++;
+            this.preview = '';
+            this.mode = 'markdown';
+        },
+
         destroy() {
             clearTimeout(this.previewTimer);
             clearTimeout(this.mentionTimer);

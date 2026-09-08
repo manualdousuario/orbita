@@ -6,7 +6,9 @@
     'previewClass' => 'min-h-[260px] max-w-none',
 ])
 
-<div x-data="markdownEditor(@js(['allowImage' => $allowImage]))" class="markdown-editor">
+<div x-data="markdownEditor(@js(['allowImage' => $allowImage]))"
+     x-on:editor-reset="resetEditor()"
+     class="markdown-editor">
     <div class="toolbar-scroll mb-1 flex flex-nowrap items-center gap-1 overflow-x-auto overflow-y-hidden overscroll-x-contain rounded-md border border-gray-300 bg-gray-50 p-0 dark:border-gray-700 dark:bg-gray-800">
         @php
             $btn = 'inline-flex h-9 w-8 shrink-0 items-center justify-center text-gray-600 hover:bg-gray-200 hover:text-gray-900 disabled:cursor-not-allowed disabled:opacity-40 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white';

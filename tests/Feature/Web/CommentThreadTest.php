@@ -412,6 +412,42 @@ it('reply editors include the shared markdown and mention behaviors', function (
         ->toContain('x-data="markdownEditor');
 });
 
+it('every comment editor can be told to drop its preview', function () {
+    $post = threadPost();
+    $parent = threadComment($post, 'comentario com resposta');
+    threadComment($post, 'resposta existente', $parent);
+
+    $reader = User::factory()->createOne(['username' => 'leitor_reset', 'email_verified_at' => now()]);
+
+    $html = (string) actingAs($reader)
+        ->get(route('posts.show', ['hashid' => $post->hashid, 'slug' => $post->slug]))
+        ->assertOk()->getContent();
+
+    $editors = substr_count($html, 'x-data="markdownEditor');
+
+    expect($editors)->toBeGreaterThan(1)
+        ->and(substr_count($html, 'x-on:editor-reset="resetEditor()"'))->toBe($editors);
+});
+
+it('publishing resets the editor while a rejected comment keeps it', function () {
+    $post = threadPost();
+    $reader = User::factory()->createOne(['username' => 'leitor_publica', 'email_verified_at' => now()]);
+
+    actingAs($reader);
+
+    Livewire::test('comment-form', ['postId' => $post->id])
+        ->set('content', 'Comentario publicado a partir da pre-visualizacao.')
+        ->call('save')
+        ->assertHasNoErrors()
+        ->assertDispatched('editor-reset');
+
+    Livewire::test('comment-form', ['postId' => $post->id])
+        ->set('content', '')
+        ->call('save')
+        ->assertHasErrors('content')
+        ->assertNotDispatched('editor-reset');
+});
+
 /** An orphan promoted to a root gets no breakout offset. */
 it('an orphan promoted to a root gets no breakout offset', function () {
     $post = threadPost();
