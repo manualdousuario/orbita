@@ -28,6 +28,7 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
@@ -149,23 +150,36 @@ class UserResource extends Resource
                         UserRole::Moderator => 'warning',
                         UserRole::User => 'gray',
                     }),
-                IconColumn::make('is_banned')->label('Banido')->boolean(),
-                IconColumn::make('anonymized_at')->label('Excluída')->boolean(),
+                IconColumn::make('is_banned')
+                    ->label('Banido')
+                    ->boolean()
+                    ->trueIcon(Heroicon::OutlinedNoSymbol)
+                    ->trueColor('danger')
+                    ->falseIcon(Heroicon::OutlinedCheckCircle)
+                    ->falseColor('gray'),
+                IconColumn::make('anonymized_at')
+                    ->label('Excluída')
+                    ->boolean()
+                    ->getStateUsing(fn (User $record): bool => $record->isAnonymized())
+                    ->trueIcon(Heroicon::OutlinedTrash)
+                    ->trueColor('danger')
+                    ->falseIcon(Heroicon::OutlinedMinusSmall)
+                    ->falseColor('gray'),
                 TextColumn::make('posts_count')
                     ->label('Posts')
-                    ->counts('posts')
+                    ->counts(['posts' => fn (Builder $query) => $query->whereNull('version_of')])
                     ->numeric()
                     ->sortable()
                     ->url(fn (User $record): string => PostResource::getUrl('index', [
-                        'tableFilters' => ['user' => ['value' => $record->id]],
+                        'filters' => ['user' => ['value' => $record->id]],
                     ])),
                 TextColumn::make('comments_count')
                     ->label('Comentários')
-                    ->counts('comments')
+                    ->counts(['comments' => fn (Builder $query) => $query->whereNull('version_of')])
                     ->numeric()
                     ->sortable()
                     ->url(fn (User $record): string => CommentResource::getUrl('index', [
-                        'tableFilters' => ['user' => ['value' => $record->id]],
+                        'filters' => ['user' => ['value' => $record->id]],
                     ])),
                 TextColumn::make('created_at')->label('Criado em')->dateTime('d/m/Y H:i')->sortable(),
             ])

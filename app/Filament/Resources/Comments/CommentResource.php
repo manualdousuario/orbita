@@ -92,8 +92,7 @@ class CommentResource extends Resource
                 SelectFilter::make('user')
                     ->label('Autor')
                     ->relationship('user', 'username')
-                    ->searchable()
-                    ->preload(),
+                    ->searchable(),
             ])
             ->defaultSort('created_at', 'desc')
             ->recordActions([

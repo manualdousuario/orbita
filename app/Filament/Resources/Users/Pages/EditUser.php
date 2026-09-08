@@ -12,6 +12,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Support\Icons\Heroicon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
 
@@ -21,6 +22,8 @@ use Illuminate\Support\Facades\Password;
 class EditUser extends EditRecord
 {
     protected static string $resource = UserResource::class;
+
+    protected const PRIVILEGED_ATTRIBUTES = ['role', 'is_banned'];
 
     public function getTitle(): string
     {
@@ -116,5 +119,31 @@ class EditUser extends EditRecord
                     $this->redirect(UserResource::getUrl('index'));
                 }),
         ];
+    }
+
+    protected function handleRecordUpdate(Model $record, array $data): Model
+    {
+        $privileged = array_intersect_key($data, array_flip(self::PRIVILEGED_ATTRIBUTES));
+        $data = array_diff_key($data, $privileged);
+
+        if ($privileged !== []) {
+            abort_unless(Filament::auth()->user()?->isAdmin() ?? false, 403);
+            abort_if($record instanceof User && $record->isAnonymized(), 403);
+
+            $record->forceFill($privileged);
+        }
+
+        $record->fill($data)->save();
+
+        if ($record->wasChanged('is_banned')) {
+            ModerationLogger::log(
+                $record->getAttribute('is_banned') ? 'ban_user' : 'unban_user',
+                'user',
+                (int) $record->getKey(),
+                'Alterado na edição do usuário',
+            );
+        }
+
+        return $record;
     }
 }
