@@ -105,12 +105,12 @@ class SearchService
         $unionParams = [];
 
         if ($type === 'all' || $type === 'posts') {
-            $unions[] = "SELECT 'post' AS type, p.hashid, p.slug, p.title, p.content, NULL AS post_hashid, NULL AS post_slug, u.username, u.display_name, u.avatar_url, u.anonymized_at, p.created_at, MATCH(p.title, p.content) AGAINST (? IN BOOLEAN MODE) AS relevance FROM posts p JOIN users u ON p.user_id = u.id WHERE {$postClause}";
+            $unions[] = "SELECT 'post' AS type, p.hashid, p.slug, p.title, p.content, NULL AS post_hashid, NULL AS post_slug, u.username, u.display_name, u.avatar_url, u.anonymized_at, p.allow_comments, p.created_at, MATCH(p.title, p.content) AGAINST (? IN BOOLEAN MODE) AS relevance FROM posts p JOIN users u ON p.user_id = u.id WHERE {$postClause}";
             $unionParams = array_merge($unionParams, [$query], $postParams);
         }
 
         if ($type === 'all' || $type === 'comments') {
-            $unions[] = "SELECT 'comment' AS type, c.hashid, p.slug, p.title, c.content, p.hashid AS post_hashid, p.slug AS post_slug, u.username, u.display_name, u.avatar_url, u.anonymized_at, c.created_at, MATCH(c.content) AGAINST (? IN BOOLEAN MODE) AS relevance FROM comments c JOIN users u ON c.user_id = u.id JOIN posts p ON c.post_id = p.id WHERE {$commentClause}";
+            $unions[] = "SELECT 'comment' AS type, c.hashid, p.slug, p.title, c.content, p.hashid AS post_hashid, p.slug AS post_slug, u.username, u.display_name, u.avatar_url, u.anonymized_at, p.allow_comments, c.created_at, MATCH(c.content) AGAINST (? IN BOOLEAN MODE) AS relevance FROM comments c JOIN users u ON c.user_id = u.id JOIN posts p ON c.post_id = p.id WHERE {$commentClause}";
             $unionParams = array_merge($unionParams, [$query], $commentParams);
         }
 

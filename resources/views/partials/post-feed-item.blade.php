@@ -10,6 +10,7 @@
     $image = $meta['images'][$id] ?? null;
     $permalink = route('posts.show', ['hashid' => $post->hashid, 'slug' => $post->slug ?? null]);
     $pinned = ($showsPinned ?? false) && (bool) ($post->is_pinned ?? false);
+    $locked = ! ($post->allow_comments ?? true);
     $showScore = (bool) config('orbita.posts.show_score', true);
 @endphp
 <li wire:key="post-{{ $id }}" class="flex items-start gap-x-3 pt-4 pb-2">
@@ -40,11 +41,12 @@
         <div class="flex flex-wrap items-baseline gap-x-2">
             <h2 class="min-w-0 text-base font-semibold leading-snug text-balance sm:text-lg">
                 @if ($pinned)
-                    <span class="mr-1 inline-flex align-middle text-primary-600 dark:text-primary-400" title="Post fixado">
+                    <span class="mr-1 inline-flex h-[1lh] items-center align-top text-primary-600 dark:text-primary-400" title="Post fixado">
                         <x-icon-pin class="h-4 w-4" aria-hidden="true" />
                         <span class="sr-only">Post fixado</span>
                     </span>
                 @endif
+                <x-post-locked-badge :locked="$locked" />
                 <a href="{{ $permalink }}" wire:navigate
                    class="break-words text-gray-900 visited:text-visited hover:text-primary-600 dark:text-gray-100 dark:hover:text-primary-400">
                     {{ $post->title }}

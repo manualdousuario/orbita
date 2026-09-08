@@ -45,6 +45,7 @@ new class extends Component
                     $score = (int) $post->score;
                     $comments = (int) $post->comment_count;
                     $showScore = (bool) config('orbita.posts.show_score', true);
+                    $locked = ! $post->allow_comments;
                 @endphp
                 <li wire:key="bookmarked-post-{{ $post->id }}" @class(['py-4', 'grid grid-cols-[auto_1fr] gap-x-3' => $showScore])>
                     @if ($showScore)
@@ -61,6 +62,7 @@ new class extends Component
                     <div class="min-w-0">
                         <div class="flex flex-wrap items-baseline gap-x-2">
                             <h2 class="min-w-0 text-base font-semibold leading-snug text-balance">
+                                <x-post-locked-badge :locked="$locked" />
                                 <a href="{{ route('posts.show', ['hashid' => $post->hashid, 'slug' => $post->slug]) }}" wire:navigate
                                     class="break-words text-gray-900 visited:text-visited hover:text-primary-600 dark:text-gray-100 dark:hover:text-primary-400">
                                     {{ $post->title }}

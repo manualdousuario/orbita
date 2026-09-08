@@ -138,14 +138,18 @@ new class extends Component
                         $url = $item->type === 'post'
                             ? route('posts.show', ['hashid' => $item->hashid, 'slug' => $item->slug])
                             : route('posts.show', ['hashid' => $item->post_hashid, 'slug' => $item->post_slug]) . '#comment-' . $item->hashid;
+                        $locked = $item->type === 'post' && ! $item->allow_comments;
                     @endphp
                     <li wire:key="result-{{ $item->type }}-{{ $item->hashid }}"
                         class="rounded-lg border border-gray-200 bg-white p-3 dark:border-gray-800 dark:bg-gray-900">
                         <div class="flex items-start justify-between gap-2">
-                            <a href="{{ $url }}" wire:navigate
-                               class="font-medium text-gray-900 hover:text-primary-600 dark:text-gray-100 dark:hover:text-primary-400">
-                                {{ $item->title }}
-                            </a>
+                            <span class="min-w-0">
+                                <x-post-locked-badge :locked="$locked" />
+                                <a href="{{ $url }}" wire:navigate
+                                   class="font-medium text-gray-900 hover:text-primary-600 dark:text-gray-100 dark:hover:text-primary-400">
+                                    {{ $item->title }}
+                                </a>
+                            </span>
                             <span class="shrink-0 rounded-full px-2 py-0.5 text-sm font-medium {{ $item->type === 'post' ? 'bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300' : 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400' }}">
                                 {{ $item->type === 'post' ? 'Post' : 'Comentário' }}
                             </span>

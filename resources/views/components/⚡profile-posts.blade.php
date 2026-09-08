@@ -54,6 +54,7 @@ new class extends Component
 
             @forelse ($this->posts as $post)
                 <li wire:key="profile-post-{{ $post->id }}" class="rounded-lg border border-gray-200 bg-white p-3 dark:border-gray-800 dark:bg-gray-900">
+                    <x-post-locked-badge :locked="! $post->allow_comments" />
                     <a href="{{ route('posts.show', ['hashid' => $post->hashid, 'slug' => $post->slug]) }}" wire:navigate
                        class="font-medium text-gray-900 hover:text-primary-600 dark:text-gray-100 dark:hover:text-primary-400">
                         {{ $post->title }}
