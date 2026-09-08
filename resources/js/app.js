@@ -532,11 +532,76 @@ document.addEventListener('alpine:init', () => {
 document.addEventListener('alpine:init', () => {
     window.Alpine.data('composeFab', () => ({
         visible: true,
+        composing: false,
         lift: 0,
         observer: null,
         onResize: null,
+        onReplyToggled: null,
+        onCommentCreated: null,
+        onFocusIn: null,
+        onFocusOut: null,
+        focusTimer: null,
+        syncTimer: null,
+
+        get shown() {
+            return this.visible && ! this.composing;
+        },
 
         init() {
+            const openReplies = new Set();
+            let composerFocus = false;
+
+            const sync = () => {
+                for (const el of openReplies) {
+                    if (! el.isConnected) {
+                        openReplies.delete(el);
+                    }
+                }
+
+                this.composing = openReplies.size > 0 || composerFocus;
+            };
+
+            this.onReplyToggled = (event) => {
+                const el = event.target;
+                if (! (el instanceof Element)) {
+                    return;
+                }
+
+                if (event.detail?.open) {
+                    openReplies.add(el);
+                } else {
+                    openReplies.delete(el);
+                }
+
+                sync();
+            };
+
+            this.onCommentCreated = () => {
+                composerFocus = false;
+                sync();
+
+                clearTimeout(this.syncTimer);
+                this.syncTimer = setTimeout(sync, 0);
+            };
+
+            this.onFocusIn = (event) => {
+                composerFocus = !! event.target?.closest?.('[data-composer]');
+                sync();
+            };
+
+            this.onFocusOut = () => {
+                clearTimeout(this.focusTimer);
+                this.focusTimer = setTimeout(() => {
+                    composerFocus = !! document.activeElement?.closest?.('[data-composer]');
+                    sync();
+                }, 0);
+            };
+
+            window.addEventListener('reply-toggled', this.onReplyToggled);
+            window.addEventListener('comment-created', this.onCommentCreated);
+            document.addEventListener('focusin', this.onFocusIn);
+            document.addEventListener('focusout', this.onFocusOut);
+
             const footer = document.querySelector('footer');
             if (! footer) {
                 return;
@@ -564,7 +629,13 @@ document.addEventListener('alpine:init', () => {
 
         destroy() {
             this.observer?.disconnect();
+            clearTimeout(this.focusTimer);
+            clearTimeout(this.syncTimer);
             window.removeEventListener('resize', this.onResize);
+            window.removeEventListener('reply-toggled', this.onReplyToggled);
+            window.removeEventListener('comment-created', this.onCommentCreated);
+            document.removeEventListener('focusin', this.onFocusIn);
+            document.removeEventListener('focusout', this.onFocusOut);
         },
     }));
 });

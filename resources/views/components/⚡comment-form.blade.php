@@ -200,7 +200,7 @@ new class extends Component
     }
 }; ?>
 
-<form wire:submit="save" onsubmit="this.querySelector('textarea')?.blur()" class="{{ $isReply ? 'mt-3' : '' }}">
+<form wire:submit="save" data-composer onsubmit="this.querySelector('textarea')?.blur()" class="{{ $isReply ? 'mt-3' : '' }}">
     @auth
         @if (auth()->user()->isPendingActivation())
             <div class="rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm text-gray-600 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300">

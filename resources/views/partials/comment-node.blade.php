@@ -16,6 +16,7 @@
 <li wire:key="comment-{{ $node['id'] }}" id="comment-{{ $node['hashid'] }}"
     @class(['scroll-mt-24', 'py-5 first:pt-0 last:pb-0' => $isRoot])>
     <div x-data="{ replying: false, collapsed: false }"
+         x-init="$watch('replying', (open) => $dispatch('reply-toggled', { open }))"
          @if ($depth > 0) style="--reply-pad: {{ $replyPad }}px; --reply-gaps: {{ $depth }}" @endif
          x-on:cancel-reply="replying = false"
          x-on:reply-posted.window="if ($event.detail.parentId === {{ $node['id'] }}) replying = false">

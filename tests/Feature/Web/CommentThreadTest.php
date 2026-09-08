@@ -383,6 +383,8 @@ it('the reply form breaks out of the thread indent on phones', function () {
     expect(substr_count($html, '--reply-pad'))->toBe(5, 'only the five nested levels are offset');
     expect(substr_count($html, 'x-data="{ replying: false, collapsed: false }"'))->toBe(6);
 
+    expect(substr_count($html, "\$watch('replying'"))->toBe(6);
+
     // Match the full string: 'pl-[21px]' alone is a substring of 'pl-0 sm:pl-[21px]'.
     expect(substr_count($html, 'gap-x-2 sm:gap-x-5 pl-[21px]'))->toBe(2, 'levels 1-2 keep the inset');
     expect(substr_count($html, 'gap-x-2 sm:gap-x-5 pl-0 sm:pl-[21px]'))->toBe(3, 'levels 3-5 drop it on mobile');
