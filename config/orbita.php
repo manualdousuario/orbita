@@ -74,6 +74,11 @@ return [
             'mc_cid',
             'mc_eid',
         ]),
+        'link_guard_enabled' => false,
+        'link_domain_blocklist' => '',
+        'link_domain_allowlist' => '',
+        'link_trust_account_age_hours' => 72,
+        'link_trust_min_comments' => 3,
     ],
 
     'antispam' => [

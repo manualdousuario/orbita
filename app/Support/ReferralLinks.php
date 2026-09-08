@@ -13,11 +13,6 @@ use App\Models\User;
  */
 class ReferralLinks
 {
-    private const URL_PATTERN = '#(?:https?://|www\.)[^\s<>()\[\]"\'`]+#i';
-
-    /** Sentence punctuation that trails a URL in prose and is not part of it. */
-    private const TRAILING_PUNCTUATION = '.,;:!?';
-
     public static function enabled(): bool
     {
         return (bool) config('orbita.moderation.strip_referral_params', false)
@@ -127,15 +122,7 @@ class ReferralLinks
             return false;
         }
 
-        $eligible = $target instanceof Post ? ['published', 'closed'] : ['visible'];
-
-        if (! in_array((string) $target->status, $eligible, true)) {
-            return false;
-        }
-
-        $target->update(['status' => 'hidden']);
-
-        return true;
+        return ContentVisibility::hideForReview($target);
     }
 
     /**
@@ -150,44 +137,20 @@ class ReferralLinks
             return ['content' => $markdown, 'stripped' => []];
         }
 
-        $tokens = preg_split(
-            '/(```[\s\S]*?```|~~~[\s\S]*?~~~|`+[^`]*?`+)/',
-            $markdown,
-            -1,
-            PREG_SPLIT_DELIM_CAPTURE
-        );
-
-        if ($tokens === false) {
-            return ['content' => $markdown, 'stripped' => []];
-        }
-
         $stripped = [];
 
-        foreach ($tokens as $i => $token) {
-            if ($i % 2 === 1) {
-                continue;
+        $content = MarkdownUrls::map($markdown, function (string $url) use (&$stripped): string {
+            [$clean, $names] = self::cleanUrl($url);
+
+            foreach ($names as $name) {
+                $stripped[] = $name;
             }
 
-            $tokens[$i] = (string) preg_replace_callback(
-                self::URL_PATTERN,
-                function (array $m) use (&$stripped): string {
-                    $url = rtrim($m[0], self::TRAILING_PUNCTUATION);
-                    $tail = substr($m[0], strlen($url));
-
-                    [$clean, $names] = self::cleanUrl($url);
-
-                    foreach ($names as $name) {
-                        $stripped[] = $name;
-                    }
-
-                    return $clean.$tail;
-                },
-                $token
-            );
-        }
+            return (string) $clean;
+        });
 
         return [
-            'content' => implode('', $tokens),
+            'content' => $content,
             'stripped' => array_values(array_unique($stripped)),
         ];
     }

@@ -46,6 +46,7 @@ class ModerationResource extends Resource
         'auto_hide' => 'Ocultado automaticamente',
         'referral_stripped' => 'Link de referência removido',
         'activate_user' => 'Conta ativada',
+        'link_flagged' => 'Link suspeito',
     ];
 
     /** @var array<string, string> */

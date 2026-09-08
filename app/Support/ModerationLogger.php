@@ -15,7 +15,7 @@ class ModerationLogger
      *
      * @param  string  $action  One of: hide, unhide, remove, ban_user, unban_user, pin, unpin,
      *                          restore, lock_comments, unlock_comments, auto_hide,
-     *                          referral_stripped, activate_user
+     *                          referral_stripped, activate_user, link_flagged
      * @param  string  $targetType  One of: post, comment, user, media
      * @param  array<string, mixed>|null  $metadata
      */

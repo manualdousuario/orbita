@@ -8,6 +8,7 @@ use App\Models\Post;
 use App\Models\User;
 use App\Support\Antispam;
 use App\Support\HashId;
+use App\Support\LinkGuard;
 use App\Support\Markdown;
 use App\Support\MentionNotifier;
 use App\Support\ReferralLinks;
@@ -250,6 +251,7 @@ class PostService
         });
 
         ReferralLinks::report($post, $stripped);
+        LinkGuard::report($post, (string) $post->content, $post->url);
 
         if ($post->status === 'published') {
             $this->dispatchMentionNotifications($post, null);
@@ -356,6 +358,7 @@ class PostService
         $post->update($data);
 
         ReferralLinks::report($post, $stripped);
+        LinkGuard::report($post, (string) $post->content, $post->url);
 
         if ($post->status === 'published' && ($titleOrContentChanged || ! $wasPublished)) {
             app(TagService::class)->syncForPost($post, trim($post->title.' '.$post->content));

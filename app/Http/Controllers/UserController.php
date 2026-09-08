@@ -17,6 +17,7 @@ use App\Models\UserToken;
 use App\Services\ImageService;
 use App\Services\MetaTagsService;
 use App\Support\Avatar;
+use App\Support\LinkGuard;
 use App\Support\ReferralLinks;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
@@ -199,6 +200,7 @@ class UserController extends Controller
         $user->save();
 
         ReferralLinks::report($user, array_values(array_unique($stripped)));
+        LinkGuard::report($user, (string) $user->bio, $user->website);
 
         return redirect()
             ->route('users.edit', ['username' => $user->username])

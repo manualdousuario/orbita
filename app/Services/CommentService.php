@@ -11,6 +11,7 @@ use App\Models\Post;
 use App\Models\User;
 use App\Support\Antispam;
 use App\Support\HashId;
+use App\Support\LinkGuard;
 use App\Support\Markdown;
 use App\Support\MentionNotifier;
 use App\Support\ReferralLinks;
@@ -283,9 +284,12 @@ class CommentService
         });
 
         ReferralLinks::report($comment, $sanitized['stripped']);
+        LinkGuard::report($comment, (string) $comment->content);
 
-        $this->dispatchCommentEvents($comment);
-        $this->dispatchMentionNotifications($comment, null);
+        if ($comment->status === 'visible') {
+            $this->dispatchCommentEvents($comment);
+            $this->dispatchMentionNotifications($comment, null);
+        }
 
         return $comment;
     }
@@ -373,7 +377,11 @@ class CommentService
         ReferralLinks::report($comment, $stripped);
 
         if ($contentChanged) {
-            $this->dispatchMentionNotifications($comment, $previousContent);
+            LinkGuard::report($comment, (string) $comment->content);
+
+            if ($comment->status === 'visible') {
+                $this->dispatchMentionNotifications($comment, $previousContent);
+            }
         }
 
         return $comment;
