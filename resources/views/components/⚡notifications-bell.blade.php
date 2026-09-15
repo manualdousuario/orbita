@@ -69,7 +69,7 @@ new class extends Component
                 'message' => $n->message ? \Illuminate\Support\Str::limit((string) $n->message, 70) : null,
                 'link' => $n->link,
                 'is_read' => (bool) $n->is_read,
-                'when' => $n->created_at ? Carbon::parse($n->created_at)->locale('pt_BR')->diffForHumans() : '',
+                'when' => $n->created_at ? Carbon::parse($n->created_at)->toIso8601String() : '',
             ])
             ->all();
     }
@@ -122,7 +122,7 @@ new class extends Component
                         @if ($n['message'])
                             <p class="mt-0.5 text-sm text-gray-500 dark:text-gray-400">{{ $n['message'] }}</p>
                         @endif
-                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ $n['when'] }}</p>
+                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400"><x-date-time :value="$n['when']" /></p>
                     </a>
 
                     @if (! $n['is_read'])

@@ -13,6 +13,7 @@ use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Table;
 use Filament\View\PanelsRenderHook;
 use Filament\Widgets\AccountWidget;
 use Filament\Widgets\FilamentInfoWidget;
@@ -29,6 +30,15 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
  */
 class AdminPanelProvider extends PanelProvider
 {
+    public function boot(): void
+    {
+        // Admin dates follow APP_LOCALE through CLDR presets, like the front end.
+        Table::configureUsing(fn (Table $table): Table => $table
+            ->defaultIsoDateDisplayFormat('L')
+            ->defaultIsoDateTimeDisplayFormat('L LT')
+            ->defaultIsoTimeDisplayFormat('LT'));
+    }
+
     public function panel(Panel $panel): Panel
     {
         return $panel

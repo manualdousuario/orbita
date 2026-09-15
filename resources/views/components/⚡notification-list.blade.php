@@ -92,7 +92,7 @@ new class extends Component
                                     {{ $notification->title }}
                                     <span x-show="!read" class="ml-1 rounded bg-primary-600 px-1.5 py-0.5 text-sm font-semibold text-white">Nova</span>
                                 </p>
-                                <span class="shrink-0 text-sm text-gray-500 dark:text-gray-400">{{ $notification->created_at?->locale('pt_BR')->diffForHumans() }}</span>
+                                <x-date-time :value="$notification->created_at" class="shrink-0 text-sm text-gray-500 dark:text-gray-400" />
                             </div>
                             @if ($notification->message)
                                 <p class="mt-0.5 text-sm text-gray-600 dark:text-gray-300">{{ $notification->message }}</p>

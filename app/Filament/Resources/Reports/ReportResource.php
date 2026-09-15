@@ -94,7 +94,7 @@ class ReportResource extends Resource
                     ->openUrlInNewTab(),
                 TextColumn::make('reporter.username')->label('Reportado por')->searchable()->sortable(),
                 TextColumn::make('reason')->label('Motivo')->wrap()->placeholder('—')->toggleable(),
-                TextColumn::make('created_at')->label('Data')->dateTime('d/m/Y H:i')->sortable(),
+                TextColumn::make('created_at')->label('Data')->isoDateTime()->sortable(),
             ])
             ->filters([
                 SelectFilter::make('reportable_type')->label('Tipo')->options(self::$targetTypes),

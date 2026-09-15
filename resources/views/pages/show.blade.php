@@ -12,7 +12,7 @@
 
         <hr class="my-6 border-gray-200 dark:border-gray-800">
         <p class="text-sm text-gray-500 dark:text-gray-400">
-            Atualizada em {{ $page->updated_at?->locale('pt_BR')->translatedFormat('d \d\e F \d\e Y') }}.
+            Atualizada em {{ $page->updated_at?->isoFormat('LL') }}.
         </p>
     </article>
 </x-layouts.app>

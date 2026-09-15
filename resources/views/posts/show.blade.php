@@ -58,9 +58,7 @@
                     </div>
 
                     <div class="flex flex-wrap items-center gap-x-2.5 gap-y-1 font-mono text-sm text-gray-500 dark:text-gray-400">
-                        <span title="{{ $publishedAt?->locale('pt_BR')->isoFormat('D [de] MMMM [de] YYYY [às] HH:mm') }}">
-                            {{ $publishedAt?->locale('pt_BR')->diffForHumans() }}
-                        </span>
+                        <x-date-time :value="$publishedAt" />
 
                         @if ($showScore)
                         <span aria-hidden="true">&middot;</span>

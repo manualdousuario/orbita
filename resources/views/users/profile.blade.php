@@ -31,7 +31,7 @@
                     <p class="mt-2 text-gray-700 dark:text-gray-300">{{ $user->bio }}</p>
                 @endif
                 <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                    Membro desde {{ $user->created_at?->locale('pt_BR')->translatedFormat('F \d\e Y') }}
+                    Membro desde {{ $user->created_at?->isoFormat('MMMM YYYY') }}
                 </p>
             </div>
 

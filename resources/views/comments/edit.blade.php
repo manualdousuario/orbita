@@ -5,7 +5,7 @@
 
     @if ($comment->edited_at)
         <p class="rounded-md border border-gray-200 bg-gray-50 p-3 text-sm text-gray-600 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300">
-            Editado pela última vez em {{ $comment->edited_at->format('d/m/Y H:i') }}.
+            Editado pela última vez em <x-date-time :value="$comment->edited_at" />.
         </p>
     @endif
 

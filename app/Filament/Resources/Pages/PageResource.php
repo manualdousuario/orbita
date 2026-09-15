@@ -77,7 +77,7 @@ class PageResource extends Resource
                 IconColumn::make('is_guidelines')->label('Diretrizes')->boolean(),
                 IconColumn::make('is_terms')->label('Termos')->boolean(),
                 IconColumn::make('is_active')->label('Ativo')->boolean(),
-                TextColumn::make('updated_at')->label('Atualizado em')->dateTime('d/m/Y H:i')->sortable(),
+                TextColumn::make('updated_at')->label('Atualizado em')->isoDateTime()->sortable(),
             ])
             ->filters([
                 TernaryFilter::make('is_active')->label('Ativo'),

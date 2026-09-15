@@ -174,7 +174,7 @@ class PostResource extends Resource
                 IconColumn::make('is_pinned')->label('Fixado')->boolean(),
                 TextColumn::make('score')->label('Pontuação')->numeric()->sortable(),
                 TextColumn::make('comment_count')->label('Comentários')->numeric()->sortable(),
-                TextColumn::make('created_at')->label('Criado em')->dateTime('d/m/Y H:i')->sortable(),
+                TextColumn::make('created_at')->label('Criado em')->isoDateTime()->sortable(),
             ])
             ->filters([
                 SelectFilter::make('status')->label('Status')->options(self::selectableStatuses()),

@@ -60,7 +60,7 @@ new class extends Component
                         {{ $post->title }}
                     </a>
                     <div class="mt-1 flex flex-wrap items-center gap-x-2 text-sm text-gray-500 dark:text-gray-400">
-                        <span>{{ $post->created_at?->locale('pt_BR')->diffForHumans() }}</span>
+                        <x-date-time :value="$post->created_at" />
                         @if (config('orbita.posts.show_score', true))
                             <span aria-hidden="true">&middot;</span>
                             <span>{{ (int) $post->score }} pontos</span>

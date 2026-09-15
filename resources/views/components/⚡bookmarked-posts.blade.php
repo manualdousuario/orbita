@@ -83,7 +83,7 @@ new class extends Component
                             @if ($post->user?->isLinkable())
                                 &middot; &#64;{{ $post->user->username }}
                             @endif
-                            &middot; {{ $post->created_at?->locale('pt_BR')->diffForHumans() }}
+                            &middot; <x-date-time :value="$post->created_at" />
                         </p>
 
                         <div class="mt-1 flex items-center gap-1">

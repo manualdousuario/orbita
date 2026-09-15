@@ -42,7 +42,7 @@
 
         <div>
             <dt class="font-medium text-gray-500 dark:text-gray-400">Falhou em</dt>
-            <dd class="mt-0.5 text-gray-950 dark:text-white">{{ $record->failed_at?->format('d/m/Y H:i:s') ?? '—' }}</dd>
+            <dd class="mt-0.5 text-gray-950 dark:text-white">{{ $record->failed_at?->isoFormat('L LTS') ?? '—' }}</dd>
         </div>
 
         <div>

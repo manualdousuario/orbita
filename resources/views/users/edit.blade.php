@@ -73,7 +73,7 @@
                            @if ($usernameLockedUntil) readonly @endif
                            class="mt-1 {{ $inputClass }} @if ($usernameLockedUntil) cursor-not-allowed opacity-60 @endif">
                     @if ($usernameLockedUntil)
-                        <p class="{{ $helpClass }}">Você poderá alterar novamente em {{ $usernameLockedUntil->locale('pt_BR')->isoFormat('D [de] MMMM [de] YYYY') }}.</p>
+                        <p class="{{ $helpClass }}">Você poderá alterar novamente em {{ $usernameLockedUntil->isoFormat('LL') }}.</p>
                     @else
                         <p class="{{ $helpClass }}">Letras, números e underscore. Pode ser alterado uma vez a cada 30 dias.</p>
                     @endif
@@ -249,7 +249,7 @@
                                             <p class="truncate text-sm text-gray-500 dark:text-gray-400">
                                                 {{ $account->provider_nickname ?: $account->provider_email ?: $account->provider_name }}
                                                 @if ($account->created_at)
-                                                    · conectado em {{ $account->created_at->locale('pt_BR')->isoFormat('D [de] MMMM [de] YYYY') }}
+                                                    · conectado em {{ $account->created_at->isoFormat('LL') }}
                                                 @endif
                                             </p>
                                         @else

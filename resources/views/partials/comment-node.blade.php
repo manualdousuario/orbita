@@ -80,9 +80,8 @@
 
                     <span aria-hidden="true">&middot;</span>
                     <a href="#comment-{{ $node['hashid'] }}"
-                       title="{{ $node['created_at']?->locale('pt_BR')->isoFormat('D [de] MMMM [de] YYYY [às] HH:mm') }}"
                        class="hover:text-primary-600 dark:hover:text-primary-400">
-                        {{ $node['created_at']?->locale('pt_BR')->diffForHumans() }}
+                        <x-date-time :value="$node['created_at']" />
                     </a>
 
                     @if ($node['edited_at'])

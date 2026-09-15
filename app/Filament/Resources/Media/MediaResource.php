@@ -111,7 +111,7 @@ class MediaResource extends Resource
                         default => 'gray',
                     }),
                 TextColumn::make('uploader.username')->label('Enviado por')->searchable()->sortable(),
-                TextColumn::make('created_at')->label('Enviado em')->dateTime('d/m/Y H:i')->sortable(),
+                TextColumn::make('created_at')->label('Enviado em')->isoDateTime()->sortable(),
             ])
             ->filters([
                 SelectFilter::make('status')->label('Status')->options(self::$statuses),

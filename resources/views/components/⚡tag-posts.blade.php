@@ -104,7 +104,7 @@ new class extends Component
                             @endif
                             @if ($when)
                                 <span aria-hidden="true">&middot;</span>
-                                <span>{{ \Illuminate\Support\Carbon::parse($when)->locale('pt_BR')->diffForHumans() }}</span>
+                                <x-date-time :value="$when" />
                             @endif
                             <span aria-hidden="true">&middot;</span>
                             <a href="{{ $permalink }}#comentarios" wire:navigate class="inline-flex items-center gap-1 hover:text-primary-600 dark:hover:text-primary-400">

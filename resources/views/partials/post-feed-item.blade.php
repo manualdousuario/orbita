@@ -70,7 +70,7 @@
             @endif
             @if ($when)
                 <span aria-hidden="true">&middot;</span>
-                <span>{{ \Illuminate\Support\Carbon::parse($when)->locale('pt_BR')->diffForHumans() }}</span>
+                <x-date-time :value="$when" />
             @endif
         </p>
 

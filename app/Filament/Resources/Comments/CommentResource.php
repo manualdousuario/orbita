@@ -85,7 +85,7 @@ class CommentResource extends Resource
                         'revision' => 'warning',
                         default => 'gray',
                     }),
-                TextColumn::make('created_at')->label('Criado em')->dateTime('d/m/Y H:i')->sortable(),
+                TextColumn::make('created_at')->label('Criado em')->isoDateTime()->sortable(),
             ])
             ->filters([
                 SelectFilter::make('status')->label('Status')->options(self::selectableStatuses()),

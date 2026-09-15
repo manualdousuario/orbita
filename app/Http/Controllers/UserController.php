@@ -147,7 +147,7 @@ class UserController extends Controller
 
         if (array_key_exists('username', $validated) && $validated['username'] !== $user->username) {
             if ($isSelfEdit && ! $user->canChangeUsername()) {
-                $when = $user->usernameChangeAvailableAt()->locale('pt_BR')->isoFormat('D [de] MMMM [de] YYYY');
+                $when = $user->usernameChangeAvailableAt()->isoFormat('LL');
 
                 return back()->withInput()->withErrors([
                     'username' => 'Você só pode alterar o nome de usuário uma vez a cada '.config('orbita.auth.username_change_cooldown_days')." dias. Próxima troca disponível em {$when}.",

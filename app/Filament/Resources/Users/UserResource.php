@@ -181,7 +181,7 @@ class UserResource extends Resource
                     ->url(fn (User $record): string => CommentResource::getUrl('index', [
                         'filters' => ['user' => ['value' => $record->id]],
                     ])),
-                TextColumn::make('created_at')->label('Criado em')->dateTime('d/m/Y H:i')->sortable(),
+                TextColumn::make('created_at')->label('Criado em')->isoDateTime()->sortable(),
             ])
             ->filters([
                 SelectFilter::make('role')

@@ -78,7 +78,7 @@ class Queue extends Page implements HasTable
                     ->searchable(query: fn (Builder $query, string $search): Builder => $query
                         ->where('exception', 'like', "%{$search}%"))
                     ->action(fn (FailedJob $record): mixed => $this->mountTableAction('viewException', $record->getKey())),
-                TextColumn::make('failed_at')->label('Falhou em')->dateTime('d/m/Y H:i')->sortable(),
+                TextColumn::make('failed_at')->label('Falhou em')->isoDateTime()->sortable(),
             ])
             ->recordActions([
                 Action::make('viewException')

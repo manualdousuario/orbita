@@ -22,9 +22,8 @@
             @endif
             <span aria-hidden="true">&middot;</span>
             <a href="{{ $commentLink }}" wire:navigate
-               title="{{ \Illuminate\Support\Carbon::parse($comment->created_at)->locale('pt_BR')->isoFormat('D [de] MMMM [de] YYYY [às] HH:mm') }}"
                class="hover:text-primary-600 dark:hover:text-primary-400">
-                {{ \Illuminate\Support\Carbon::parse($comment->created_at)->locale('pt_BR')->diffForHumans() }}
+                <x-date-time :value="$comment->created_at" />
             </a>
         </p>
 

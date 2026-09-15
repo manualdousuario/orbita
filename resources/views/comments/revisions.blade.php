@@ -17,9 +17,9 @@
             </div>
             <div class="space-y-3 p-4">
                 <div class="text-sm text-gray-500 dark:text-gray-400">
-                    Criado em {{ $comment->created_at?->format('d/m/Y H:i') }}
+                    Criado em <x-date-time :value="$comment->created_at" />
                     @if ($comment->edited_at)
-                        &middot; editado em {{ $comment->edited_at->format('d/m/Y H:i') }}
+                        &middot; editado em <x-date-time :value="$comment->edited_at" />
                     @endif
                 </div>
                 <div class="md-content md-content--comment rounded bg-gray-50 p-3 text-gray-800 dark:bg-gray-800 dark:text-gray-200">
@@ -44,7 +44,7 @@
                             <span class="rounded bg-gray-200 px-2 py-0.5 text-sm font-semibold text-gray-700 dark:bg-gray-700 dark:text-gray-200">
                                 v{{ $versions->count() - $index }}
                             </span>
-                            <span class="text-gray-600 dark:text-gray-300">{{ $version->created_at?->format('d/m/Y H:i') }}</span>
+                            <x-date-time :value="$version->created_at" class="text-gray-600 dark:text-gray-300" />
                         </summary>
                         <div class="border-t border-gray-100 p-4 dark:border-gray-800">
                             <div class="md-content md-content--comment rounded bg-gray-50 p-3 text-gray-800 dark:bg-gray-800 dark:text-gray-200">

@@ -62,7 +62,7 @@ new class extends Component
                         </a>
                         <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
                             em "{{ \Illuminate\Support\Str::limit((string) $comment->post->title, 60) }}"
-                            &middot; {{ $comment->created_at?->locale('pt_BR')->diffForHumans() }}
+                            &middot; <x-date-time :value="$comment->created_at" />
                         </p>
                     @endif
                 </li>

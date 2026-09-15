@@ -82,7 +82,7 @@ class ModerationResource extends Resource
                     ->formatStateUsing(fn (string $state): string => self::$targetTypes[$state] ?? $state),
                 TextColumn::make('target_id')->label('Alvo')->numeric(),
                 TextColumn::make('reason')->label('Motivo')->limit(60)->wrap(),
-                TextColumn::make('created_at')->label('Data')->dateTime('d/m/Y H:i')->sortable(),
+                TextColumn::make('created_at')->label('Data')->isoDateTime()->sortable(),
             ])
             ->filters([
                 SelectFilter::make('action')->label('Ação')->options(self::$actions),

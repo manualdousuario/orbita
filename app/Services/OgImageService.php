@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Services\Og\TextFitter;
 use DateTimeInterface;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Imagick;
 use ImagickDraw;
@@ -56,9 +57,6 @@ class OgImageService
     private const AVATAR_SIZE = 52;
 
     private const AVATAR_ORIGIN = [72, 506];
-
-    /** Non-breaking abbreviations, so the footer date never depends on the app locale. */
-    private const MONTHS = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
 
     public function render(
         string $title,
@@ -366,9 +364,10 @@ class OgImageService
         return mb_strtolower(parse_url($url, PHP_URL_HOST) ?: $url);
     }
 
+    /** Same CLDR preset the site uses for a date without a time, so it follows APP_LOCALE. */
     private function formatDate(DateTimeInterface $date): string
     {
-        return $date->format('j').' '.self::MONTHS[(int) $date->format('n') - 1].' '.$date->format('Y');
+        return Carbon::instance($date)->isoFormat('LL');
     }
 
     /**
