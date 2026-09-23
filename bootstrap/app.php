@@ -11,6 +11,7 @@ use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Routing\Exceptions\InvalidSignatureException;
 use Illuminate\Support\Facades\Log;
 use Livewire\Exceptions\ComponentNotFoundException;
+use Livewire\Mechanisms\HandleRequests\EndpointResolver;
 use Sentry\Laravel\Integration;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -33,7 +34,10 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions) {
         Integration::handles($exceptions);
 
-        $exceptions->map(fn (ComponentNotFoundException $e): Throwable => request()->is('livewire/js-module/*')
+        $exceptions->map(fn (ComponentNotFoundException $e): Throwable => in_array(request()->route()?->uri(), array_map(
+            fn (string $path): string => ltrim($path, '/'),
+            [EndpointResolver::componentJsPath(), EndpointResolver::componentCssPath(), EndpointResolver::componentGlobalCssPath()],
+        ), true)
             ? new NotFoundHttpException($e->getMessage(), $e)
             : $e);
 
