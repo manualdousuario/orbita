@@ -29,8 +29,14 @@ class PostController extends Controller
     /**
      * GET /p/{hashid}/{slug?} — post detail with comment tree.
      */
-    public function show(string $hashid, ?string $slug = null): View
+    public function show(Request $request, string $hashid, ?string $slug = null): View|RedirectResponse
     {
+        if ($request->query->has('replytocom')) {
+            $query = array_diff_key($request->query(), ['replytocom' => true]);
+
+            return redirect()->to($request->url().($query === [] ? '' : '?'.http_build_query($query)), 301);
+        }
+
         $post = Post::query()
             ->with('user', 'media', 'terms')
             ->where('hashid', $hashid)

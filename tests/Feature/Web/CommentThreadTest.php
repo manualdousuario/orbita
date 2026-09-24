@@ -88,7 +88,7 @@ it('the sort control renders one class attribute per link', function () {
     $html = (string) get(route('posts.show', ['hashid' => $post->hashid, 'slug' => $post->slug]))
         ->assertOk()->getContent();
 
-    preg_match_all('/<a [^>]*rel="nofollow"[^>]*>/', $html, $m);
+    preg_match_all('/<a [^>]*href="[^"]*#comentarios"[^>]*rel="nofollow"[^>]*>/', $html, $m);
 
     expect($m[0])->toHaveCount(3, 'three sort links');
 
