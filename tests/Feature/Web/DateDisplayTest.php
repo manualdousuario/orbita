@@ -66,7 +66,7 @@ it('shows the real date on the home feed', function () {
 
     dateDisplayPost();
 
-    $response = get('/');
+    $response = get('/all');
 
     $response->assertOk();
     $response->assertSee('15/09/2026 10:41');
