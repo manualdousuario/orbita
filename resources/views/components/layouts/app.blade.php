@@ -143,7 +143,7 @@
                 @endauth
 
                 @guest
-                    <a href="{{ route('login', ['redirect_to' => url()->current()]) }}" wire:navigate class="rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800">Entrar</a>
+                    <a href="{{ route('login', ['redirect_to' => url()->current()]) }}" rel="nofollow" wire:navigate class="rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800">Entrar</a>
                     <a href="{{ route('register') }}" wire:navigate class="rounded-md bg-primary-600 px-3 py-2 text-sm font-semibold text-white hover:bg-primary-700">Cadastrar</a>
                 @endguest
             </div>

@@ -1,6 +1,12 @@
 <x-layouts.app>
     <x-slot:title>Entrar - {{ config('orbita.name', 'Órbita') }}</x-slot:title>
 
+    @if (request()->has('redirect_to'))
+        @push('head')
+            <meta name="robots" content="noindex, follow">
+        @endpush
+    @endif
+
     <div class="mx-auto max-w-md">
         <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
             <div class="bg-primary-600 px-6 py-4">

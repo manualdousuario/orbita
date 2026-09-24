@@ -25,7 +25,7 @@
 @endphp
 
 @if (! $user)
-    <a href="{{ route('login', ['redirect_to' => url()->current()]) }}"
+    <a href="{{ route('login', ['redirect_to' => url()->current()]) }}" rel="nofollow"
        aria-label="Entrar para acompanhar posts"
        class="{{ $base }} {{ $shape }} text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400">
         <x-heroicon-o-bookmark class="h-4 w-4" aria-hidden="true" />

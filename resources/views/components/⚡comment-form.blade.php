@@ -246,7 +246,7 @@ new class extends Component
 
     @guest
         <div class="rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm text-gray-600 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300">
-            <a href="{{ route('login', ['redirect_to' => url()->current()]) }}" class="font-medium text-primary-600 hover:underline dark:text-primary-400">Faça login</a> para comentar.
+            <a href="{{ route('login', ['redirect_to' => url()->current()]) }}" rel="nofollow" class="font-medium text-primary-600 hover:underline dark:text-primary-400">Faça login</a> para comentar.
         </div>
     @endguest
 </form>

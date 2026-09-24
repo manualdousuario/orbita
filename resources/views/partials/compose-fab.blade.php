@@ -7,7 +7,7 @@
         $user = auth()->user();
     @endphp
 
-    <a href="{{ $user ? route('posts.create') : route('login', ['redirect_to' => url()->current()]) }}" wire:navigate
+    <a href="{{ $user ? route('posts.create') : route('login', ['redirect_to' => url()->current()]) }}" rel="nofollow" wire:navigate
        x-data="composeFab"
        x-bind:inert="! shown"
        x-bind:class="shown ? 'opacity-100' : 'opacity-0 translate-y-4 pointer-events-none'"

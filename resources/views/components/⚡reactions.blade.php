@@ -193,7 +193,7 @@ new class extends Component
                     <span aria-hidden="true" class="font-sans">{{ $this->emojiMap[$slug] ?? '•' }}</span>{{ $n }}
                 </button>
             @else
-                <a href="{{ $gateUrl }}" aria-label="{{ $gateVerb }} - {{ $name }} ({{ $n }})"
+                <a href="{{ $gateUrl }}" rel="nofollow" aria-label="{{ $gateVerb }} - {{ $name }} ({{ $n }})"
                    class="inline-flex min-h-8 items-center gap-1 rounded-full border border-transparent bg-gray-100 px-2 font-mono text-sm tabular-nums text-gray-600 hover:border-gray-300 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-600">
                     <span aria-hidden="true" class="font-sans">{{ $this->emojiMap[$slug] ?? '•' }}</span>{{ $n }}
                 </a>
@@ -275,7 +275,7 @@ new class extends Component
             </div>
         </div>
     @else
-        <a href="{{ $gateUrl }}"
+        <a href="{{ $gateUrl }}" rel="nofollow"
            aria-label="{{ $gateVerb }}"
            @class([
                'inline-flex items-center gap-1.5 rounded-md text-sm text-gray-500 transition hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400',
