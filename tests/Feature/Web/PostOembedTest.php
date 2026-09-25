@@ -14,6 +14,7 @@ use App\Support\HashId;
 use Database\Seeders\ReactionTypeSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
@@ -45,6 +46,10 @@ function oembedAuthor(?User $set = null): User
 beforeEach(function () {
     seed(ReactionTypeSeeder::class);
     oembedAuthor(User::factory()->createOne(['email_verified_at' => now()]));
+
+    foreach (['youtube.com', 'x.com', 'exemplo.com.br'] as $host) {
+        Cache::put('favicon:'.$host, '0', now()->addHour());
+    }
 });
 
 function oembedLinkPost(string $url, int $id = 1): Post
