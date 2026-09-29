@@ -36,6 +36,7 @@ it('root defaults to popular', function () {
 it('each tab calls its own ranking method', function () {
     foreach (HomeFeedTabs::all() as $key => $meta) {
         $mock = Mockery::mock(RankingService::class);
+        $mock->shouldReceive('feedTotal')->andReturn(1);
 
         if (($meta['kind'] ?? 'posts') === 'comments') {
             $mock->shouldReceive('paginateComments')

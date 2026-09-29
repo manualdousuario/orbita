@@ -8,11 +8,12 @@
     @endif
 
     <div class="mx-auto max-w-md">
-        <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
-            <div class="bg-primary-600 px-6 py-4">
-                <h1 class="text-lg font-semibold text-white">Entrar</h1>
-            </div>
+        <div class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
             <div class="space-y-4 p-6">
+                <div>
+                    <h1 class="font-serif text-2xl font-bold text-balance text-gray-900 dark:text-gray-100">Entrar no {{ config('orbita.name', 'Órbita') }}</h1>
+                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{{ config('orbita.meta.default_description') }}</p>
+                </div>
                 @php
                     $slugCopy = [
                         'verification-link-sent' => 'Se houver uma conta pendente com esse email, enviamos um novo link de ativação.',
@@ -34,7 +35,7 @@
                     </div>
                 @endif
 
-                <x-auth.errors />
+                <x-auth.errors :inline="['email', 'password']" />
 
                 <x-auth.social-buttons />
 
@@ -43,9 +44,10 @@
 
                     <div>
                         <label for="email" class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
-                        <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="email"
+                        <input type="email" id="email" name="email" {{ \App\Support\FormField::aria($errors, 'email') }} value="{{ old('email') }}" required autofocus autocomplete="email"
                                placeholder="seu@email.com"
-                               class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100" />
+                               class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 aria-[invalid=true]:border-red-500 dark:aria-[invalid=true]:border-red-400" />
+                        <x-field-error name="email" />
                     </div>
 
                     <div>
@@ -53,9 +55,10 @@
                             <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Senha</label>
                             <a href="{{ route('password.request') }}" class="text-sm text-primary-600 hover:underline dark:text-primary-400">Esqueci a senha</a>
                         </div>
-                        <input type="password" id="password" name="password" required autocomplete="current-password"
+                        <input type="password" id="password" name="password" {{ \App\Support\FormField::aria($errors, 'password') }} required autocomplete="current-password"
                                placeholder="Digite sua senha"
-                               class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100" />
+                               class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 aria-[invalid=true]:border-red-500 dark:aria-[invalid=true]:border-red-400" />
+                        <x-field-error name="password" />
                     </div>
 
                     <label class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">

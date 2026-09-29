@@ -19,5 +19,7 @@
         <x-pagination-head :total="$feedTotal" :per-page="(int) config('orbita.posts.per_page', 25)" />
     @endpush
 
+    <h1 class="sr-only">{{ config('orbita.name', 'Órbita') }}: {{ $meta['label'] }}</h1>
+
     <livewire:home-feed :tab="$tab" />
 </x-layouts.app>

@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Services\PostService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
+use function Pest\Laravel\artisan;
 use function Pest\Laravel\get;
 
 uses(RefreshDatabase::class);
@@ -153,4 +154,50 @@ it('missing or inactive tag is 404', function () {
 
     Term::create(['taxonomy' => 'tag', 'name' => 'oculta', 'slug' => 'oculta', 'is_active' => false]);
     get(route('tags.show', ['slug' => 'oculta']))->assertNotFound();
+});
+
+it('url fragments, anchors, code, escapes and bare numbers are not tags', function () {
+    $user = tagAuthor();
+
+    postService()->createPost([
+        'user_id' => $user->id,
+        'title' => 'Fragmentos',
+        'content' => implode("\n\n", [
+            'Veja https://github.com/a/b/issues/1#issuecomment-123 e www.exemplo.com/#topo',
+            '[regras](https://exemplo.com/doc/#regras), [wiki](https://w.org/Pump_(WMF)#c-J_(WMF)-1) e <https://exemplo.com/#about>',
+            'Código `el.scrollTo(#div)` e a regra #8 ou #152',
+            "```\n#circle { fill: red }\n```",
+            'Escapado \#oremos, colado palavra#grudada',
+            'Mas (#astronomia) e #Órbita2026 contam',
+        ]),
+        'status' => 'published',
+    ]);
+
+    expect(Term::where('taxonomy', 'tag')->orderBy('slug')->pluck('slug')->all())
+        ->toBe(['astronomia', 'orbita2026']);
+});
+
+it('the resync command removes tags the extractor no longer produces', function () {
+    $user = tagAuthor();
+
+    $post = postService()->createPost([
+        'user_id' => $user->id,
+        'title' => 'Sobre #fisica',
+        'content' => 'texto',
+        'status' => 'published',
+    ]);
+
+    $junk = Term::create(['taxonomy' => 'tag', 'slug' => 'issuecomment', 'name' => 'issuecomment', 'is_active' => true]);
+    $post->terms()->attach($junk->id);
+    Term::create(['taxonomy' => 'tag', 'slug' => 'curada', 'name' => 'curada', 'is_active' => true]);
+
+    artisan('orbita:tags-resync', ['--dry-run' => true])
+        ->expectsOutputToContain('Would remove 1 tag(s): issuecomment')
+        ->assertSuccessful();
+    expect(Term::where('slug', 'issuecomment')->exists())->toBeTrue();
+
+    artisan('orbita:tags-resync')->assertSuccessful();
+
+    expect(Term::where('taxonomy', 'tag')->orderBy('slug')->pluck('slug')->all())
+        ->toBe(['curada', 'fisica']);
 });

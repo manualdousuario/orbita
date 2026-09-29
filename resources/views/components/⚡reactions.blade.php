@@ -169,7 +169,8 @@ new class extends Component
     $gateVerb = $reactor !== null ? 'Ative sua conta para reagir' : 'Entrar para reagir';
 @endphp
 
-<div class="flex flex-wrap items-center gap-2 text-sm">
+<div class="contents">
+    <div class="flex flex-wrap items-center gap-2 text-sm">
     @if ($announcement !== '')
         <p role="status" aria-live="polite" class="sr-only">{{ $announcement }}</p>
     @endif
@@ -202,12 +203,12 @@ new class extends Component
     @endif
 
     @if ($canReact)
-        <div class="relative" x-data="{ open: false, reportOpen: false }" @keydown.escape="open = false; $refs.trigger.focus()">
+        <div class="relative" x-data="{ open: false }" @keydown.escape="open = false; $refs.trigger.focus()">
             <button type="button" x-ref="trigger" @click="open = !open"
                     @class([
                         'inline-flex items-center gap-1.5 rounded-md text-sm font-medium text-gray-500 transition data-loading:pointer-events-none data-loading:opacity-50 dark:text-gray-400',
                         'justify-center bg-gray-100 p-3.5 hover:bg-gray-100 hover:text-gray-900 dark:bg-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-100' => $compact,
-                        'py-3 hover:text-primary-600 dark:hover:text-primary-400' => ! $compact,
+                        'min-w-6 justify-center px-1 py-3 hover:text-primary-600 dark:hover:text-primary-400' => ! $compact,
                     ])
                     aria-haspopup="true" :aria-expanded="open ? 'true' : 'false'"
                     aria-label="{{ $userReaction ? 'Alterar reação' : 'Reagir' }}">
@@ -234,44 +235,6 @@ new class extends Component
                         Remover reação
                     </button>
                 @endif
-
-                <div class="border-t border-gray-100 dark:border-gray-700"></div>
-                <div class="bg-amber-50 dark:bg-amber-950/40">
-                    @if ($reported)
-                        <span class="flex w-full items-center gap-2 px-3 py-3 text-sm font-medium text-amber-700 dark:text-amber-400">
-                            <x-heroicon-s-flag class="h-4 w-4" aria-hidden="true" />
-                            Reportado
-                        </span>
-                    @else
-                        <button type="button" @click="reportOpen = !reportOpen"
-                                :aria-expanded="reportOpen ? 'true' : 'false'"
-                                class="flex w-full items-center gap-2 px-3 py-3 text-left text-sm font-medium text-amber-700 transition hover:bg-amber-100 dark:text-amber-400 dark:hover:bg-amber-900/40">
-                            <x-heroicon-o-flag class="h-4 w-4" aria-hidden="true" />
-                            Reportar
-                        </button>
-
-                        <form x-show="reportOpen" x-cloak wire:submit="report" class="px-3 pb-3">
-                            <label for="report-reason-{{ $this->getId() }}" class="sr-only">Motivo (opcional)</label>
-                            <textarea id="report-reason-{{ $this->getId() }}" wire:model="reason" rows="2" maxlength="500"
-                                      placeholder="Motivo (opcional)"
-                                      class="block w-full rounded-md border border-amber-200 bg-white px-2 py-1.5 text-sm text-gray-700 placeholder:text-gray-500 focus:border-primary-500 focus:ring-primary-500 dark:border-amber-800 dark:bg-gray-900 dark:text-gray-200"></textarea>
-                            @error('reason')
-                                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                            @enderror
-                            <div class="mt-1.5 flex items-center justify-end gap-1">
-                                <button type="button" @click="reportOpen = false"
-                                        class="rounded px-2 py-1 text-sm font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
-                                    Cancelar
-                                </button>
-                                <button type="submit" wire:loading.attr="disabled"
-                                        class="rounded bg-amber-600 px-2 py-1 text-sm font-semibold text-white hover:bg-amber-700 disabled:opacity-50">
-                                    <span wire:loading.remove wire:target="report">Enviar</span>
-                                    <span wire:loading wire:target="report">Enviando...</span>
-                                </button>
-                            </div>
-                        </form>
-                    @endif
-                </div>
             </div>
         </div>
     @else
@@ -280,9 +243,62 @@ new class extends Component
            @class([
                'inline-flex items-center gap-1.5 rounded-md text-sm text-gray-500 transition hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400',
                 'justify-center bg-gray-100 p-3.5 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-800' => $compact,
-                'py-3' => ! $compact,
+                'min-w-6 justify-center px-1 py-3' => ! $compact,
            ])>
             <x-heroicon-o-face-smile class="h-4 w-4" aria-hidden="true" />
         </a>
+    @endif
+    </div>
+
+    @if ($canReact)
+        <div class="relative order-last" x-data="{ open: false, reportOpen: false }"
+             @keydown.escape="open = false; $refs.more.focus()">
+            <button type="button" x-ref="more" @click="open = !open"
+                    aria-haspopup="true" :aria-expanded="open ? 'true' : 'false'" aria-label="Mais ações"
+                    @class([
+                        'inline-flex items-center rounded-md text-sm text-gray-500 transition hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400',
+                        'justify-center bg-gray-100 p-3.5 dark:bg-gray-800' => $compact,
+                        'px-1 py-3' => ! $compact,
+                    ])>
+                <x-heroicon-o-ellipsis-horizontal class="h-4 w-4" aria-hidden="true" />
+            </button>
+
+            <div x-show="open" x-transition @click.outside="open = false; reportOpen = false" x-cloak
+                 class="absolute right-0 z-20 w-64 overflow-hidden rounded-md border border-gray-200 bg-white font-sans shadow-lg dark:border-gray-700 dark:bg-gray-800">
+                @if ($reported)
+                    <span class="flex w-full items-center gap-2 px-3 py-3 text-sm font-medium text-amber-700 dark:text-amber-400">
+                        <x-heroicon-s-flag class="h-4 w-4" aria-hidden="true" />
+                        Reportado. A moderação vai olhar.
+                    </span>
+                @else
+                    <button type="button" @click="reportOpen = !reportOpen"
+                            :aria-expanded="reportOpen ? 'true' : 'false'"
+                            class="flex w-full items-center gap-2 px-3 py-3 text-left text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
+                        <x-heroicon-o-flag class="h-4 w-4" aria-hidden="true" />
+                        Reportar à moderação
+                    </button>
+
+                    <form x-show="reportOpen" x-cloak wire:submit="report" class="px-3 pb-3">
+                        <label for="report-reason-{{ $this->getId() }}" class="mb-1 block text-sm text-gray-600 dark:text-gray-300">Motivo (opcional)</label>
+                        <textarea id="report-reason-{{ $this->getId() }}" wire:model="reason" rows="2" maxlength="500"
+                                  class="block w-full rounded-md border border-gray-300 bg-white px-2 py-1.5 text-sm text-gray-700 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-200"></textarea>
+                        @error('reason')
+                            <p class="mt-1 text-sm text-red-700 dark:text-red-300">{{ $message }}</p>
+                        @enderror
+                        <div class="mt-2 flex items-center justify-end gap-1">
+                            <button type="button" @click="reportOpen = false"
+                                    class="rounded px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100">
+                                Cancelar
+                            </button>
+                            <button type="submit" wire:loading.attr="disabled"
+                                    class="rounded bg-amber-600 px-3 py-2 text-sm font-semibold text-white hover:bg-amber-700 disabled:opacity-50">
+                                <span wire:loading.remove wire:target="report">Enviar</span>
+                                <span wire:loading wire:target="report">Enviando…</span>
+                            </button>
+                        </div>
+                    </form>
+                @endif
+            </div>
+        </div>
     @endif
 </div>

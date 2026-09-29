@@ -55,9 +55,20 @@ class Markdown
         return array_values(array_unique($matches[1]));
     }
 
+    public const HASHTAG_PATTERN = '(?=[\p{N}_]*\p{L})[\p{L}\p{N}_]{1,50}';
+
     public static function extractHashtags(string $markdown): array
     {
-        preg_match_all('/#([\p{L}\p{N}_]{1,50})/u', $markdown, $matches);
+        $text = preg_replace([
+            '/^(```|~~~).*?^\1/ms',          // fenced code
+            '/`[^`\n]*`/u',                    // inline code
+            '/\]\((?:[^()\s]|\([^()\s]*\))*(?:\s+"[^"]*")?\)/u', // link targets, with balanced `(WMF)` parens
+            '/<[a-z][a-z0-9+.-]*:[^>\s]*>/iu', // <autolinks>
+            '#\b[a-z][a-z0-9+.-]*://\S+#iu',   // bare URLs
+            '/\bwww\.\S+/iu',
+        ], ' ', $markdown) ?? $markdown;
+
+        preg_match_all('/(?<![^\s(\[{"\'“‘])#('.self::HASHTAG_PATTERN.')/u', $text, $matches);
 
         return array_values(array_unique($matches[1]));
     }

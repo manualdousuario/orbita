@@ -2,6 +2,7 @@
 
 use App\Livewire\Concerns\InteractsWithInfiniteScroll;
 use App\Models\User;
+use App\Support\FeedRowMeta;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
@@ -35,43 +36,46 @@ new class extends Component
     {
         return User::query()->findOrFail($this->userId)
             ->posts()
+            ->with('user')
             ->whereNull('version_of')
             ->whereIn('status', ['published', 'closed'])
             ->orderByDesc('created_at')
             ->paginate((int) config('orbita.pagination.profile_per_page'), ['*'], self::PAGE)
             ->withPath(\App\Support\Url::paginationPath());
     }
+
+    #[Computed]
+    public function rowMeta(): array
+    {
+        return FeedRowMeta::for(FeedRowMeta::idsOf($this->posts->items()));
+    }
+
+    #[Computed]
+    public function canAdmin(): bool
+    {
+        return auth()->user()?->isStaff() ?? false;
+    }
 }; ?>
 
 <div x-data="infiniteUrl">
-    <ul class="space-y-2">
+    <ul class="divide-y divide-gray-200 dark:divide-gray-800">
         @island('profile-posts-rows')
-            <li style="height:0;margin:0" aria-hidden="true"
+            <li style="height:0;border-width:0" aria-hidden="true"
                 data-page-marker="{{ $this->posts->currentPage() }}"
                 data-page-param="posts"
                 data-prev-url="{{ \App\Support\Url::canonicalPage($this->posts->previousPageUrl(), 'posts') }}"
                 data-next-url="{{ $this->posts->nextPageUrl() }}"></li>
 
             @forelse ($this->posts as $post)
-                <li wire:key="profile-post-{{ $post->id }}" class="rounded-lg border border-gray-200 bg-white p-3 dark:border-gray-800 dark:bg-gray-900">
-                    <x-post-locked-badge :locked="! $post->allow_comments" />
-                    <a href="{{ route('posts.show', ['hashid' => $post->hashid, 'slug' => $post->slug]) }}" wire:navigate
-                       class="font-medium text-gray-900 hover:text-primary-600 dark:text-gray-100 dark:hover:text-primary-400">
-                        {{ $post->title }}
-                    </a>
-                    <div class="mt-1 flex flex-wrap items-center gap-x-2 text-sm text-gray-500 dark:text-gray-400">
-                        <x-date-time :value="$post->created_at" />
-                        @if (config('orbita.posts.show_score', true))
-                            <span aria-hidden="true">&middot;</span>
-                            <span>{{ (int) $post->score }} pontos</span>
-                        @endif
-                        <span aria-hidden="true">&middot;</span>
-                        <span>{{ (int) $post->comment_count }} {{ (int) $post->comment_count === 1 ? 'comentário' : 'comentários' }}</span>
-                    </div>
-                </li>
+                @include('partials.post-feed-item', [
+                    'post' => $post,
+                    'meta' => $this->rowMeta,
+                    'canAdmin' => $this->canAdmin,
+                    'hideAuthor' => true,
+                ])
             @empty
                 @if ($this->posts->currentPage() === 1)
-                    <li class="rounded-lg border border-gray-200 bg-white p-4 text-sm text-gray-500 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400">Nenhum post ainda.</li>
+                    <li class="py-6 text-sm text-gray-500 dark:text-gray-400">Nenhum post ainda.</li>
                 @endif
             @endforelse
         @endisland

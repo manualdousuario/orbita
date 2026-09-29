@@ -60,7 +60,7 @@ it('a disabled provider renders no button on the login screen', function () {
     ]);
     Settings::set(['orbita.social.google.enabled' => false]);
 
-    get(route('login'))->assertOk()->assertDontSee('Entrar com Google');
+    get(route('login'))->assertOk()->assertDontSee('Continuar com Google');
 });
 
 it('an enabled but unconfigured provider renders no button', function () {
@@ -68,7 +68,7 @@ it('an enabled but unconfigured provider renders no button', function () {
     config(['services.google.client_id' => null, 'services.google.client_secret' => null]);
     Settings::set(['orbita.social.google.enabled' => true]);
 
-    get(route('login'))->assertOk()->assertDontSee('Entrar com Google');
+    get(route('login'))->assertOk()->assertDontSee('Continuar com Google');
 });
 
 it('a fully configured provider renders its button', function () {
@@ -78,6 +78,6 @@ it('a fully configured provider renders its button', function () {
     ]);
     Settings::set(['orbita.social.google.enabled' => true]);
 
-    get(route('login'))->assertOk()->assertSee('Entrar com Google');
-    get(route('register'))->assertOk()->assertSee('Entrar com Google');
+    get(route('login'))->assertOk()->assertSee('Continuar com Google');
+    get(route('register'))->assertOk()->assertSee('Continuar com Google');
 });

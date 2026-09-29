@@ -144,8 +144,12 @@ class MetaTagsService
         $description = $user->bio ?: 'Perfil de '.$displayName.' no '.config('orbita.name').'.';
         $url = route('users.profile', ['username' => $user->username]);
 
+        $title = $user->display_name && $user->display_name !== $user->username
+            ? $displayName.' (@'.$user->username.')'
+            : $displayName;
+
         return $this->forGenericPage(
-            $displayName,
+            $title,
             $description,
             true,
             $this->generateProfilePageSchema($user, $url, $postsTotal),

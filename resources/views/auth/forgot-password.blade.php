@@ -2,18 +2,16 @@
     <x-slot:title>Recuperar senha - {{ config('orbita.name', 'Órbita') }}</x-slot:title>
 
     <div class="mx-auto max-w-md">
-        <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
-            <div class="bg-primary-600 px-6 py-4">
-                <h1 class="text-lg font-semibold text-white">Recuperar senha</h1>
-            </div>
+        <div class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
             <div class="space-y-4 p-6">
+                <h1 class="font-serif text-2xl font-bold text-balance text-gray-900 dark:text-gray-100">Recuperar senha</h1>
                 @if (session('status'))
                     <div class="rounded-md bg-green-50 px-4 py-3 text-sm text-green-800 dark:bg-green-900/30 dark:text-green-200">
                         {{ session('status') }}
                     </div>
                 @endif
 
-                <x-auth.errors />
+                <x-auth.errors :inline="['email']" />
 
                 <p class="text-sm text-gray-600 dark:text-gray-400">
                     Digite seu email cadastrado e enviaremos um link para redefinir sua senha.
@@ -24,9 +22,10 @@
 
                     <div>
                         <label for="email" class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
-                        <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="email"
+                        <input type="email" id="email" name="email" {{ \App\Support\FormField::aria($errors, 'email') }} value="{{ old('email') }}" required autofocus autocomplete="email"
                                placeholder="seu@email.com"
-                               class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100" />
+                               class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 aria-[invalid=true]:border-red-500 dark:aria-[invalid=true]:border-red-400" />
+                        <x-field-error name="email" />
                     </div>
 
                     <button type="submit" class="w-full rounded-md bg-primary-600 px-4 py-3 text-sm font-semibold text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900">

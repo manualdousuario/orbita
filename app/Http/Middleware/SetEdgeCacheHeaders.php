@@ -24,6 +24,7 @@ final class SetEdgeCacheHeaders
         'pages.show',
         'tags.show',
         'users.profile',
+        'users.profile.comments',
         'posts.show',
         'posts.revisions',
         'comments.revisions',

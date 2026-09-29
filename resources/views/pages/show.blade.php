@@ -4,9 +4,9 @@
     @endpush
 
     <article>
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">{{ $page->title }}</h1>
+        <h1 class="text-3xl font-bold text-balance text-gray-900 dark:text-gray-100">{{ $page->title }}</h1>
 
-        <div class="md-content mt-6 text-gray-700 dark:text-gray-300">
+        <div class="md-content mt-6 max-w-[64ch] text-gray-700 dark:text-gray-300">
             {!! $contentHtml !!}
         </div>
 

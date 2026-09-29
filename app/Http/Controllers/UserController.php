@@ -38,9 +38,23 @@ use Laravel\Fortify\Contracts\UpdatesUserPasswords;
 class UserController extends Controller
 {
     /**
-     * GET /u/{username} — public profile with the user's posts and comments.
+     * GET /u/{username} — public profile, posts tab.
      */
     public function profile(string $username): View
+    {
+        return $this->renderProfile($username, 'posts');
+    }
+
+    /**
+     * GET /u/{username}/comentarios — public profile, comments tab.
+     */
+    public function profileComments(string $username): View
+    {
+        return $this->renderProfile($username, 'comments');
+    }
+
+    /** @param 'posts'|'comments' $tab */
+    private function renderProfile(string $username, string $tab): View
     {
         $user = User::query()->where('username', $username)->whereNull('anonymized_at')->firstOrFail();
 
@@ -49,11 +63,26 @@ class UserController extends Controller
             ->whereIn('status', ['published', 'closed'])
             ->count();
 
+        $commentsTotal = $user->comments()
+            ->whereNull('version_of')
+            ->where('status', 'visible')
+            ->count();
+
         $meta = app(MetaTagsService::class)->forProfile($user, $postsTotal);
+
+        $joinedAt = collect([
+            $user->created_at,
+            DB::table('posts')->where('user_id', $user->id)->min('created_at'),
+            DB::table('posts')->where('user_id', $user->id)->min('published_at'),
+            DB::table('comments')->where('user_id', $user->id)->min('created_at'),
+        ])->filter()->map(fn ($date) => Carbon::parse($date))->min();
 
         return view('users.profile', [
             'user' => $user,
+            'joinedAt' => $joinedAt,
+            'tab' => $tab,
             'postsTotal' => $postsTotal,
+            'commentsTotal' => $commentsTotal,
             'meta' => $meta,
         ]);
     }

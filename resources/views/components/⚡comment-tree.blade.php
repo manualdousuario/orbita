@@ -25,6 +25,9 @@ new class extends Component
     public bool $allowComments = true;
 
     #[Locked]
+    public ?string $closedNotice = null;
+
+    #[Locked]
     public string $sort = 'newest';
 
     /** Batched per render, not Livewire state. @var array<int, array<string, mixed>> */
@@ -60,10 +63,11 @@ new class extends Component
 
     private bool $renderAllLoadedPages = false;
 
-    public function mount(int $postId, bool $allowComments = true): void
+    public function mount(int $postId, bool $allowComments = true, ?string $closedNotice = null): void
     {
         $this->postId = $postId;
         $this->allowComments = $allowComments;
+        $this->closedNotice = $closedNotice;
 
         $requested = (string) request()->query('sort', '');
 
@@ -371,6 +375,13 @@ new class extends Component
         </div>
     @endisland
 
+    @if ($closedNotice)
+        <p class="flex items-start gap-2 text-sm text-gray-500 dark:text-gray-400">
+            <x-icon-lock class="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+            <span>{{ $closedNotice }}</span>
+        </p>
+    @endif
+
     <ul class="divide-y divide-gray-200 dark:divide-gray-800">
         @island('comment-roots')
             @php $markers = $this->pageMarkers; @endphp
@@ -394,7 +405,7 @@ new class extends Component
             @empty
                 @if ($this->roots->currentPage() === 1)
                     <li class="py-6 text-center text-sm text-gray-500 dark:text-gray-400">
-                        Nenhum comentário ainda. Seja o primeiro a comentar.
+                        {{ $allowComments ? 'Nenhum comentário ainda. Seja o primeiro a comentar.' : 'Ninguém comentou neste post.' }}
                     </li>
                 @endif
             @endforelse

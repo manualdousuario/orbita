@@ -83,17 +83,19 @@
                 </a>
             </nav>
 
+            @unless (request()->routeIs('search'))
             <form action="{{ route('search') }}" method="GET" role="search" class="ml-auto hidden min-w-0 flex-1 sm:block sm:max-w-xs">
                 <div class="relative">
                     <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
                         <x-heroicon-o-magnifying-glass class="h-4 w-4" aria-hidden="true" />
                     </span>
                     <input type="search" name="q" value="{{ request('q') }}" placeholder="Buscar..." aria-label="Buscar"
-                           class="w-full rounded-md border border-gray-300 bg-white py-2 pl-9 pr-3 text-sm text-gray-900 placeholder-gray-400 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100">
+                           class="w-full rounded-md border border-gray-300 bg-white py-2 pl-9 pr-3 text-sm text-gray-900 placeholder-gray-500 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100">
                 </div>
             </form>
+            @endunless
 
-            <div class="ml-auto flex items-center gap-1 sm:ml-2">
+            <div @class(['ml-auto flex items-center gap-1', 'sm:ml-2' => ! request()->routeIs('search')])>
                 <a href="{{ route('search') }}" wire:navigate aria-label="Buscar"
                    @if (request()->routeIs('search')) aria-current="page" @endif
                    class="flex h-11 w-11 items-center justify-center rounded-md text-gray-600 hover:bg-gray-100 sm:hidden dark:text-gray-300 dark:hover:bg-gray-800">
@@ -143,8 +145,12 @@
                 @endauth
 
                 @guest
-                    <a href="{{ route('login', ['redirect_to' => url()->current()]) }}" rel="nofollow" wire:navigate class="rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800">Entrar</a>
-                    <a href="{{ route('register') }}" wire:navigate class="rounded-md bg-primary-600 px-3 py-2 text-sm font-semibold text-white hover:bg-primary-700">Cadastrar</a>
+                    @unless (request()->routeIs('login'))
+                        <a href="{{ route('login', ['redirect_to' => url()->current()]) }}" rel="nofollow" wire:navigate class="rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800">Entrar</a>
+                    @endunless
+                    @unless (request()->routeIs('register'))
+                        <a href="{{ route('register') }}" wire:navigate class="rounded-md bg-primary-600 px-3 py-2 text-sm font-semibold text-white hover:bg-primary-700">Cadastrar</a>
+                    @endunless
                 @endguest
             </div>
         </div>
@@ -218,8 +224,8 @@
                             :class="theme === 'light'
                                 ? 'bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-gray-100'
                                 : 'text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800'"
-                            class="inline-flex min-h-[26px] items-center gap-1 px-2 text-[11px] font-medium transition">
-                        <x-heroicon-o-sun class="h-3.5 w-3.5" aria-hidden="true" />
+                            class="inline-flex min-h-9 items-center gap-1.5 px-3 text-xs font-medium transition">
+                        <x-heroicon-o-sun class="h-4 w-4" aria-hidden="true" />
                         Claro
                     </button>
                     <button type="button" @click="set('dark')"
@@ -227,8 +233,8 @@
                             :class="theme === 'dark'
                                 ? 'bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-gray-100'
                                 : 'text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800'"
-                            class="inline-flex min-h-[26px] items-center gap-1 border-l border-gray-300 px-2 text-[11px] font-medium transition dark:border-gray-700">
-                        <x-heroicon-o-moon class="h-3.5 w-3.5" aria-hidden="true" />
+                            class="inline-flex min-h-9 items-center gap-1.5 border-l border-gray-300 px-3 text-xs font-medium transition dark:border-gray-700">
+                        <x-heroicon-o-moon class="h-4 w-4" aria-hidden="true" />
                         Escuro
                     </button>
                     <button type="button" @click="set('auto')"
@@ -238,14 +244,14 @@
                             :class="theme === 'auto'
                                 ? 'bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-gray-100'
                                 : 'text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800'"
-                            class="inline-flex min-h-[26px] items-center justify-center border-l border-gray-300 px-2 transition dark:border-gray-700">
-                        <x-heroicon-o-computer-desktop class="h-3.5 w-3.5" aria-hidden="true" />
+                            class="inline-flex min-h-9 min-w-9 items-center justify-center border-l border-gray-300 px-2 transition dark:border-gray-700">
+                        <x-heroicon-o-computer-desktop class="h-4 w-4" aria-hidden="true" />
                     </button>
                 </div>
             </div>
 
             @if ($quote)
-                <p class="italic">{{ $quote['text'] }}@if ($quote['author'] !== '') - {{ $quote['author'] }}@endif</p>
+                <p class="max-w-[60ch] italic text-balance">{{ $quote['text'] }}@if ($quote['author'] !== '') - {{ $quote['author'] }}@endif</p>
             @endif
         </div>
     </footer>

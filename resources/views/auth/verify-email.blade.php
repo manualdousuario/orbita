@@ -2,11 +2,9 @@
     <x-slot:title>Ative sua conta - {{ config('orbita.name', 'Órbita') }}</x-slot:title>
 
     <div class="mx-auto max-w-md">
-        <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
-            <div class="bg-primary-600 px-6 py-4">
-                <h1 class="text-lg font-semibold text-white">Ative sua conta</h1>
-            </div>
+        <div class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900">
             <div class="space-y-4 p-6">
+                <h1 class="font-serif text-2xl font-bold text-balance text-gray-900 dark:text-gray-100">Ative sua conta</h1>
                 @if (session('status') === 'verification-link-sent')
                     <div class="rounded-md bg-green-50 px-4 py-3 text-sm text-green-800 dark:bg-green-900/30 dark:text-green-200">
                         Se houver uma conta pendente com esse email, enviamos um novo link de ativação. O link vale 24 horas.

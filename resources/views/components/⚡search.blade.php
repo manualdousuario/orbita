@@ -110,14 +110,14 @@ new class extends Component
     @island('search-summary')
         @if ($this->hasQuery && $this->total > 0)
             <p class="text-sm text-gray-500 dark:text-gray-400">
-                <strong>{{ $this->total }}</strong> resultado(s) para <strong>"{{ trim($this->query) }}"</strong>.
+                <strong>{{ $this->total }}</strong> {{ $this->total === 1 ? 'resultado' : 'resultados' }} para <strong>"{{ trim($this->query) }}"</strong>.
             </p>
         @endif
     @endisland
 
-    <ul class="space-y-2">
+    <ul class="divide-y divide-gray-200 dark:divide-gray-800">
         @island('search-rows')
-            <li style="height:0;margin:0" aria-hidden="true"
+            <li style="height:0;border-width:0" aria-hidden="true"
                 data-page-marker="{{ $this->results->currentPage() }}"
                 data-page-param="page"
                 data-prev-url="{{ \App\Support\Url::canonicalPage($this->results->previousPageUrl()) }}"
@@ -140,24 +140,46 @@ new class extends Component
                             : route('posts.show', ['hashid' => $item->post_hashid, 'slug' => $item->post_slug]) . '#comment-' . $item->hashid;
                         $locked = $item->type === 'post' && ! $item->allow_comments;
                     @endphp
-                    <li wire:key="result-{{ $item->type }}-{{ $item->hashid }}"
-                        class="rounded-lg border border-gray-200 bg-white p-3 dark:border-gray-800 dark:bg-gray-900">
-                        <div class="flex items-start justify-between gap-2">
-                            <span class="min-w-0">
-                                <x-post-locked-badge :locked="$locked" />
-                                <a href="{{ $url }}" wire:navigate
-                                   class="font-medium text-gray-900 hover:text-primary-600 dark:text-gray-100 dark:hover:text-primary-400">
-                                    {{ $item->title }}
-                                </a>
-                            </span>
-                            <span class="shrink-0 rounded-full px-2 py-0.5 text-sm font-medium {{ $item->type === 'post' ? 'bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300' : 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400' }}">
-                                {{ $item->type === 'post' ? 'Post' : 'Comentário' }}
-                            </span>
-                        </div>
-                        @if (! empty($item->content))
-                            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ \Illuminate\Support\Str::limit(strip_tags((string) $item->content), 160) }}</p>
+                    @php
+                        $isComment = $item->type === 'comment';
+                        $author = $item->anonymized_at ? \App\Actions\AnonymizeUser::DISPLAY_NAME : ($item->display_name ?: $item->username);
+                    @endphp
+                    <li wire:key="result-{{ $item->type }}-{{ $item->hashid }}" class="py-4">
+                        <h2 class="text-base font-semibold leading-snug text-balance sm:text-lg">
+                            <x-post-locked-badge :locked="$locked" />
+                            @if ($isComment)
+                                <span class="sr-only">Comentário em</span>
+                            @endif
+                            <a href="{{ $url }}" wire:navigate
+                               class="break-words text-gray-900 visited:text-visited hover:text-primary-600 dark:text-gray-100 dark:visited:text-visited dark:hover:text-primary-400">
+                                {{ $item->title }}
+                            </a>
+                        </h2>
+
+                        @if (filled($item->content))
+                            <p @class([
+                                'mt-1 max-w-[64ch] text-gray-700 dark:text-gray-300 [&_mark]:rounded-sm [&_mark]:bg-amber-200/70 [&_mark]:px-0.5 [&_mark]:text-gray-900 dark:[&_mark]:bg-amber-400/25 dark:[&_mark]:text-amber-100',
+                                'font-serif text-[0.95rem] leading-relaxed' => $isComment,
+                                'text-sm' => ! $isComment,
+                            ])>{{ \App\Support\SearchSnippet::make((string) $item->content, (string) $this->query) }}</p>
                         @endif
-                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">por {{ $item->display_name ?: $item->username }}</p>
+
+                        <p class="mt-1 flex flex-wrap items-center gap-x-1.5 font-mono text-sm text-gray-500 dark:text-gray-400">
+                            @if ($isComment)
+                                <x-heroicon-o-chat-bubble-left class="h-3.5 w-3.5" aria-hidden="true" />
+                                <span>comentário de</span>
+                            @endif
+                            @if ($item->username && ! $item->anonymized_at)
+                                <a href="{{ route('users.profile', ['username' => $item->username]) }}" wire:navigate
+                                   class="hover:text-primary-600 hover:underline dark:hover:text-primary-400">{{ $author }}</a>
+                            @else
+                                <span>{{ $author }}</span>
+                            @endif
+                            @if ($item->created_at)
+                                <span aria-hidden="true">&middot;</span>
+                                <x-date-time :value="\Illuminate\Support\Carbon::parse($item->created_at)" />
+                            @endif
+                        </p>
                     </li>
                 @endforeach
             @endif

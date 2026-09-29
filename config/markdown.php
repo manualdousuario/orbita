@@ -47,7 +47,7 @@ return [
             ],
             'hashtag_mention' => [
                 'prefix' => '#',
-                'pattern' => '[\p{L}\p{N}_]{1,50}',
+                'pattern' => Markdown::HASHTAG_PATTERN,
                 'generator' => [Markdown::class, 'handleHashtagMention'],
             ],
         ],

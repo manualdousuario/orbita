@@ -85,8 +85,9 @@ it('the bookmark button stays visible and labelled without alpine', function () 
 
     $button = $m[0];
 
-    expect($button)->toContain('aria-label="Acompanhar post"')
+    expect($button)->toContain('<span>Acompanhar</span>')
         ->toContain('aria-pressed="false"');
+    expect($button)->not->toContain('aria-label=');
 
     expect($button)->not->toContain('x-cloak');
     expect($button)->not->toContain('x-show');

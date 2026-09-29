@@ -24,6 +24,16 @@
             <h1 class="font-serif font-bold leading-tight text-balance break-words text-gray-900 dark:text-gray-100"
                 style="font-size: clamp(1.5rem, 1.2rem + 1.6vw, 2rem);">{{ $post->title }}</h1>
 
+            @php $postTags = \App\Support\FeedRowMeta::tagsFor([(int) $post->id])[$post->id] ?? []; @endphp
+            @if ($postTags !== [])
+                <p class="mt-2 flex flex-wrap gap-x-3 font-mono text-sm">
+                    @foreach ($postTags as $tag)
+                        <a href="{{ route('tags.show', ['slug' => $tag->slug]) }}" wire:navigate
+                           class="text-primary-700 hover:underline dark:text-primary-300">#{{ $tag->name }}</a>
+                    @endforeach
+                </p>
+            @endif
+
             @php
                 $publishedAt = $post->published_at ?? $post->created_at;
                 $reactionScore = (int) ($reactionSummary['score'] ?? 0);
@@ -185,11 +195,15 @@
                                     :summary="$reactionSummary" :key="'react-post-'.$post->id" />
 
                 <a href="#comentarios"
-                   aria-label="{{ $commentCount }} {{ $commentCount === 1 ? 'comentário' : 'comentários' }}"
+                   aria-label="{{ $commentCount === 0 && $post->allow_comments ? 'Comentar' : $commentCount.' '.($commentCount === 1 ? 'comentário' : 'comentários') }}"
                    class="inline-flex items-center gap-1.5 py-3 text-sm text-gray-500 transition-colors hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400">
                     <x-heroicon-o-chat-bubble-left class="h-4 w-4" aria-hidden="true" />
-                    <span class="font-mono tabular-nums" aria-hidden="true">{{ $commentCount }}</span>
-                    <span aria-hidden="true">{{ $commentCount === 1 ? 'comentário' : 'comentários' }}</span>
+                    @if ($commentCount === 0 && $post->allow_comments)
+                        <span aria-hidden="true">Comentar</span>
+                    @else
+                        <span class="font-mono tabular-nums" aria-hidden="true">{{ $commentCount }}</span>
+                        <span aria-hidden="true">{{ $commentCount === 1 ? 'comentário' : 'comentários' }}</span>
+                    @endif
                 </a>
 
                 <x-bookmark-button :hashid="$post->hashid" :bookmarked="$isBookmarked" :compact="false" />
@@ -200,15 +214,20 @@
         </article>
 
         <section id="comentarios" class="scroll-mt-20 space-y-4">
+            @php
+                $closeDays = (int) config('orbita.posts.close_inactive_days');
+                $closedNotice = match (true) {
+                    (bool) $post->allow_comments => null,
+                    $post->status === 'closed' && $closeDays > 0 => "Os comentários fecharam depois de {$closeDays} dias sem atividade. A conversa fica aqui para leitura.",
+                    default => 'Os comentários estão fechados para este post.',
+                };
+            @endphp
+
             @if ($post->allow_comments)
                 <livewire:comment-form :post-id="$post->id" />
-            @else
-                <p class="rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm text-gray-500 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400">
-                    Os comentários estão fechados para este post.
-                </p>
             @endif
 
-            <livewire:comment-tree :post-id="$post->id" :allow-comments="$post->allow_comments" />
+            <livewire:comment-tree :post-id="$post->id" :allow-comments="$post->allow_comments" :closed-notice="$closedNotice" />
         </section>
     </div>
 </x-layouts.app>

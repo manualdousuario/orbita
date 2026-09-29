@@ -64,3 +64,27 @@ it('does not show the edit in admin link on profiles, not even to staff', functi
         ->assertOk()
         ->assertDontSee('/admin/users/'.$target->id.'/edit');
 });
+
+it('member since uses the first activity when it predates the account row', function () {
+    $user = User::factory()->createOne([
+        'username' => 'veterana',
+        'email_verified_at' => now(),
+        'created_at' => '2026-07-15 10:00:00',
+    ]);
+
+    Post::create([
+        'user_id' => $user->id,
+        'hashid' => HashId::encode(31),
+        'title' => 'Primeiro post',
+        'slug' => 'primeiro-post',
+        'content' => 'De antes da migração.',
+        'status' => 'closed',
+        'published_at' => '2023-02-03 09:00:00',
+        'created_at' => '2023-02-03 09:00:00',
+    ]);
+
+    get('/u/veterana')
+        ->assertOk()
+        ->assertSee('datetime="2023-02-03"', false)
+        ->assertSee('3 de fevereiro de 2023');
+});

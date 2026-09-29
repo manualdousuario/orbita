@@ -45,30 +45,35 @@ new class extends Component
 }; ?>
 
 <div x-data="infiniteUrl">
-    <ul class="space-y-2">
+    <ul class="divide-y divide-gray-200 dark:divide-gray-800">
         @island('profile-comments-rows')
-            <li style="height:0;margin:0" aria-hidden="true"
+            <li style="height:0;border-width:0" aria-hidden="true"
                 data-page-marker="{{ $this->comments->currentPage() }}"
                 data-page-param="comments"
                 data-prev-url="{{ \App\Support\Url::canonicalPage($this->comments->previousPageUrl(), 'comments') }}"
                 data-next-url="{{ $this->comments->nextPageUrl() }}"></li>
 
             @forelse ($this->comments as $comment)
-                <li wire:key="profile-comment-{{ $comment->id }}" class="rounded-lg border border-gray-200 bg-white p-3 dark:border-gray-800 dark:bg-gray-900">
-                    @if ($comment->post)
-                        <a href="{{ route('posts.show', ['hashid' => $comment->post->hashid, 'slug' => $comment->post->slug]) }}#comment-{{ $comment->hashid }}" wire:navigate
-                           class="text-sm text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400">
-                            {{ \Illuminate\Support\Str::limit((string) $comment->content, 160) }}
-                        </a>
-                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                            em "{{ \Illuminate\Support\Str::limit((string) $comment->post->title, 60) }}"
-                            &middot; <x-date-time :value="$comment->created_at" />
+                @if ($comment->post)
+                    @php
+                        $postUrl = route('posts.show', ['hashid' => $comment->post->hashid, 'slug' => $comment->post->slug]);
+                        $excerpt = html_entity_decode(\App\Support\Markdown::excerpt((string) $comment->content, 280), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                    @endphp
+                    <li wire:key="profile-comment-{{ $comment->id }}" class="py-4">
+                        <p class="flex flex-wrap items-baseline gap-x-1.5 text-sm text-gray-500 dark:text-gray-400">
+                            <span>em</span>
+                            <a href="{{ $postUrl }}" wire:navigate
+                               class="font-semibold text-gray-900 visited:text-visited hover:text-primary-600 dark:text-gray-100 dark:visited:text-visited dark:hover:text-primary-400">{{ $comment->post->title }}</a>
+                            <span aria-hidden="true">&middot;</span>
+                            <a href="{{ $postUrl }}#comment-{{ $comment->hashid }}" wire:navigate
+                               class="font-mono hover:text-primary-600 dark:hover:text-primary-400"><x-date-time :value="$comment->created_at" /></a>
                         </p>
-                    @endif
-                </li>
+                        <p class="mt-1 max-w-[64ch] font-serif text-[0.95rem] leading-relaxed text-gray-800 dark:text-gray-200">{{ $excerpt }}</p>
+                    </li>
+                @endif
             @empty
                 @if ($this->comments->currentPage() === 1)
-                    <li class="rounded-lg border border-gray-200 bg-white p-4 text-sm text-gray-500 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400">Nenhum comentário ainda.</li>
+                    <li class="py-6 text-sm text-gray-500 dark:text-gray-400">Nenhum comentário ainda.</li>
                 @endif
             @endforelse
         @endisland

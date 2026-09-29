@@ -22,7 +22,7 @@
                 wire:loading.attr="disabled" wire:target="{{ $method }}"
                 class="inline-flex items-center gap-2 rounded-md border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700">
             <span wire:loading.remove wire:target="{{ $method }}">Carregar mais</span>
-            <span wire:loading wire:target="{{ $method }}" class="inline-flex items-center gap-2">
+            <span wire:loading.inline-flex wire:target="{{ $method }}" class="items-center gap-2">
                 <svg class="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />

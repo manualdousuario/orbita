@@ -1,11 +1,8 @@
 <?php
 
 use App\Livewire\Concerns\InteractsWithInfiniteScroll;
-use App\Models\Media;
-use App\Services\BookmarkService;
 use App\Services\RankingService;
-use App\Services\ReactionService;
-use App\Services\ReportService;
+use App\Support\FeedRowMeta;
 use App\Support\HomeFeedTabs;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Locked;
@@ -70,69 +67,36 @@ new class extends Component
             return app(RankingService::class)->paginateComments($this->perPage, $this->getPage());
         }
 
-        return app(RankingService::class)->paginatePosts($meta['method'], $this->perPage, $this->getPage());
+        $method = $this->showsLatestInstead ? HomeFeedTabs::get('all')['method'] : $meta['method'];
+
+        return app(RankingService::class)->paginatePosts($method, $this->perPage, $this->getPage());
     }
 
-    /**
-     * Reaction summaries, save state and thumbnail for every row currently on screen -
-     * in four queries, not four per row.
-     *
-     * Still one page at a time: infinite scroll accumulates in the DOM rather than on the
-     * server, so each render only batches the ids of the single page it is rendering.
-     */
+    #[Computed]
+    public function showsLatestInstead(): bool
+    {
+        return $this->tab === 'popular'
+            && app(RankingService::class)->feedTotal(HomeFeedTabs::get('popular')['method']) === 0;
+    }
+
     #[Computed]
     public function rowMeta(): array
     {
-        $items = $this->posts->items();
-        $ids = array_map(static fn ($p): int => (int) $p->id, $items);
-
-        if ($ids === []) {
-            return ['summaries' => [], 'mine' => [], 'bookmarked' => [], 'images' => [], 'reported' => []];
-        }
-
-        $reactions = app(ReactionService::class);
-        $userId = auth()->id() ? (int) auth()->id() : null;
-
-        return [
-            'summaries' => $reactions->summariesFor('post', $ids),
-            'mine' => $reactions->userReactionsFor($userId, 'post', $ids),
-            'bookmarked' => app(BookmarkService::class)->bookmarkedPostIds($userId, $ids),
-            'images' => $this->firstImagesFor($ids),
-            'reported' => array_flip(app(ReportService::class)->reportedIdsFor($userId, 'post', $ids)),
-        ];
-    }
-
-    /**
-     * The first image of each post, in ONE query.
-     *
-     * @param  list<int>  $ids
-     * @return array<int, Media>
-     */
-    private function firstImagesFor(array $ids): array
-    {
-        return Media::query()
-            ->join('media_relationship as mr', 'mr.media_id', '=', 'media.id')
-            ->whereIn('mr.post_id', $ids)
-            ->where('media.media_type', Media::TYPE_POST)
-            ->orderBy('mr.display_order')
-            ->orderBy('mr.media_id')
-            ->get(['media.*', 'mr.post_id as post_id'])
-            ->unique('post_id')
-            ->keyBy('post_id')
-            ->all();
+        return FeedRowMeta::for(FeedRowMeta::idsOf($this->posts->items()));
     }
 }; ?>
 
 @php $tabs = \App\Support\HomeFeedTabs::all(); $current = $tabs[$tab]; @endphp
 
 <div class="space-y-6" x-data="infiniteUrl">
-    <div class="relative -mx-4 md:mx-0">
-        <nav class="flex snap-x snap-proximity gap-1.5 overflow-x-auto scroll-px-4 px-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:flex-wrap md:gap-y-1.5 md:overflow-x-visible md:scroll-px-0 md:px-0"
+    <div class="relative -mx-4 md:mx-0" x-data="scrollHint">
+        <nav x-ref="scroller"
+             class="flex snap-x snap-proximity gap-1.5 overflow-x-auto overscroll-x-contain scroll-px-4 px-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:flex-wrap md:gap-y-1.5 md:overflow-x-visible md:scroll-px-0 md:px-0"
              aria-label="Filtros do feed">
             @foreach ($tabs as $key => $meta)
                 @php $active = $key === $tab; @endphp
                 <a href="{{ route(\App\Support\HomeFeedTabs::routeName($key)) }}" wire:navigate
-                   @if ($active) aria-current="page" @endif
+                   @if ($active) aria-current="page" x-init="$el.scrollIntoView({ block: 'nearest', inline: 'nearest' })" @endif
                    @class([
                        'inline-flex shrink-0 snap-start items-center whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium transition',
                        'bg-primary-600 text-white' => $active,
@@ -143,11 +107,25 @@ new class extends Component
             @endforeach
         </nav>
 
-        <div class="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-gray-50 to-transparent md:hidden dark:from-gray-950"
-             aria-hidden="true"></div>
+        <button type="button" x-show="! atStart" x-cloak tabindex="-1" aria-hidden="true"
+                @click="scrollBy(-1)"
+                class="absolute inset-y-0 left-0 flex w-12 items-center justify-start bg-gradient-to-r from-gray-50 from-50% to-transparent pl-1 text-gray-500 md:hidden dark:from-gray-950 dark:text-gray-400">
+            <x-heroicon-o-chevron-left class="h-4 w-4" aria-hidden="true" />
+        </button>
+        <button type="button" x-show="! atEnd" x-cloak tabindex="-1" aria-hidden="true"
+                @click="scrollBy(1)"
+                class="absolute inset-y-0 right-0 flex w-12 items-center justify-end bg-gradient-to-l from-gray-50 from-50% to-transparent pr-1 text-gray-500 md:hidden dark:from-gray-950 dark:text-gray-400">
+            <x-heroicon-o-chevron-right class="h-4 w-4" aria-hidden="true" />
+        </button>
     </div>
 
-    <p class="mt-3 mb-0 text-sm text-gray-500 dark:text-gray-400">{{ $current['description'] }}</p>
+    <p class="mt-3 mb-0 text-sm text-gray-500 dark:text-gray-400">
+        @if ($this->showsLatestInstead)
+            Nada ganhou tração nos últimos 7 dias. Enquanto isso, os posts mais recentes.
+        @else
+            {{ $current['description'] }}
+        @endif
+    </p>
 
     <ul class="divide-y divide-gray-200 dark:divide-gray-800">
         @island('feed-rows')

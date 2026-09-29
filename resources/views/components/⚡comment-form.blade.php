@@ -236,7 +236,7 @@ new class extends Component
                     <button type="submit" wire:loading.attr="disabled"
                             class="rounded-md bg-primary-600 px-4 py-2 text-sm font-semibold text-white hover:bg-primary-700 disabled:opacity-50">
                         <span wire:loading.remove wire:target="save">{{ $isEdit ? 'Salvar' : ($isReply ? 'Responder' : 'Publicar') }}</span>
-                        <span wire:loading wire:target="save">Enviando...</span>
+                        <span wire:loading wire:target="save">Enviando…</span>
                     </button>
                 </div>
             </div>
@@ -246,7 +246,8 @@ new class extends Component
 
     @guest
         <div class="rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm text-gray-600 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300">
-            <a href="{{ route('login', ['redirect_to' => url()->current()]) }}" rel="nofollow" class="font-medium text-primary-600 hover:underline dark:text-primary-400">Faça login</a> para comentar.
+            <a href="{{ route('login', ['redirect_to' => url()->current()]) }}" rel="nofollow" class="font-medium text-primary-600 hover:underline dark:text-primary-400">Faça login</a>
+            ou <a href="{{ route('register') }}" wire:navigate class="font-medium text-primary-600 hover:underline dark:text-primary-400">crie uma conta</a> para comentar.
         </div>
     @endguest
 </form>

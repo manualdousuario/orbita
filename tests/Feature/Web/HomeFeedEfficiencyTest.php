@@ -135,8 +135,9 @@ it('the feed shows the readers saved state', function () {
 
     $html = (string) actingAs($reader)->get(route('home'))->assertOk()->getContent();
 
-    expect($html)->toContain('Deixar de acompanhar')
-        ->toContain('Acompanhar post');
+    preg_match_all('/x-data="bookmarkButton[^"]*"[^>]*aria-pressed="(true|false)"/s', $html, $m);
+
+    expect($m[1])->toContain('true')->toContain('false');
 });
 
 /** The rail shows the reaction score, not the decayed ranking score. */

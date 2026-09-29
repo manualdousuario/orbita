@@ -438,7 +438,9 @@ document.addEventListener('alpine:init', () => {
 
         syncLabel() {
             this.$el.setAttribute('aria-pressed', this.bookmarked ? 'true' : 'false');
-            this.$el.setAttribute('aria-label', this.bookmarked ? 'Deixar de acompanhar' : 'Acompanhar post');
+            if (this.$el.hasAttribute('aria-label')) {
+                this.$el.setAttribute('aria-label', this.bookmarked ? 'Deixar de acompanhar' : 'Acompanhar post');
+            }
         },
 
         async toggle() {
@@ -533,9 +535,11 @@ document.addEventListener('alpine:init', () => {
     window.Alpine.data('composeFab', () => ({
         visible: true,
         composing: false,
+        reading: false,
         lift: 0,
         observer: null,
         onResize: null,
+        onScroll: null,
         onReplyToggled: null,
         onCommentCreated: null,
         onFocusIn: null,
@@ -544,7 +548,7 @@ document.addEventListener('alpine:init', () => {
         syncTimer: null,
 
         get shown() {
-            return this.visible && ! this.composing;
+            return this.visible && ! this.composing && ! this.reading;
         },
 
         init() {
@@ -597,8 +601,19 @@ document.addEventListener('alpine:init', () => {
                 }, 0);
             };
 
+            let lastY = window.scrollY;
+            this.onScroll = () => {
+                const y = window.scrollY;
+                if (Math.abs(y - lastY) < 8) {
+                    return;
+                }
+                this.reading = y > lastY && y > 120;
+                lastY = y;
+            };
+
             window.addEventListener('reply-toggled', this.onReplyToggled);
             window.addEventListener('comment-created', this.onCommentCreated);
+            window.addEventListener('scroll', this.onScroll, { passive: true });
             document.addEventListener('focusin', this.onFocusIn);
             document.addEventListener('focusout', this.onFocusOut);
 
@@ -632,6 +647,7 @@ document.addEventListener('alpine:init', () => {
             clearTimeout(this.focusTimer);
             clearTimeout(this.syncTimer);
             window.removeEventListener('resize', this.onResize);
+            window.removeEventListener('scroll', this.onScroll);
             window.removeEventListener('reply-toggled', this.onReplyToggled);
             window.removeEventListener('comment-created', this.onCommentCreated);
             document.removeEventListener('focusin', this.onFocusIn);

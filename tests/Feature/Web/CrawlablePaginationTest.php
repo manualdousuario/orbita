@@ -122,7 +122,7 @@ it('the numbered nav is present but marked hidden for js readers', function () {
 });
 
 /** The two profile lists paginate independently. */
-it('the profile columns paginate independently', function () {
+it('the profile tabs paginate on their own keys', function () {
     $author = makePaginatedPosts(30);
     $post = Post::query()->first();
 
@@ -138,11 +138,11 @@ it('the profile columns paginate independently', function () {
         ]);
     }
 
-    $url = route('users.profile', ['username' => $author->username]);
-    $html = (string) get($url.'?posts=2')->assertOk()->getContent();
+    $posts = (string) get(route('users.profile', ['username' => $author->username]).'?posts=2')->assertOk()->getContent();
+    $comments = (string) get(route('users.profile.comments', ['username' => $author->username]))->assertOk()->getContent();
 
-    expect($html)->toContain('posts=3')    // the posts column advances on its own key
-        ->toContain('comments=2');          // the comments column is still on page 1
-    // Neither column may fall back to the shared "page" key.
-    expect($html)->not->toContain('?page=');
+    expect($posts)->toContain('posts=3');      // the posts tab advances on its own key
+    expect($comments)->toContain('comments=2'); // and so does the comments tab
+    expect($posts)->not->toContain('?page=');
+    expect($comments)->not->toContain('?page=');
 });

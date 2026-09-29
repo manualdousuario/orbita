@@ -128,3 +128,85 @@ it('search leaves comment results unmarked even when the parent post is closed',
         ->assertSee('Quasares distantes')
         ->assertDontSee('Comentários fechados');
 });
+
+it('search finds closed posts, which are most of the archive', function () {
+    $author = User::factory()->createOne([
+        'username' => 'arquivista',
+        'email_verified_at' => now(),
+    ]);
+
+    Post::create([
+        'user_id' => $author->id,
+        'hashid' => HashId::encode(21),
+        'title' => 'Pulsares antigos do acervo',
+        'slug' => 'pulsares-antigos',
+        'content' => 'Post que fechou por inatividade.',
+        'status' => 'closed',
+        'allow_comments' => false,
+        'published_at' => now()->subYear(),
+    ]);
+
+    get('/search?q=Pulsares&type=posts')
+        ->assertOk()
+        ->assertSee('Pulsares antigos do acervo')
+        ->assertSee('Comentários fechados');
+
+    get('/search?q=Pulsares')
+        ->assertOk()
+        ->assertSee('Pulsares antigos do acervo');
+});
+
+it('search skips comments whose post is gone', function () {
+    $author = User::factory()->createOne([
+        'username' => 'apagador',
+        'email_verified_at' => now(),
+    ]);
+
+    $post = Post::create([
+        'user_id' => $author->id,
+        'hashid' => HashId::encode(22),
+        'title' => 'Post removido',
+        'slug' => 'post-removido',
+        'content' => 'Sem relação.',
+        'status' => 'published',
+        'published_at' => now(),
+    ]);
+
+    DB::table('comments')->insert([
+        'hashid' => HashId::encode(23),
+        'user_id' => $author->id,
+        'post_id' => $post->id,
+        'content' => 'Comentário sobre nebulosas escondidas.',
+        'status' => 'visible',
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+
+    $post->delete();
+
+    get('/search?q=nebulosas&type=comments')
+        ->assertOk()
+        ->assertDontSee('Post removido');
+});
+
+it('search rows show a readable excerpt with the term highlighted', function () {
+    $author = User::factory()->createOne([
+        'username' => 'trechista',
+        'email_verified_at' => now(),
+    ]);
+
+    Post::create([
+        'user_id' => $author->id,
+        'hashid' => HashId::encode(41),
+        'title' => 'Magnetosferas',
+        'slug' => 'magnetosferas',
+        'content' => 'Leia [o artigo sobre **auroras**](https://exemplo.com/a) completo.',
+        'status' => 'published',
+        'published_at' => now(),
+    ]);
+
+    get('/search?q=auroras')
+        ->assertOk()
+        ->assertSee('o artigo sobre <mark>auroras</mark> completo.', false)
+        ->assertDontSee('](https://exemplo.com/a)', false);
+});

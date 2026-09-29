@@ -237,7 +237,7 @@ it('for profile uses bio and produces profile page schema', function () {
 
     $meta = app(MetaTagsService::class)->forProfile($user);
 
-    expect($meta['title'])->toBe('Jane Doe | TestSite')
+    expect($meta['title'])->toBe('Jane Doe (@jane) | TestSite')
         ->and($meta['description'])->toBe('Astrophysicist and coffee enthusiast.')
         ->and($meta['image'])->toBe(url('/images/ogimage.jpg'));
 

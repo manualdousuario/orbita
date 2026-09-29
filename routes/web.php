@@ -57,6 +57,7 @@ Route::get('/sitemap-posts-{page}.xml', [SitemapController::class, 'posts'])
 Route::get('/t/{slug}', [TagController::class, 'show'])->name('tags.show');
 
 Route::get('/u/{username}', [UserController::class, 'profile'])->name('users.profile');
+Route::get('/u/{username}/comentarios', [UserController::class, 'profileComments'])->name('users.profile.comments');
 
 /*
 |--------------------------------------------------------------------------

@@ -75,7 +75,7 @@ class SearchService
         $type = $filters['type'] ?? 'all';
         $offset = ($page - 1) * $perPage;
 
-        $postWhere = ["p.status = 'published'", 'p.deleted_at IS NULL', 'MATCH(p.title, p.content) AGAINST (? IN BOOLEAN MODE)'];
+        $postWhere = ["p.status IN ('published', 'closed')", 'p.deleted_at IS NULL', 'p.version_of IS NULL', 'MATCH(p.title, p.content) AGAINST (? IN BOOLEAN MODE)'];
         $postParams = [$query];
 
         if (! empty($filters['date_from'])) {
@@ -88,7 +88,7 @@ class SearchService
         }
         $postClause = implode(' AND ', $postWhere);
 
-        $commentWhere = ["c.status = 'visible'", 'c.deleted_at IS NULL', 'MATCH(c.content) AGAINST (? IN BOOLEAN MODE)'];
+        $commentWhere = ["c.status = 'visible'", 'c.deleted_at IS NULL', "p.status IN ('published', 'closed')", 'p.deleted_at IS NULL', 'MATCH(c.content) AGAINST (? IN BOOLEAN MODE)'];
         $commentParams = [$query];
 
         if (! empty($filters['date_from'])) {
@@ -105,7 +105,7 @@ class SearchService
         $unionParams = [];
 
         if ($type === 'all' || $type === 'posts') {
-            $unions[] = "SELECT 'post' AS type, p.hashid, p.slug, p.title, p.content, NULL AS post_hashid, NULL AS post_slug, u.username, u.display_name, u.avatar_url, u.anonymized_at, p.allow_comments, p.created_at, MATCH(p.title, p.content) AGAINST (? IN BOOLEAN MODE) AS relevance FROM posts p JOIN users u ON p.user_id = u.id WHERE {$postClause}";
+            $unions[] = "SELECT 'post' AS type, p.hashid, p.slug, p.title, p.content, NULL AS post_hashid, NULL AS post_slug, u.username, u.display_name, u.avatar_url, u.anonymized_at, p.allow_comments, COALESCE(p.published_at, p.created_at) AS created_at, MATCH(p.title, p.content) AGAINST (? IN BOOLEAN MODE) AS relevance FROM posts p JOIN users u ON p.user_id = u.id WHERE {$postClause}";
             $unionParams = array_merge($unionParams, [$query], $postParams);
         }
 
@@ -143,7 +143,7 @@ class SearchService
     {
         $query = $this->booleanQuery($query);
 
-        $where = ["p.status = 'published'", 'p.deleted_at IS NULL'];
+        $where = ["p.status IN ('published', 'closed')", 'p.deleted_at IS NULL', 'p.version_of IS NULL'];
         $where[] = 'MATCH(p.title, p.content) AGAINST (? IN BOOLEAN MODE)';
         $whereParams = [$query];
 
@@ -193,7 +193,7 @@ class SearchService
     {
         $query = $this->booleanQuery($query);
 
-        $where = ["p.status = 'published'", 'p.deleted_at IS NULL'];
+        $where = ["p.status IN ('published', 'closed')", 'p.deleted_at IS NULL', 'p.version_of IS NULL'];
         $where[] = 'MATCH(p.title, p.content) AGAINST (? IN BOOLEAN MODE)';
         $whereParams = [$query];
 
@@ -234,7 +234,7 @@ class SearchService
     {
         $query = $this->booleanQuery($query);
 
-        $where = ["c.status = 'visible'", 'c.deleted_at IS NULL'];
+        $where = ["c.status = 'visible'", 'c.deleted_at IS NULL', "p.status IN ('published', 'closed')", 'p.deleted_at IS NULL'];
         $where[] = 'MATCH(c.content) AGAINST (? IN BOOLEAN MODE)';
         $whereParams = [$query];
 

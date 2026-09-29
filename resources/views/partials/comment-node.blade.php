@@ -62,8 +62,8 @@
                     @if ($node['user']?->website)
                         <span aria-hidden="true">&middot;</span>
                         <a href="{{ $node['user']->website }}" target="_blank" rel="nofollow noopener ugc"
-                           title="Site de {{ $node['author'] }}"
-                           class="hover:text-primary-600 dark:hover:text-primary-400">
+                           title="Site de {{ $node['author'] }}" aria-label="Site de {{ $node['author'] }}"
+                           class="-m-1 inline-flex min-h-6 min-w-6 items-center justify-center p-1 hover:text-primary-600 dark:hover:text-primary-400">
                             <x-heroicon-o-link class="h-3.5 w-3.5" aria-hidden="true" />
                         </a>
                     @endif
@@ -74,7 +74,7 @@
                     @endif
 
                     @if ($node['is_op'])
-                        <span class="rounded bg-primary-50 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-primary-700 dark:bg-primary-950 dark:text-primary-300"
+                        <span class="rounded bg-primary-50 px-1.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-primary-700 dark:bg-primary-950 dark:text-primary-300"
                               title="OP do post">OP</span>
                     @endif
 
@@ -97,8 +97,9 @@
                                 aria-controls="{{ $repliesId }}"
                                 :aria-label="collapsed ? 'Expandir esta conversa' : 'Recolher esta conversa'"
                                 aria-label="Recolher esta conversa"
-                                class="inline-flex h-6 min-w-6 items-center justify-center rounded text-gray-500 transition hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200">
-                            <span aria-hidden="true" class="text-sm font-semibold leading-none" x-text="collapsed ? '+' : '−'">−</span>
+                                class="-my-1.5 inline-flex h-8 min-w-8 items-center justify-center rounded text-gray-500 transition hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200">
+                            <x-heroicon-m-minus-circle x-bind:class="{ 'hidden': collapsed }" class="h-4 w-4" aria-hidden="true" />
+                            <x-heroicon-m-plus-circle x-bind:class="{ 'hidden': ! collapsed }" class="hidden h-4 w-4" aria-hidden="true" />
                         </button>
                         <span x-show="collapsed" x-cloak class="text-gray-500 dark:text-gray-400">
                             {{ $replyCount }} {{ $replyCount === 1 ? 'resposta' : 'respostas' }}

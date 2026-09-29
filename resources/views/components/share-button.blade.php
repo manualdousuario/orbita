@@ -10,7 +10,7 @@
             @class([
                 'inline-flex items-center gap-1.5 rounded-md text-sm font-medium text-gray-500 transition dark:text-gray-400',
                 'justify-center bg-gray-100 p-3.5 hover:bg-gray-100 hover:text-gray-900 dark:bg-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-100' => $compact,
-                'py-3 hover:text-primary-600 dark:hover:text-primary-400' => ! $compact,
+                'min-w-6 justify-center px-1 py-3 hover:text-primary-600 dark:hover:text-primary-400' => ! $compact,
             ])>
         <x-heroicon-o-share class="h-4 w-4" aria-hidden="true" />
     </button>

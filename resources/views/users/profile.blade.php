@@ -7,8 +7,9 @@
                :canonical="\App\Support\Url::canonicalWithPage(['posts', 'comments'])">
     @push('head')
         <x-meta-og :meta="$meta" />
-        <x-pagination-head :total="$postsTotal" :per-page="(int) config('orbita.pagination.profile_per_page')"
-                           page-name="posts" />
+        <x-pagination-head :total="$tab === 'comments' ? $commentsTotal : $postsTotal"
+                           :per-page="(int) config('orbita.pagination.profile_per_page')"
+                           :page-name="$tab" />
     @endpush
 
     <div class="space-y-6">
@@ -20,8 +21,8 @@
                     <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">{{ $displayName }}</h1>
                     @if ($user->website)
                         <a href="{{ $user->website }}" target="_blank" rel="nofollow noopener ugc"
-                           title="Site de {{ $displayName }}"
-                           class="text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400">
+                           title="Site de {{ $displayName }}" aria-label="Site de {{ $displayName }}"
+                           class="-m-1 inline-flex min-h-6 min-w-6 items-center justify-center p-1 text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400">
                             <x-heroicon-o-link class="h-4 w-4" aria-hidden="true" />
                         </a>
                     @endif
@@ -30,9 +31,11 @@
                 @if ($user->bio)
                     <p class="mt-2 text-gray-700 dark:text-gray-300">{{ $user->bio }}</p>
                 @endif
-                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                    Membro desde {{ $user->created_at?->isoFormat('MMMM YYYY') }}
-                </p>
+                @if ($joinedAt)
+                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                        Membro desde <time datetime="{{ $joinedAt->toDateString() }}">{{ $joinedAt->isoFormat('LL') }}</time>
+                    </p>
+                @endif
             </div>
 
             @if ($canManage)
@@ -45,16 +48,34 @@
             @endif
         </div>
 
-        <div class="grid gap-6 md:grid-cols-2">
-            <section>
-                <h2 class="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-100">Posts</h2>
-                <livewire:profile-posts :user-id="$user->id" />
-            </section>
+        @php
+            $profileTabs = [
+                'posts' => ['label' => 'Posts', 'count' => $postsTotal, 'url' => route('users.profile', ['username' => $user->username])],
+                'comments' => ['label' => 'Comentários', 'count' => $commentsTotal, 'url' => route('users.profile.comments', ['username' => $user->username])],
+            ];
+        @endphp
 
-            <section>
-                <h2 class="mb-3 text-lg font-semibold text-gray-900 dark:text-gray-100">Comentários</h2>
+        <section>
+            <nav class="flex gap-6 border-b border-gray-200 dark:border-gray-800" aria-label="Conteúdo de {{ $displayName }}">
+                @foreach ($profileTabs as $key => $profileTab)
+                    <a href="{{ $profileTab['url'] }}" wire:navigate
+                       @if ($tab === $key) aria-current="page" @endif
+                       @class([
+                           '-mb-px inline-flex items-baseline gap-2 border-b-2 py-3 text-base font-semibold transition',
+                           'border-primary-600 text-gray-900 dark:border-primary-400 dark:text-gray-100' => $tab === $key,
+                           'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-900 dark:text-gray-400 dark:hover:border-gray-600 dark:hover:text-gray-100' => $tab !== $key,
+                       ])>
+                        {{ $profileTab['label'] }}
+                        <span class="font-mono text-sm font-normal tabular-nums text-gray-500 dark:text-gray-400">{{ $profileTab['count'] }}</span>
+                    </a>
+                @endforeach
+            </nav>
+
+            @if ($tab === 'comments')
                 <livewire:profile-comments :user-id="$user->id" />
-            </section>
-        </div>
+            @else
+                <livewire:profile-posts :user-id="$user->id" />
+            @endif
+        </section>
     </div>
 </x-layouts.app>

@@ -1,7 +1,14 @@
 @php
     $id = (int) $post->id;
     $domain = \App\Support\Url::domain($post->url ?? null);
-    $author = $post->display_name ?: $post->username;
+    if ($post instanceof \App\Models\Post) {
+        $author = $post->user?->authorName() ?? 'Anônimo';
+        $username = $post->user?->isLinkable() ? $post->user->username : null;
+    } else {
+        $author = $post->display_name ?: $post->username;
+        $username = $post->username && ! ($post->anonymized_at ?? null) ? $post->username : null;
+    }
+    $showAuthor = ! ($hideAuthor ?? false);
     $when = $post->published_at ?? $post->created_at ?? null;
     $count = (int) ($post->comment_count ?? 0);
     $summary = ($meta['summaries'][$id] ?? ['reactions' => [], 'score' => 0, 'count' => 0])
@@ -48,7 +55,7 @@
                 @endif
                 <x-post-locked-badge :locked="$locked" />
                 <a href="{{ $permalink }}" wire:navigate
-                   class="break-words text-gray-900 visited:text-visited hover:text-primary-600 dark:text-gray-100 dark:hover:text-primary-400">
+                   class="break-words text-gray-900 visited:text-visited hover:text-primary-600 dark:text-gray-100 dark:visited:text-visited dark:hover:text-primary-400">
                     {{ $post->title }}
                 </a>
             </h2>
@@ -63,27 +70,44 @@
         </div>
 
         <p class="mt-1 flex flex-wrap items-center gap-x-1.5 font-mono text-sm text-gray-500 dark:text-gray-400">
-            <span>{{ $author }}</span>
-            @if ($post->username && ! ($post->anonymized_at ?? null))
-                <span aria-hidden="true">&middot;</span>
-                <span>&#64;{{ $post->username }}</span>
+            @if ($showAuthor)
+                @if ($username)
+                    <a href="{{ route('users.profile', ['username' => $username]) }}" wire:navigate
+                       class="hover:text-primary-600 hover:underline dark:hover:text-primary-400">{{ $author }}</a>
+                    <span aria-hidden="true">&middot;</span>
+                    <span>&#64;{{ $username }}</span>
+                @else
+                    <span>{{ $author }}</span>
+                @endif
             @endif
             @if ($when)
-                <span aria-hidden="true">&middot;</span>
+                @if ($showAuthor)
+                    <span aria-hidden="true">&middot;</span>
+                @endif
                 <x-date-time :value="$when" />
             @endif
+            @foreach ($meta['tags'][$id] ?? [] as $tag)
+                @continue((int) $tag->id === (int) ($currentTagId ?? 0))
+                <span aria-hidden="true">&middot;</span>
+                <a href="{{ route('tags.show', ['slug' => $tag->slug]) }}" wire:navigate
+                   class="text-primary-700 hover:underline dark:text-primary-300">#{{ $tag->name }}</a>
+            @endforeach
         </p>
 
-        <div class="mt-1 flex flex-wrap items-center gap-x-4 font-mono">
+        <div class="mt-1 flex flex-wrap items-center gap-x-3 font-mono sm:gap-x-4">
             <livewire:reactions type="post" :id="$id" :compact="false"
                                 :summary="$summary" :reported="isset($meta['reported'][$id])" :key="'react-post-'.$id" />
 
             <a href="{{ $permalink }}#comentarios" wire:navigate
-               aria-label="{{ $count }} {{ $count === 1 ? 'comentário' : 'comentários' }}"
+               aria-label="{{ $count === 0 && ! $locked ? 'Comentar' : $count.' '.($count === 1 ? 'comentário' : 'comentários') }}"
                 class="inline-flex items-center gap-1.5 py-3 text-sm text-gray-500 transition-colors hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400">
                 <x-heroicon-o-chat-bubble-left class="h-4 w-4" aria-hidden="true" />
-                <span class="font-mono tabular-nums" aria-hidden="true">{{ $count }}</span>
-                <span aria-hidden="true">{{ $count === 1 ? 'comentário' : 'comentários' }}</span>
+                @if ($count === 0 && ! $locked)
+                    <span aria-hidden="true">Comentar</span>
+                @else
+                    <span class="font-mono tabular-nums" aria-hidden="true">{{ $count }}</span>
+                    <span class="hidden sm:inline" aria-hidden="true">{{ $count === 1 ? 'comentário' : 'comentários' }}</span>
+                @endif
             </a>
 
             <x-bookmark-button :hashid="$post->hashid" :bookmarked="isset($meta['bookmarked'][$id])" :compact="false" />
@@ -103,6 +127,7 @@
     @if ($image)
         <a href="{{ $permalink }}" wire:navigate tabindex="-1" aria-hidden="true" class="shrink-0">
             <x-media-image :media="$image" :width="160" :height="160" fit="crop" alt=""
+                           onerror="this.parentElement.hidden = true"
                            class="h-14 w-14 rounded-md border border-gray-200 object-cover sm:h-16 sm:w-16 dark:border-gray-800" />
         </a>
     @endif
