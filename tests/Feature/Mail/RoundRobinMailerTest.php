@@ -43,11 +43,9 @@ it('both providers are built as smtp transports', function () {
 });
 
 it('the retry period is configured where laravel actually reads it', function () {
-    // MailManager reads retry_after from the last sub-mailer, not the roundrobin block.
-    expect(config('mail.mailers.roundrobin.mailers')[1])->toBe('resend');
-    expect(config('mail.mailers.resend.retry_after'))->not->toBeNull();
+    expect(config('mail.mailers.roundrobin.retry_after'))->not->toBeNull();
 
-    config()->set('mail.mailers.resend.retry_after', 15);
+    config()->set('mail.mailers.roundrobin.retry_after', 15);
     Mail::forgetMailers();
 
     $retryPeriod = (new ReflectionProperty(RoundRobinTransport::class, 'retryPeriod'))

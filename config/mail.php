@@ -10,6 +10,8 @@ return [
         'roundrobin' => [
             'transport' => 'roundrobin',
             'mailers' => ['oci', 'resend'],
+
+            'retry_after' => env('MAIL_ROUNDROBIN_RETRY_AFTER', 60),
         ],
 
         'oci' => [
@@ -32,9 +34,6 @@ return [
             'password' => env('MAIL_RESEND_PASSWORD'),
             'timeout' => env('MAIL_SMTP_TIMEOUT', 30),
             'local_domain' => env('MAIL_EHLO_DOMAIN', parse_url((string) env('APP_URL', 'http://localhost'), PHP_URL_HOST)),
-
-            // Sidelining time after a failed send; must sit here (read from last sub-mailer).
-            'retry_after' => env('MAIL_ROUNDROBIN_RETRY_AFTER', 60),
         ],
 
         // Kept for compatibility with environments still on MAIL_MAILER=smtp.
