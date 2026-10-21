@@ -2,7 +2,7 @@
 
 if [ "${ORBITA_SCHEDULER:-true}" != "true" ]; then
     echo "[orbita] scheduler disabled by ORBITA_SCHEDULER"
-    exit 0
+    exec sleep 2147483647
 fi
 
 cd /var/www/html || exit 1

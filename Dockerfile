@@ -37,6 +37,7 @@ RUN composer dump-autoload --optimize --no-dev \
     && chown -R www-data:www-data /var/www/html/vendor /var/www/html/bootstrap/cache
 
 COPY --chmod=755 docker/s6-rc.d/ /etc/s6-overlay/s6-rc.d/
+COPY --chmod=755 docker/user-bundles.d/ /etc/s6-overlay/user-bundles.d/
 
 ENV S6_KILL_GRACETIME=30000 \
     S6_SERVICES_GRACETIME=30000 \

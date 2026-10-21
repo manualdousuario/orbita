@@ -2,7 +2,9 @@
 
 if [ "${ORBITA_QUEUE:-true}" != "true" ]; then
     echo "[orbita] queue worker disabled by ORBITA_QUEUE"
-    exit 0
+    # Stay up (idle) instead of exiting: s6-rc would otherwise see the
+    # service go down during the startup transaction and fail the bundle.
+    exec sleep 2147483647
 fi
 
 cd /var/www/html || exit 1
