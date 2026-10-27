@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\LogHttpAccess;
+use App\Http\Middleware\LogoutBannedUser;
 use App\Http\Middleware\SetEdgeCacheHeaders;
 use App\Http\Middleware\SetSecurityHeaders;
 use App\Support\PermanentMailFailure;
@@ -30,6 +31,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->prepend(SetSecurityHeaders::class);
         $middleware->prepend(SetEdgeCacheHeaders::class);
         $middleware->prepend(LogHttpAccess::class);
+        $middleware->web(append: LogoutBannedUser::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         Integration::handles($exceptions);

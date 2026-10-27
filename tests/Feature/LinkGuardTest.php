@@ -282,6 +282,55 @@ it('never flags staff', function () {
     expect($comment->fresh()->status)->toBe('visible');
 });
 
+it('hides a link dressed as a mention even from an established account', function () {
+    $user = guardRegular();
+    $post = guardPost($user);
+
+    $comment = app(CommentService::class)->createComment([
+        'post_id' => $post->id,
+        'user_id' => $user->id,
+        'content' => '@[block blast](https://blockblast-2.io/) Gostei muito do artigo!',
+    ]);
+
+    expect($comment->fresh()->status)->toBe('hidden');
+
+    $log = Moderation::query()->where('action', 'link_flagged')->latest('id')->firstOrFail();
+
+    expect($log->metadata['reason'])->toBe('disguised_mention')
+        ->and($log->metadata['hosts'])->toBe(['blockblast-2.io'])
+        ->and($log->reason)->toBe('Link disfarçado de menção: blockblast-2.io');
+});
+
+it('leaves plain mentions and ordinary links from an established account visible', function () {
+    $user = guardRegular();
+    $post = guardPost($user);
+
+    $comment = app(CommentService::class)->createComment([
+        'post_id' => $post->id,
+        'user_id' => $user->id,
+        'content' => "@fulano veja [o artigo](https://qualquer-coisa.com/x)\n\n`@[x](https://codigo.io)`",
+    ]);
+
+    expect($comment->fresh()->status)->toBe('visible')
+        ->and(guardFlags('comment', (int) $comment->id))->toBe(0);
+});
+
+it('never flags a mention link from staff', function () {
+    $staff = User::factory()->createOne([
+        'email_verified_at' => now(),
+        'role' => 'moderator',
+    ]);
+    $post = guardPost(guardRegular());
+
+    $comment = app(CommentService::class)->createComment([
+        'post_id' => $post->id,
+        'user_id' => $staff->id,
+        'content' => '@[time](https://qualquer-coisa.com/)',
+    ]);
+
+    expect($comment->fresh()->status)->toBe('visible');
+});
+
 it('does nothing at all while disabled', function () {
     config(['orbita.moderation.link_guard_enabled' => false]);
 

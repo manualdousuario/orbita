@@ -79,6 +79,7 @@ return [
         'link_domain_allowlist' => '',
         'link_trust_account_age_hours' => 72,
         'link_trust_min_comments' => 3,
+        'email_domain_blocklist' => '',
     ],
 
     'antispam' => [

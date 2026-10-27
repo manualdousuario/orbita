@@ -14,6 +14,7 @@ use App\Exceptions\InvalidImageException;
 use App\Models\SocialAccount;
 use App\Models\User;
 use App\Models\UserToken;
+use App\Rules\AllowedEmailDomain;
 use App\Services\ImageService;
 use App\Services\MetaTagsService;
 use App\Support\Avatar;
@@ -246,7 +247,7 @@ class UserController extends Controller
         $requiresPassword = $user->hasPassword();
 
         $validated = $request->validate([
-            'new_email' => ['required', 'email', 'max:255', 'unique:users,email'],
+            'new_email' => ['required', 'email', 'max:255', 'unique:users,email', new AllowedEmailDomain],
             'password' => $requiresPassword ? ['required', 'string'] : ['nullable', 'string'],
         ]);
 

@@ -73,6 +73,7 @@ function newReportMail(string $content = 'comentário denunciado', bool $autoHid
         postTitle: 'Post que hospeda o comentário',
         targetContent: $content,
         targetAuthor: 'bruno_autor',
+        targetAuthorUrl: 'https://orbita.test/admin/users/7/edit',
         reporterName: 'carla_denunciante',
         reason: 'discurso de ódio',
         contentUrl: 'https://orbita.test/p/abc#comment-def',
@@ -151,6 +152,28 @@ it('both bodies carry the reported content in full', function () {
         $mail->assertSeeInHtml($needle);
         $mail->assertSeeInText($needle);
     }
+});
+
+it('both bodies link the content author to the admin', function () {
+    $mail = newReportMail();
+
+    $mail->assertSeeInHtml('href="https://orbita.test/admin/users/7/edit"', false);
+    $mail->assertSeeInText('bruno_autor (https://orbita.test/admin/users/7/edit)');
+});
+
+it('the queued alert carries the author admin link', function () {
+    Mail::fake();
+
+    reportStaff('moderator');
+    $reporter = User::factory()->createOne(['email_verified_at' => now()]);
+    $comment = reportedComment();
+
+    app(ReportService::class)->report((int) $reporter->id, 'comment', (int) $comment->id);
+
+    Mail::assertQueued(
+        NewReportMail::class,
+        fn (NewReportMail $mail) => str_ends_with((string) $mail->targetAuthorUrl, '/admin/users/'.$comment->user_id.'/edit'),
+    );
 });
 
 it('the auto hide warning only shows when the content was hidden', function () {

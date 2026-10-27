@@ -18,7 +18,13 @@ class RequiresActivatedAccount extends LivewireAttribute
     {
         $user = auth()->user();
 
-        if ($user !== null && ! $user->isPendingActivation()) {
+        if ($user !== null && ! $user->isPendingActivation() && ! $user->is_banned) {
+            return;
+        }
+
+        if ($user?->is_banned) {
+            $returnEarly();
+
             return;
         }
 

@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Comments;
 
 use App\Filament\Resources\Comments\Pages\EditComment;
 use App\Filament\Resources\Comments\Pages\ListComments;
+use App\Filament\Resources\Users\UserResource;
 use App\Models\Comment;
 use App\Services\CommentService;
 use App\Support\ModerationLogger;
@@ -73,7 +74,8 @@ class CommentResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('content')->label('Comentário')->searchable()->wrap(),
-                TextColumn::make('user.username')->label('Autor')->searchable()->sortable(),
+                TextColumn::make('user.username')->label('Autor')->searchable()->sortable()
+                    ->url(fn (Comment $record): ?string => UserResource::adminUrlFor($record->user)),
                 TextColumn::make('post.title')->label('Post')->limit(40)->searchable(),
                 TextColumn::make('status')
                     ->label('Status')

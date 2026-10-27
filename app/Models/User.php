@@ -6,6 +6,7 @@ use App\Actions\AnonymizeUser;
 use App\Enums\UserRole;
 use App\Notifications\ResetPasswordNotification;
 use App\Notifications\VerifyEmailNotification;
+use App\Support\BannedContent;
 use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasName;
@@ -47,6 +48,10 @@ class User extends Authenticatable implements FilamentUser, HasName, MustVerifyE
                 ->event('updated')
                 ->withProperties(['attributes' => $attributes, 'old' => $old])
                 ->log('updated');
+
+            if ($user->wasChanged('is_banned') && $user->is_banned) {
+                BannedContent::hide($user);
+            }
         });
     }
 

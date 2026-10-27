@@ -246,12 +246,18 @@ class NotificationService
                 ? trim((string) $target->title."\n\n".(string) $target->content)
                 : (string) $target->content;
 
+            $author = $target->user;
+            $authorUrl = $author !== null && ! $author->isAnonymized()
+                ? rtrim((string) config('orbita.url'), '/').'/admin/users/'.$author->id.'/edit'
+                : null;
+
             foreach ($this->recipients([UserRole::Moderator, UserRole::Admin]) as $staff) {
                 Mail::to($staff->email)->queue(new NewReportMail(
                     targetLabel: $isPost ? 'Post' : 'Comentário',
                     postTitle: (string) ($post?->title ?? '(post removido)'),
                     targetContent: $content,
-                    targetAuthor: (string) ($target->user?->display_name ?? $target->user?->username ?? '(desconhecido)'),
+                    targetAuthor: (string) ($author?->display_name ?? $author?->username ?? '(desconhecido)'),
+                    targetAuthorUrl: $authorUrl,
                     reporterName: (string) ($report->reporter?->display_name ?? $report->reporter?->username ?? '(desconhecido)'),
                     reason: $report->reason,
                     contentUrl: $contentUrl,

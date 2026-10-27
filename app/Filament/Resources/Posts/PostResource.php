@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Posts;
 
 use App\Filament\Resources\Posts\Pages\EditPost;
 use App\Filament\Resources\Posts\Pages\ListPosts;
+use App\Filament\Resources\Users\UserResource;
 use App\Models\Post;
 use App\Support\ModerationLogger;
 use BackedEnum;
@@ -160,7 +161,8 @@ class PostResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('title')->label('Título')->searchable()->limit(60)->sortable(),
-                TextColumn::make('user.username')->label('Autor')->searchable()->sortable(),
+                TextColumn::make('user.username')->label('Autor')->searchable()->sortable()
+                    ->url(fn (Post $record): ?string => UserResource::adminUrlFor($record->user)),
                 TextColumn::make('status')
                     ->label('Status')
                     ->badge()

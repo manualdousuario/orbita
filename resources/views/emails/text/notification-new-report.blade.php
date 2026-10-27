@@ -7,7 +7,7 @@ Para reexibir, use "Reexibir" no painel.
 
 Tipo: {{ $targetLabel }}
 Post: {{ $postTitle }}
-Autor do conteúdo: {{ $targetAuthor }}
+Autor do conteúdo: {{ $targetAuthor }}{{ $targetAuthorUrl ? ' ('.$targetAuthorUrl.')' : '' }}
 Denunciado por: {{ $reporterName }}
 Motivo: {{ $reason ?: '(não informado)' }}
 Total de denúncias: {{ $reportCount }}

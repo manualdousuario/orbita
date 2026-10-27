@@ -9,6 +9,7 @@ use App\Events\SocialLinkConfirmationRequested;
 use App\Models\SocialAccount;
 use App\Models\User;
 use App\Models\UserToken;
+use App\Rules\AllowedEmailDomain;
 use App\Support\SocialAuthOutcome;
 use App\Support\SocialProfile;
 use App\Support\UsernameGenerator;
@@ -232,6 +233,10 @@ class SocialAuthService
     {
         if (! config('orbita.register', true)) {
             return SocialAuthOutcome::error('O registro de novas contas está desativado.');
+        }
+
+        if (AllowedEmailDomain::isBlocked($email)) {
+            return SocialAuthOutcome::error(AllowedEmailDomain::MESSAGE);
         }
 
         $mustConfirm = $forcePending

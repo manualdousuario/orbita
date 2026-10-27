@@ -245,4 +245,14 @@ class UserResource extends Resource
     {
         return false;
     }
+
+    /** Admin edit URL for a content author; null when missing or anonymized. */
+    public static function adminUrlFor(?User $user): ?string
+    {
+        if ($user === null || $user->isAnonymized()) {
+            return null;
+        }
+
+        return self::getUrl('edit', ['record' => $user]);
+    }
 }

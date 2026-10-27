@@ -3,6 +3,7 @@
 namespace App\Actions\Fortify;
 
 use App\Models\User;
+use App\Rules\AllowedEmailDomain;
 use App\Services\TurnstileService;
 use App\Support\UsernameGenerator;
 use Illuminate\Support\Facades\Hash;
@@ -53,6 +54,7 @@ class CreateNewUser implements CreatesNewUsers
                 'email',
                 'max:255',
                 Rule::unique(User::class, 'email'),
+                new AllowedEmailDomain,
             ],
             'display_name' => ['nullable', 'string', 'max:100'],
             'password' => $this->passwordRules(),

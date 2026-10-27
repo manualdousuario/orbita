@@ -24,6 +24,7 @@ class NewReportMail extends Mailable implements ShouldQueue
         public string $postTitle,
         public string $targetContent,
         public string $targetAuthor,
+        public ?string $targetAuthorUrl,
         public string $reporterName,
         public ?string $reason,
         public string $contentUrl,

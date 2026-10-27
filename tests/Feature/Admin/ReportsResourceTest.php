@@ -10,6 +10,7 @@ namespace Tests\Feature\Admin;
 
 use App\Filament\Resources\Reports\Pages\ListReports;
 use App\Filament\Resources\Reports\ReportResource;
+use App\Filament\Resources\Users\UserResource;
 use App\Models\Comment;
 use App\Models\Post;
 use App\Models\Report;
@@ -185,6 +186,58 @@ it('the list shows the target author and the post it belongs to', function () {
         ->assertTableColumnStateSet('target_excerpt', $content, $report)
         ->assertTableColumnStateSet('target_author', 'autor_do_texto', $report)
         ->assertTableColumnStateSet('target_post', 'Post que hospeda o comentário', $report);
+});
+
+it('the target author links to their admin page', function () {
+    Filament::setCurrentPanel('admin');
+    $admin = reportsAdmin();
+    $author = User::factory()->create(['username' => 'spammer_novo', 'email_verified_at' => now()]);
+    $reporter = User::factory()->create(['email_verified_at' => now()]);
+
+    $post = Post::create([
+        'user_id' => $author->id,
+        'hashid' => 'aru'.reportsSeq(),
+        'title' => 'Post qualquer',
+        'slug' => 'post-qualquer-'.uniqid(),
+        'content' => 'corpo',
+        'status' => 'published',
+        'published_at' => now(),
+    ]);
+
+    $comment = Comment::create([
+        'post_id' => $post->id,
+        'user_id' => $author->id,
+        'hashid' => 'aruc'.reportsSeq(),
+        'content' => 'spam',
+        'nesting_level' => 0,
+        'status' => 'visible',
+    ]);
+
+    $commentReport = Report::create(['user_id' => $reporter->id, 'reportable_type' => 'comment', 'reportable_id' => $comment->id]);
+    $postReport = Report::create(['user_id' => $reporter->id, 'reportable_type' => 'post', 'reportable_id' => $post->id]);
+
+    actingAs($admin);
+
+    $url = UserResource::getUrl('edit', ['record' => $author]);
+
+    Livewire::test(ListReports::class)
+        ->assertTableActionHasUrl('view_author', $url, $commentReport)
+        ->assertTableActionHasUrl('view_author', $url, $postReport)
+        ->assertSeeHtml('href="'.e($url).'"')
+        ->assertSee('@spammer_novo');
+});
+
+it('an anonymized author gets no link', function () {
+    Filament::setCurrentPanel('admin');
+    $admin = reportsAdmin();
+    $reporter = User::factory()->create(['email_verified_at' => now()]);
+    $report = reportFor($reporter);
+    $reporter->forceFill(['anonymized_at' => now()])->save();
+
+    actingAs($admin);
+
+    Livewire::test(ListReports::class)
+        ->assertTableActionHidden('view_author', $report);
 });
 
 it('reports cannot be created edited or deleted from the panel', function () {

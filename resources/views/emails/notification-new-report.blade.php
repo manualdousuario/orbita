@@ -14,7 +14,12 @@
     <p style="margin:0 0 16px;">
         <strong>Tipo:</strong> {{ $targetLabel }}<br>
         <strong>Post:</strong> {{ $postTitle }}<br>
-        <strong>Autor do conteúdo:</strong> {{ $targetAuthor }}<br>
+        <strong>Autor do conteúdo:</strong>
+        @if ($targetAuthorUrl)
+            <a href="{{ $targetAuthorUrl }}" style="color:#4f46e5;">{{ $targetAuthor }}</a><br>
+        @else
+            {{ $targetAuthor }}<br>
+        @endif
         <strong>Denunciado por:</strong> {{ $reporterName }}<br>
         <strong>Motivo:</strong> {{ $reason ?: '(não informado)' }}<br>
         <strong>Total de denúncias:</strong> {{ $reportCount }}

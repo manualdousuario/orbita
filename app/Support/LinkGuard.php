@@ -135,6 +135,19 @@ class LinkGuard
 
         $author = $target instanceof User ? $target : $target->user;
 
+        if (! ($author?->isStaff() ?? false)) {
+            $disguised = array_values(array_filter(
+                self::mentionLinkHosts((string) $markdown),
+                fn (string $host) => ! self::isAllowed($host),
+            ));
+
+            if ($disguised !== []) {
+                self::flag($target, 'disguised_mention', $disguised);
+
+                return;
+            }
+        }
+
         if (self::isTrusted($author, $target instanceof Comment ? (int) $target->id : null)) {
             return;
         }
@@ -144,6 +157,33 @@ class LinkGuard
         if ($external !== []) {
             self::flag($target, 'untrusted_author', $external);
         }
+    }
+
+    /**
+     * Hosts of links written as "@[text](url)" outside code spans.
+     *
+     * @return list<string>
+     */
+    public static function mentionLinkHosts(string $markdown): array
+    {
+        $tokens = preg_split('/(```[\s\S]*?```|~~~[\s\S]*?~~~|`+[^`]*?`+)/', $markdown, -1, PREG_SPLIT_DELIM_CAPTURE);
+        $hosts = [];
+
+        foreach ($tokens === false ? [$markdown] : $tokens as $i => $token) {
+            if ($i % 2 === 1 || ! preg_match_all('#@\[[^\]]*\]\(\s*<?((?:https?://|www\.)[^\s)>]+)#i', $token, $m)) {
+                continue;
+            }
+
+            foreach ($m[1] as $url) {
+                $host = MarkdownUrls::host($url);
+
+                if ($host !== null) {
+                    $hosts[] = $host;
+                }
+            }
+        }
+
+        return array_values(array_unique($hosts));
     }
 
     /**
@@ -159,9 +199,11 @@ class LinkGuard
 
         $hidden = $target instanceof User ? false : ContentVisibility::hideForReview($target);
 
-        $message = $reason === 'blocked_domain'
-            ? 'Link de domínio bloqueado: '.implode(', ', $hosts)
-            : 'Link externo publicado por conta sem histórico: '.implode(', ', $hosts);
+        $message = match ($reason) {
+            'blocked_domain' => 'Link de domínio bloqueado: ',
+            'disguised_mention' => 'Link disfarçado de menção: ',
+            default => 'Link externo publicado por conta sem histórico: ',
+        }.implode(', ', $hosts);
 
         ModerationLogger::system(
             'link_flagged',

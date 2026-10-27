@@ -5,9 +5,11 @@ namespace App\Filament\Resources\Reports;
 use App\Filament\Resources\Comments\CommentResource;
 use App\Filament\Resources\Posts\PostResource;
 use App\Filament\Resources\Reports\Pages\ListReports;
+use App\Filament\Resources\Users\UserResource;
 use App\Models\Comment;
 use App\Models\Post;
 use App\Models\Report;
+use App\Models\User;
 use App\Services\CommentService;
 use App\Services\ReportService;
 use BackedEnum;
@@ -84,6 +86,9 @@ class ReportResource extends Resource
                 TextColumn::make('target_author')
                     ->label('Autor do conteúdo')
                     ->getStateUsing(fn (Report $record): ?string => self::targetAuthor($record))
+                    ->description(fn (Report $record): ?string => self::targetUsername($record))
+                    ->url(fn (Report $record): ?string => UserResource::adminUrlFor(self::targetUser($record)))
+                    ->color('primary')
                     ->placeholder('—'),
                 TextColumn::make('target_post')
                     ->label('Post')
@@ -124,6 +129,11 @@ class ReportResource extends Resource
                     ->icon(Heroicon::OutlinedWrenchScrewdriver)
                     ->url(fn (Report $record): ?string => self::moderateUrl($record))
                     ->visible(fn (Report $record): bool => self::moderateUrl($record) !== null),
+                Action::make('view_author')
+                    ->label('Ver autor')
+                    ->icon(Heroicon::OutlinedUser)
+                    ->url(fn (Report $record): ?string => UserResource::adminUrlFor(self::targetUser($record)))
+                    ->visible(fn (Report $record): bool => UserResource::adminUrlFor(self::targetUser($record)) !== null),
             ])
             ->bulkActions([
                 BulkAction::make('mark_read')
@@ -169,11 +179,23 @@ class ReportResource extends Resource
         };
     }
 
+    private static function targetUser(Report $report): ?User
+    {
+        return $report->target()?->user;
+    }
+
     private static function targetAuthor(Report $report): ?string
     {
-        $user = $report->target()?->user;
+        $user = self::targetUser($report);
 
         return $user?->display_name ?? $user?->username;
+    }
+
+    private static function targetUsername(Report $report): ?string
+    {
+        $username = self::targetUser($report)?->username;
+
+        return $username !== null ? '@'.$username : null;
     }
 
     private static function targetPostTitle(Report $report): ?string
