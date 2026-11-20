@@ -1,14 +1,19 @@
-name: 🧪 CI
+name: CI
 
 on:
+  workflow_call:
+    inputs:
+      ref:
+        description: Commit to verify for a release
+        type: string
+        required: false
   push:
-    branches: [main, feat/laravel-rewrite]
+    branches: ['**']
   pull_request:
-  workflow_call: {}
 
 jobs:
   test:
-    name: 🧪 Pint + Pest
+    name: Pint + Pest
     runs-on: ubuntu-24.04
 
     services:
@@ -36,61 +41,63 @@ jobs:
           --health-retries=10
 
     steps:
-      - name: 📥 Checkout code
-        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.ref || github.sha }}
 
-      - name: 🟢 Install Node
-        uses: actions/setup-node@v4
+      - name: Install Node
+        uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
 
-      - name: 📦 Cache node_modules
+      - name: Cache node_modules
         id: node_cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: node_modules
           key: node-modules-${{ hashFiles('package-lock.json') }}
 
-      - name: 📥 Install Node dependencies
+      - name: Install Node dependencies
         if: steps.node_cache.outputs.cache-hit != 'true'
         run: npm ci
 
-      - name: 🎨 Build frontend assets
+      - name: Build frontend assets
         run: npm run build
 
-      - name: 🐘 Install PHP
+      - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.4'
           extensions: pdo_mysql, gd, fileinfo, mbstring, intl, bcmath, exif, zip, redis
           coverage: none
 
-      - name: 📦 Cache Composer packages
-        uses: actions/cache@v4
+      - name: Cache Composer packages
+        uses: actions/cache@v6
         with:
           path: ~/.cache/composer
           key: composer-${{ hashFiles('composer.lock') }}
           restore-keys: composer-
 
-      - name: 📦 Install dependencies
+      - name: Install dependencies
         run: composer install --no-interaction --prefer-dist --no-progress
 
-      - name: 🔒 Composer audit
+      - name: Composer audit
         run: composer audit
 
-      - name: ⚙️ Prepare environment
+      - name: Prepare environment
         run: |
           cp .env.example .env
           php artisan key:generate
 
-      - name: 🎨 Code style (Pint)
+      - name: Code style (Pint)
         run: vendor/bin/pint --test
 
-      - name: 🔬 Static analysis (PHPStan)
+      - name: Static analysis (PHPStan)
         run: vendor/bin/phpstan analyse --memory-limit=1G --no-progress
 
-      - name: 🧪 Run tests
+      - name: Run tests
         env:
           DB_CONNECTION: mysql
           DB_HOST: 127.0.0.1
@@ -102,3 +109,23 @@ jobs:
           REDIS_PORT: 6379
           REDIS_PASSWORD: ''
         run: php artisan test
+
+  image:
+    name: Image smoke test
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+
+      - uses: docker/setup-buildx-action@v4
+      - uses: docker/build-push-action@v7
+        with:
+          context: .
+          load: true
+          tags: app:ci
+          cache-from: type=gha,scope=ci
+          cache-to: type=gha,mode=max,scope=ci
+      - name: Smoke test
+        run: |
+          docker run --rm --entrypoint php app:ci artisan --version | grep -F 'Laravel Framework'
